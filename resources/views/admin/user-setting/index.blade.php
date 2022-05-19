@@ -187,13 +187,18 @@
                 url: "{{ route('admin.settings.avatar') }}",
                 success: function(response) {
                     var html = '';
-                    html += '<div class="row">';
-                    for(var i=0; i<response.length; i++) {
-                        html += '<div class="col-auto text-center">';
-                        html += '<img src="{{ asset("assets/images/users") }}/' + response[i] + '" class="img-thumbnail rounded-circle mb-2 btn-choose-image" data-image="' + response[i] + '" data-bs-toggle="tooltip" title="Pilih Foto" width="150" style="cursor: pointer;">';
+                    if(response.length > 0) {
+                        html += '<div class="row">';
+                        for(var i=0; i<response.length; i++) {
+                            html += '<div class="col-auto text-center">';
+                            html += '<img src="{{ asset("assets/images/users") }}/' + response[i] + '" class="img-thumbnail rounded-circle mb-2 btn-choose-image" data-image="' + response[i] + '" data-bs-toggle="tooltip" title="Pilih Foto" width="150" style="cursor: pointer;">';
+                            html += '</div>';
+                        }
                         html += '</div>';
                     }
-                    html += '</div>';
+                    else {
+                        html += '<div class="alert alert-danger"><div class="alert-message">Tidak ada foto.</div></div>';
+                    }
                     $("#choose-image").html(html);
                     Spandiv.Tooltip();
                 }
