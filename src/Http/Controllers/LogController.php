@@ -60,7 +60,7 @@ class LogController extends \App\Http\Controllers\Controller
                         }
 
                         // Push to user IDs
-                        if(!in_array($log['user_id'], $this->userIDs))
+                        if(array_key_exists('user_id', $log) && !in_array($log['user_id'], $this->userIDs))
                             array_push($this->userIDs, $log['user_id']);
                     }
                 }

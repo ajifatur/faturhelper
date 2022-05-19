@@ -18,6 +18,7 @@
                                 <th rowspan="2" width="30">#</th>
                                 <th rowspan="2">Table</th>
                                 <th colspan="6">Field</th>
+                                <th rowspan="2" width="100">Last Update</th>
                             </tr>
                             <tr>
                                 <th>Name</th>
@@ -39,6 +40,19 @@
                                     @foreach($column as $column_attr)
                                         <td>{{ $column_attr }}</td>
                                     @endforeach
+                                    @if($key == 0)
+                                        <td rowspan="{{ count($table->columns) }}">
+                                            @if($table->latest_data)
+                                                {{ date('d/m/Y', strtotime($table->latest_data->updated_at)) }}
+                                                <br>
+                                                <small class="text-muted">{{ date('H:i', strtotime($table->latest_data->updated_at)) }} WIB</small>
+                                            @elseif($table->latest_data === null)
+                                                <span class="text-danger">Empty data.</span>
+                                            @else
+                                                -
+                                            @endif
+                                        </td>
+                                    @endif
                                 </tr>
                                 @endforeach
                             @endforeach
