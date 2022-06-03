@@ -17,29 +17,7 @@ FaturHelper is the project that contains some helpers/functions/methods to help 
 - DBMS MySQL >= 6.0
 - Laravel >= 8.0
 
-## Installation (Version 2.0)
-
-### Download From Composer:
-
-Run this script into your CLI:
-
-```sh
-composer require ajifatur/faturhelper
-```
-
-### Configuration:
-
-Add this script into `app/Providers/AppServiceProvider.php` inside of `register` method:
-
-``` php
-if(File::exists(base_path('vendor/ajifatur/faturhelper/src'))) {
-    foreach(glob(base_path('vendor/ajifatur/faturhelper/src').'/Helpers/*.php') as $filename) {
-        require_once $filename;
-    }
-}
-```
-
-## Installation (Version 3.0 or More)
+## Installation
 
 ### Download From Composer:
 
