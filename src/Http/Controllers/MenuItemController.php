@@ -46,7 +46,6 @@ class MenuItemController extends \App\Http\Controllers\Controller
         // Validation
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:200',
-            'route' => 'required|max:200',
             'icon' => $request->parent == 0 ? 'required|max:200' : '',
             'active_conditions' => 'required',
             'parent' => 'required',
@@ -122,7 +121,6 @@ class MenuItemController extends \App\Http\Controllers\Controller
         // Validation
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:200',
-            'route' => 'required|max:200',
             'icon' => $request->parent == 0 ? 'required|max:200' : '',
             'active_conditions' => 'required',
             'parent' => 'required',

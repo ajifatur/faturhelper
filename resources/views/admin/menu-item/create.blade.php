@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label class="col-lg-2 col-md-3 col-form-label">Route <span class="text-danger">*</span></label>
+                        <label class="col-lg-2 col-md-3 col-form-label">Route</label>
                         <div class="col-lg-10 col-md-9">
                             <input type="text" name="route" class="form-control form-control-sm {{ $errors->has('route') ? 'border-danger' : '' }}" value="{{ old('route') }}">
                             @if($errors->has('route'))
