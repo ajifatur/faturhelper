@@ -94,7 +94,7 @@
                             <tr>
                                 <td align="center"><input type="checkbox" class="form-check-input checkbox-one"></td>
                                 <td>
-                                    <a href="#">{{ $package['name'] }}</a>
+                                    <a href="https://github.com/{{ $package['name'] }}" target="_blank">{{ $package['name'] }}</a>
                                     <br>
                                     <small class="text-muted">{{ array_key_exists('description', $package) ? $package['description'] : '' }}</small>
                                 </td>
