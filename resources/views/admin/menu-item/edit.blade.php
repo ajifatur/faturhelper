@@ -1,6 +1,6 @@
 @extends('faturhelper::layouts/admin/main')
 
-@section('title', 'Edit Menu Item di '.$menu_header->name.': '.$menu_item->name)
+@section('title', 'Edit Menu Item di '.($menu_header->name != '' ? $menu_header->name : '<Tanpa Header>').': '.$menu_item->name)
 
 @section('content')
 

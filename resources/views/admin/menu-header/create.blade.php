@@ -14,7 +14,7 @@
                 <form method="post" action="{{ route('admin.menu.header.store') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="row mb-3">
-                        <label class="col-lg-2 col-md-3 col-form-label">Nama <span class="text-danger">*</span></label>
+                        <label class="col-lg-2 col-md-3 col-form-label">Nama</label>
                         <div class="col-lg-10 col-md-9">
                             <input type="text" name="name" class="form-control form-control-sm {{ $errors->has('name') ? 'border-danger' : '' }}" value="{{ old('name') }}" autofocus>
                             @if($errors->has('name'))

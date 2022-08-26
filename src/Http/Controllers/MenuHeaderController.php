@@ -33,7 +33,7 @@ class MenuHeaderController extends \App\Http\Controllers\Controller
     {
         // Validation
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:200'
+            // 'name' => 'required|max:200'
         ]);
         
         // Check errors
@@ -47,7 +47,7 @@ class MenuHeaderController extends \App\Http\Controllers\Controller
 
             // Save the menu header
             $menu_header = new MenuHeader;
-            $menu_header->name = $request->name;
+            $menu_header->name = $request->name != '' ? $request->name : '';
             $menu_header->num_order = $latest_menu_header ? $latest_menu_header->num_order + 1 : 1;
             $menu_header->save();
 
@@ -86,7 +86,7 @@ class MenuHeaderController extends \App\Http\Controllers\Controller
     {
         // Validation
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:200'
+            // 'name' => 'required|max:200'
         ]);
         
         // Check errors
@@ -97,7 +97,7 @@ class MenuHeaderController extends \App\Http\Controllers\Controller
         else {
             // Update the menu header
             $menu_header = MenuHeader::find($request->id);
-            $menu_header->name = $request->name;
+            $menu_header->name = $request->name != '' ? $request->name : '';
             $menu_header->save();
 
             // Redirect

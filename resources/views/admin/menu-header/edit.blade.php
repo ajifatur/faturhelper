@@ -1,6 +1,6 @@
 @extends('faturhelper::layouts/admin/main')
 
-@section('title', 'Edit Menu Header: '.$menu_header->name)
+@section('title', 'Edit Menu Header: '.($menu_header->name != '' ? $menu_header->name : '<Tanpa Header>'))
 
 @section('content')
 
@@ -15,7 +15,7 @@
                     @csrf
                     <input type="hidden" name="id" value="{{ $menu_header->id }}">
                     <div class="row mb-3">
-                        <label class="col-lg-2 col-md-3 col-form-label">Nama <span class="text-danger">*</span></label>
+                        <label class="col-lg-2 col-md-3 col-form-label">Nama</label>
                         <div class="col-lg-10 col-md-9">
                             <input type="text" name="name" class="form-control form-control-sm {{ $errors->has('name') ? 'border-danger' : '' }}" value="{{ $menu_header->name }}" autofocus>
                             @if($errors->has('name'))
