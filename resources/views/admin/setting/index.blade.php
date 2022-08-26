@@ -62,7 +62,7 @@
                     <h5 class="card-title mb-3">Alamat dan Kontak</h5>
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">
-                            Alamat Lengkap<span class="text-danger">*</span><br><code>setting('address')</code>
+                            Alamat Lengkap<br><code>setting('address')</code>
                         </label>
                         <div class="col-lg-10 col-md-9">
                             <textarea name="setting[address]" class="form-control form-control-sm {{ $errors->has('setting.address') ? 'border-danger' : '' }}" rows="3">{{ setting('address') }}</textarea>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">
-                            Kota<span class="text-danger">*</span><br><code>setting('city')</code>
+                            Kota<br><code>setting('city')</code>
                         </label>
                         <div class="col-lg-10 col-md-9">
                             <input type="text" name="setting[city]" class="form-control form-control-sm {{ $errors->has('setting.city') ? 'border-danger' : '' }}" value="{{ setting('city') }}">
@@ -84,7 +84,7 @@
                     </div>
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">
-                            Email<span class="text-danger">*</span><br><code>setting('email')</code>
+                            Email<br><code>setting('email')</code>
                         </label>
                         <div class="col-lg-10 col-md-9">
                             <input type="email" name="setting[email]" class="form-control form-control-sm {{ $errors->has('setting.email') ? 'border-danger' : '' }}" value="{{ setting('email') }}">
@@ -95,7 +95,7 @@
                     </div>
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">
-                            Nomor Telepon<span class="text-danger">*</span><br><code>setting('phone_number')</code>
+                            Nomor Telepon<br><code>setting('phone_number')</code>
                         </label>
                         <div class="col-lg-10 col-md-9">
                             <input type="text" name="setting[phone_number]" class="form-control form-control-sm {{ $errors->has('setting.phone_number') ? 'border-danger' : '' }}" value="{{ setting('phone_number') }}">
@@ -106,7 +106,7 @@
                     </div>
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">
-                            Nomor WhatsApp<span class="text-danger">*</span><br><code>setting('whatsapp')</code>
+                            Nomor WhatsApp<br><code>setting('whatsapp')</code>
                         </label>
                         <div class="col-lg-10 col-md-9">
                             <input type="text" name="setting[whatsapp]" class="form-control form-control-sm {{ $errors->has('setting.whatsapp') ? 'border-danger' : '' }}" value="{{ setting('whatsapp') }}">

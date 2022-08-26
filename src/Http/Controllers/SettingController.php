@@ -53,11 +53,6 @@ class SettingController extends \App\Http\Controllers\Controller
         $validator = Validator::make($request->all(), [
             'setting.name' => 'required',
             'setting.timezone' => 'required',
-            'setting.address' => 'required',
-            'setting.city' => 'required',
-            'setting.email' => 'required|email',
-            'setting.phone_number' => 'required|numeric',
-            'setting.whatsapp' => 'required|numeric',
         ]);
         
         // Check errors

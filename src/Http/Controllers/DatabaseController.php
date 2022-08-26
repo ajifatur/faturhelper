@@ -27,6 +27,7 @@ class DatabaseController extends \App\Http\Controllers\Controller
         foreach($tables as $key=>$table) {
             $tables[$key]->name = $table->{'Tables_in_'.env('DB_DATABASE')};
             $tables[$key]->columns = DB::select('DESCRIBE '.$tables[$key]->name);
+            $tables[$key]->total = DB::table($tables[$key]->name)->count();
             $tables[$key]->latest_data = Schema::hasColumn($tables[$key]->name, 'updated_at') ? DB::table($tables[$key]->name)->latest('updated_at')->first() : false;
         }
 

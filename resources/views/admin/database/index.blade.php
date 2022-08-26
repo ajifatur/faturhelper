@@ -18,6 +18,7 @@
                                 <th rowspan="2" width="30">#</th>
                                 <th rowspan="2">Table</th>
                                 <th colspan="6">Field</th>
+                                <th rowspan="2" width="50">Total</th>
                                 <th rowspan="2" width="100">Last Update</th>
                             </tr>
                             <tr>
@@ -41,6 +42,7 @@
                                         <td>{{ $column_attr }}</td>
                                     @endforeach
                                     @if($key == 0)
+                                        <td rowspan="{{ count($table->columns) }}" align="right">{{ $table->total }}</td>
                                         <td rowspan="{{ count($table->columns) }}">
                                             @if($table->latest_data)
                                                 {{ date('d/m/Y', strtotime($table->latest_data->updated_at)) }}
