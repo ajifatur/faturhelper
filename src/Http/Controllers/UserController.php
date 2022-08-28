@@ -24,7 +24,7 @@ class UserController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
         // Check the access
-        // has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(method(__METHOD__), Auth::user()->role_id);
 
         // Get users
         if($request->query('role') == 0)
@@ -50,7 +50,7 @@ class UserController extends \App\Http\Controllers\Controller
     public function create()
     {
         // Check the access
-        // has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(method(__METHOD__), Auth::user()->role_id);
 
         // Get roles
         $roles = Role::orderBy('num_order','asc')->get();
@@ -147,7 +147,7 @@ class UserController extends \App\Http\Controllers\Controller
     public function edit($id)
     {
         // Check the access
-        // has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(method(__METHOD__), Auth::user()->role_id);
 
         // Get the user
         $user = User::findOrFail($id);
@@ -248,7 +248,7 @@ class UserController extends \App\Http\Controllers\Controller
     public function delete(Request $request)
     {
         // Check the access
-        // has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(method(__METHOD__), Auth::user()->role_id);
         
         // Get the user
         $user = User::find($request->id);
