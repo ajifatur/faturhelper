@@ -186,6 +186,23 @@
                         </div>
                     </div>
                     <hr>
+                    <div class="row mb-3">
+                        <label class="col-lg-2 col-md-3 col-form-label">Tampilkan Brand <span class="text-danger">*</span></label>
+                        <div class="col-lg-10 col-md-9">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="setting[show_brand]" id="show_brand-1" value="1" {{ setting('show_brand') == '1' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="show_brand-1">Ya</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="setting[show_brand]" id="show_brand-0" value="0" {{ setting('show_brand') == '0' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="show_brand-0">Tidak</label>
+                            </div>
+                            @if($errors->has('setting.show_brand'))
+                            <div class="small text-danger">{{ $errors->first('setting.show_brand') }}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <hr>
                     <div class="row">
                         <div class="col-lg-2 col-md-3"></div>
                         <div class="col-lg-10 col-md-9">
