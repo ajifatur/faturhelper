@@ -23,7 +23,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label class="col-lg-2 col-md-10 col-form-label">Tanggal Lahir <span class="text-danger">*</span></label>
+                        <label class="col-lg-2 col-md-3 col-form-label">Tanggal Lahir <span class="text-danger">*</span></label>
                         <div class="col-lg-10 col-md-9">
                             <div class="input-group input-group-sm">
                                 <input type="text" name="birthdate" class="form-control form-control-sm {{ $errors->has('birthdate') ? 'border-danger' : '' }}" value="{{ old('birthdate') }}" autocomplete="off">
@@ -35,7 +35,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label class="col-lg-2 col-md-10 col-form-label">Jenis Kelamin <span class="text-danger">*</span></label>
+                        <label class="col-lg-2 col-md-3 col-form-label">Jenis Kelamin <span class="text-danger">*</span></label>
                         <div class="col-lg-10 col-md-9">
                             @foreach(gender() as $gender)
                             <div class="form-check">
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="row mb-3">
-                        <label class="col-lg-2 col-md-10 col-form-label">Nomor Telepon <span class="text-danger">*</span></label>
+                        <label class="col-lg-2 col-md-3 col-form-label">Nomor Telepon <span class="text-danger">*</span></label>
                         <div class="col-lg-10 col-md-9">
                             <div class="input-group">
                                 <select name="country_code" class="form-select form-select-sm {{ $errors->has('country_code') ? 'border-danger' : '' }}" id="select2" style="width: 40%"></select>
@@ -66,7 +66,7 @@
                     </div>
                     <hr>
                     <div class="row mb-3">
-                        <label class="col-lg-2 col-md-10 col-form-label">Role <span class="text-danger">*</span></label>
+                        <label class="col-lg-2 col-md-3 col-form-label">Role <span class="text-danger">*</span></label>
                         <div class="col-lg-10 col-md-9">
                             <select name="role" class="form-select form-select-sm {{ $errors->has('role') ? 'border-danger' : '' }}">
                                 <option value="" disabled selected>--Pilih--</option>
@@ -126,6 +126,22 @@
                         </div>
                     </div>
                     <hr>
+                    <div class="row mb-3">
+                        <label class="col-lg-2 col-md-3 col-form-label">Foto</label>
+                        <div class="col-lg-10 col-md-9">
+                            <div>
+                                <input type="file" name="photo" accept="image/*">
+                            </div>
+                            <div>
+                                <input type="hidden" name="photo_source">
+                                <img width="175" class="photo d-none img-thumbnail rounded-circle mt-3">
+                            </div>
+                            @if($errors->has('photo'))
+                            <div class="small text-danger">{{ $errors->first('photo') }}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <hr>
                     <div class="row">
                         <div class="col-lg-2 col-md-3"></div>
                         <div class="col-lg-10 col-md-9">
@@ -139,10 +155,32 @@
 	</div>
 </div>
 
+<div class="modal fade" id="modal-croppie" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Sesuaikan Foto</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="text-center">Ukuran 250 x 250 pixel.</p>
+                <div class="table-responsive">
+                    <div id="croppie"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-sm btn-primary btn-croppie">Potong</button>
+                <button class="btn btn-sm btn-danger" data-bs-dismiss="modal">Batal</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('js')
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.js"></script>
 <script type="text/javascript">
     // Get Country Codes
     Spandiv.Select2ServerSide("#select2", {
@@ -155,6 +193,39 @@
     
     // Datepicker
     Spandiv.DatePicker("input[name=birthdate]");
+
+    // Init Croppie
+    var croppie = Spandiv.Croppie("#croppie", {
+        width: 250,
+        height: 250,
+        type: 'circle'
+    });
+
+    // Change Croppie Input
+    $(document).on("change", "input[name=photo]", function() {
+        Spandiv.CroppieBindFromURL(croppie, this);
+        Spandiv.Modal("#modal-croppie").show();
+    });
+
+    // Button Croppie
+    $(document).on("click", ".btn-croppie", function(e) {
+        e.preventDefault();
+        croppie.croppie('result', {
+            type: 'base64',
+            circle: false
+        }).then(function(response) {
+            $("img.photo").attr("src",response).removeClass("d-none");
+            $("input[name=photo_source]").val(response);
+            $("input[name=photo]").val(null);
+            Spandiv.Modal("#modal-croppie").hide();
+        });
+    });
 </script>
+
+@endsection
+
+@section('css')
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/croppie/2.6.5/croppie.min.css">
 
 @endsection

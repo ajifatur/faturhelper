@@ -4,11 +4,13 @@ namespace Ajifatur\FaturHelper\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Ajifatur\Helpers\DateTimeExt;
 use Ajifatur\FaturHelper\Models\User;
 use Ajifatur\FaturHelper\Models\UserAttribute;
+use Ajifatur\FaturHelper\Models\UserAvatar;
 use Ajifatur\FaturHelper\Models\Role;
 
 class UserController extends \App\Http\Controllers\Controller
@@ -111,6 +113,25 @@ class UserController extends \App\Http\Controllers\Controller
             $user_attribute->dial_code = dial_code($request->country_code);
             $user_attribute->phone_number = $request->phone_number;
             $user_attribute->save();
+            
+            // Upload the image
+            if($request->photo_source != '') {
+                $image = $request->photo_source;
+                $image = str_replace('data:image/png;base64,', '', $image);
+                $image = str_replace(' ', '+', $image);
+                $imageName = date('Y-m-d-H-i-s').'.'.'png';
+                File::put(public_path('assets/images/users'). '/' . $imageName, base64_decode($image));
+
+                // Update the user avatar
+                $user->avatar = $imageName;
+                $user->save();
+
+                // Save user avatar
+                $user_avatar = new UserAvatar;
+                $user_avatar->user_id = $user->id;
+                $user_avatar->avatar = $user->avatar;
+                $user_avatar->save();
+            }
 
             // Redirect
             return redirect()->route('admin.user.index')->with(['message' => 'Berhasil menambah data.']);
@@ -193,6 +214,25 @@ class UserController extends \App\Http\Controllers\Controller
             $user_attribute->dial_code = dial_code($request->country_code);
             $user_attribute->phone_number = $request->phone_number;
             $user_attribute->save();
+            
+            // Upload the image
+            if($request->photo_source != '') {
+                $image = $request->photo_source;
+                $image = str_replace('data:image/png;base64,', '', $image);
+                $image = str_replace(' ', '+', $image);
+                $imageName = date('Y-m-d-H-i-s').'.'.'png';
+                File::put(public_path('assets/images/users'). '/' . $imageName, base64_decode($image));
+
+                // Update the user avatar
+                $user->avatar = $imageName;
+                $user->save();
+
+                // Save user avatar
+                $user_avatar = new UserAvatar;
+                $user_avatar->user_id = $user->id;
+                $user_avatar->avatar = $user->avatar;
+                $user_avatar->save();
+            }
 
             // Redirect
             return redirect()->route('admin.user.index')->with(['message' => 'Berhasil mengupdate data.']);
@@ -225,6 +265,11 @@ class UserController extends \App\Http\Controllers\Controller
         // Delete the user attribute
         if($user->attribute) {
             $user->attribute->delete();
+        }
+
+        // Delete the user avatars
+        if(count($user->avatars) > 0) {
+            $user_avatars = UserAvatar::where('user_id','=',$user->id)->delete();
         }
 
         // Redirect
