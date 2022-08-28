@@ -65,7 +65,8 @@ class LoginController extends \App\Http\Controllers\Controller
             // Set credentials
             $credentials = [
                 $loginType => $request->username,
-                'password' => $request->password
+                'password' => $request->password,
+                'status' => 1
             ];
 
             // Add credentials if non-admin is disallowed to log in

@@ -121,13 +121,22 @@ class RouteExt
     }
 
     /**
-     * Set the user profile and settings routes.
+     * Set the user, user profile and settings routes.
      *
      * @return void
      */
     public static function user()
     {
         Route::group(['middleware' => ['faturhelper.admin']], function() {
+            // User
+            Route::get('/admin/user', self::NAMESPACE.'\UserController@index')->name('admin.user.index');
+            Route::get('/admin/user/create', self::NAMESPACE.'\UserController@create')->name('admin.user.create');
+            Route::post('/admin/user/store', self::NAMESPACE.'\UserController@store')->name('admin.user.store');
+            Route::get('/admin/user/edit/{id}', self::NAMESPACE.'\UserController@edit')->name('admin.user.edit');
+            Route::post('/admin/user/update', self::NAMESPACE.'\UserController@update')->name('admin.user.update');
+            Route::post('/admin/user/delete', self::NAMESPACE.'\UserController@delete')->name('admin.user.delete');
+
+            // User profile and settings
             Route::get('/admin/profile', self::NAMESPACE.'\UserSettingController@index')->name('admin.profile');
             Route::get('/admin/settings/profile', self::NAMESPACE.'\UserSettingController@profile')->name('admin.settings.profile');
             Route::post('/admin/settings/profile/update', self::NAMESPACE.'\UserSettingController@updateProfile')->name('admin.settings.profile.update');

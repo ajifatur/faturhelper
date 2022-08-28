@@ -1,6 +1,6 @@
 <div class="settings-toggle" data-bs-toggle="offcanvas" data-bs-target="#offcanvas">
 	<div class="settings-gear">
-		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear" viewBox="0 0 16 16">
+		<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear rotate-animation" viewBox="0 0 16 16">
 			<path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
 			<path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319zm-2.633.283c.246-.835 1.428-.835 1.674 0l.094.319a1.873 1.873 0 0 0 2.693 1.115l.291-.16c.764-.415 1.6.42 1.184 1.185l-.159.292a1.873 1.873 0 0 0 1.116 2.692l.318.094c.835.246.835 1.428 0 1.674l-.319.094a1.873 1.873 0 0 0-1.115 2.693l.16.291c.415.764-.42 1.6-1.185 1.184l-.291-.159a1.873 1.873 0 0 0-2.693 1.116l-.094.318c-.246.835-1.428.835-1.674 0l-.094-.319a1.873 1.873 0 0 0-2.692-1.115l-.292.16c-.764.415-1.6-.42-1.184-1.185l.159-.291A1.873 1.873 0 0 0 1.945 8.93l-.319-.094c-.835-.246-.835-1.428 0-1.674l.319-.094A1.873 1.873 0 0 0 3.06 4.377l-.16-.292c-.415-.764.42-1.6 1.185-1.184l.292.159a1.873 1.873 0 0 0 2.692-1.115l.094-.319z"/>
 		</svg>
@@ -26,6 +26,17 @@
 		width: 40px;
 		line-height: 40px;
 	}
+	.rotate-animation {
+		-webkit-animation: rotate-gear 2s linear 0s infinite normal;
+		-moz-animation: rotate-gear 2s linear 0s infinite normal;
+		-o-animation: rotate-gear 2s linear 0s infinite normal;
+		-ms-animation: rotate-gear 2s linear 0s infinite normal;
+		animation: rotate-gear 2s linear 0s infinite normal;
+	}
+	@keyframes rotate-gear {
+		from {transform: rotate(0deg);}
+		to {transform: rotate(360deg);}
+	}
 </style>
 
 <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvas" aria-labelledby="offcanvas">
@@ -35,7 +46,11 @@
 	</div>
 	<div class="offcanvas-body">
 		<div class="d-grid gap-2 mb-3">
-			<a href="https://github.com/ajifatur/faturhelper" class="btn btn-outline-primary btn-lg" target="_blank"><i class="bi-github me-1"></i> Kunjungi Kami</a>
+			<div class="btn-group">
+				<a href="https://spandiv.xyz" class="btn btn-outline-primary btn-sm" target="_blank"><i class="bi-globe2 me-1"></i> Spandiv</a>
+				<a href="https://github.com/ajifatur/faturhelper" class="btn btn-outline-primary btn-sm" target="_blank"><i class="bi-github me-1"></i> FaturHelper</a>
+				<a href="https://github.com/ajifatur/assets" class="btn btn-outline-primary btn-sm" target="_blank"><i class="bi-github me-1"></i> Assets</a>
+			</div>
 		</div>
 		<div class="mb-3">
 			<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Tema</small>
@@ -57,8 +72,9 @@
 			<div class="row">
 				<div class="col-6"><a href="{{ route('admin.role.index') }}">Role</a></div>
 				<div class="col-6"><a href="{{ route('admin.menu.index') }}">Menu</a></div>
-				<div class="col-6"><a href="{{ route('admin.permission.index') }}">Hak Akses</a></div>
+				<div class="col-6"><a href="{{ route('admin.user.index') }}">Pengguna</a></div>
 				<div class="col-6"><a href="{{ route('admin.meta.index') }}">Meta</a></div>
+				<div class="col-6"><a href="{{ route('admin.permission.index') }}">Hak Akses</a></div>
 			</div>
 		</div>
 		<hr>
