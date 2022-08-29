@@ -7,38 +7,6 @@
 	</div>
 </div>
 
-<style>
-	.settings-toggle {
-		height: 40px;
-		width: 40px;
-		top: 50%;
-		bottom: 0;
-		right: 0;
-		transform: translateY(50%);
-		padding: 0;
-		text-align: center;
-		border-radius: 0;
-		border-top-left-radius: .5rem;
-		border-bottom-left-radius: .5rem;
-	}
-	.settings-toggle .settings-gear {
-		height: 40px;
-		width: 40px;
-		line-height: 40px;
-	}
-	.rotate-animation {
-		-webkit-animation: rotate-gear 2s linear 0s infinite normal;
-		-moz-animation: rotate-gear 2s linear 0s infinite normal;
-		-o-animation: rotate-gear 2s linear 0s infinite normal;
-		-ms-animation: rotate-gear 2s linear 0s infinite normal;
-		animation: rotate-gear 2s linear 0s infinite normal;
-	}
-	@keyframes rotate-gear {
-		from {transform: rotate(0deg);}
-		to {transform: rotate(360deg);}
-	}
-</style>
-
 <div class="offcanvas offcanvas-end" data-bs-scroll="true" tabindex="-1" id="offcanvas" aria-labelledby="offcanvas">
 	<div class="offcanvas-header settings-title">
 		<h4 class="offcanvas-title">Tools dan Aplikasi</h4>

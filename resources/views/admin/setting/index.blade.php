@@ -186,8 +186,11 @@
                         </div>
                     </div>
                     <hr>
+                    <h5 class="card-title mb-3">Konfigurasi</h5>
                     <div class="row mb-3">
-                        <label class="col-lg-2 col-md-3 col-form-label">Tampilkan Brand <span class="text-danger">*</span></label>
+                        <label class="col-lg-2 col-md-3 col-form-label">
+                            Tampilkan Brand<span class="text-danger">*</span><br><code>setting('show_brand')</code>
+                        </label>
                         <div class="col-lg-10 col-md-9">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="setting[show_brand]" id="show_brand-1" value="1" {{ setting('show_brand') == '1' ? 'checked' : '' }}>
