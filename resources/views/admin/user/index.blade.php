@@ -8,6 +8,7 @@
     <h1 class="h3 mb-2 mb-sm-0">Kelola Pengguna</h1>
     <div class="btn-group">
         <a href="{{ route('admin.user.create') }}" class="btn btn-sm btn-primary"><i class="bi-plus me-1"></i> Tambah Pengguna</a>
+        <a href="#" class="btn btn-sm btn-danger btn-delete-bulk"><i class="bi-trash me-1"></i> Hapus Terpilih</a>
     </div>
 </div>
 <div class="row">
@@ -47,7 +48,7 @@
                         <tbody>
                             @foreach($users as $user)
                             <tr>
-                                <td align="center"><input type="checkbox" class="form-check-input checkbox-one"></td>
+                                <td align="center"><input type="checkbox" class="form-check-input checkbox-one" data-id="{{ $user->id }}"></td>
                                 <td>
                                     {{ $user->name }}
                                     <div class="small text-muted">{{ $user->email }}</div>
@@ -76,6 +77,11 @@
     <input type="hidden" name="id">
 </form>
 
+<form class="form-delete-bulk d-none" method="post" action="{{ route('admin.user.delete-bulk') }}">
+    @csrf
+    <input type="hidden" name="ids">
+</form>
+
 @endsection
 
 @section('js')
@@ -86,6 +92,9 @@
 
     // Button Delete
     Spandiv.ButtonDelete(".btn-delete", ".form-delete");
+
+    // Button Delete Bulk
+    Spandiv.ButtonDeleteBulk(".btn-delete-bulk", ".form-delete-bulk");
     
     // Change the role
     $(document).on("change", ".card-header select[name=role]", function() {

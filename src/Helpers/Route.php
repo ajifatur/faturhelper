@@ -135,6 +135,7 @@ class RouteExt
             Route::get('/admin/user/edit/{id}', self::NAMESPACE.'\UserController@edit')->name('admin.user.edit');
             Route::post('/admin/user/update', self::NAMESPACE.'\UserController@update')->name('admin.user.update');
             Route::post('/admin/user/delete', self::NAMESPACE.'\UserController@delete')->name('admin.user.delete');
+            Route::post('/admin/user/delete-bulk', self::NAMESPACE.'\UserController@deleteBulk')->name('admin.user.delete-bulk');
 
             // User profile and settings
             Route::get('/admin/profile', self::NAMESPACE.'\UserSettingController@index')->name('admin.profile');

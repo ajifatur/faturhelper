@@ -5,7 +5,7 @@
 <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/ashl1/datatables-rowsgroup@fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
 <script src="https://ajifatur.github.io/assets/spandiv.min.js"></script>
-<!-- <script src="{{ asset('spandiv/spandiv.js') }}"></script> -->
+<!-- <script src="{{ asset('spandiv/assets/spandiv.js') }}"></script> -->
 <script>
 	// Change theme
 	$(document).on("change", "input[name=theme]", function(e) {

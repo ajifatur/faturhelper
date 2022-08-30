@@ -275,4 +275,52 @@ class UserController extends \App\Http\Controllers\Controller
         // Redirect
         return redirect()->route('admin.user.index')->with(['message' => 'Berhasil menghapus data.']);
     }
+
+    /**
+     * Remove the selected resource from storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteBulk(Request $request)
+    {
+        // Check the access
+        // has_access(method(__METHOD__), Auth::user()->role_id);
+
+        // Explode ids
+        $ids = explode(",", $request->ids);
+
+        if(count($ids) > 0) {
+            foreach($ids as $id) {
+                if($id != 1) {
+                    // Get the user
+                    $user = User::find($id);
+
+                    // Delete the user
+                    $user->delete();
+
+                    // Delete the user attribute
+                    if($user->attribute) {
+                        $user->attribute->delete();
+                    }
+
+                    // Delete the user avatars
+                    if(count($user->avatars) > 0) {
+                        $user_avatars = UserAvatar::where('user_id','=',$user->id)->delete();
+                    }
+                }
+            }
+
+            // Redirect
+            if(in_array(1, $ids) && count($ids) > 1) {
+                return redirect()->route('admin.user.index')->with(['message' => 'Berhasil menghapus data, tetapi tidak bisa menghapus akun default.']);
+            }
+            elseif(in_array(1, $ids) && count($ids) == 1) {
+                return redirect()->route('admin.user.index')->with(['message' => 'Tidak bisa menghapus akun default.']);
+            }
+            else {
+                return redirect()->route('admin.user.index')->with(['message' => 'Berhasil menghapus data.']);
+            }
+        }
+    }
 }
