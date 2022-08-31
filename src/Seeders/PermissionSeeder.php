@@ -25,6 +25,7 @@ class PermissionSeeder extends Seeder
             ['code' => 'UserController::create', 'name' => 'Menambah Pengguna'],
             ['code' => 'UserController::edit', 'name' => 'Mengubah Pengguna'],
             ['code' => 'UserController::delete', 'name' => 'Menghapus Pengguna'],
+            ['code' => 'UserController::deleteBulk', 'name' => 'Menghapus Pengguna Terpilih'],
             ['code' => 'PermissionController::index', 'name' => 'Mengelola Data Hak Akses'],
             ['code' => 'PermissionController::create', 'name' => 'Menambah Hak Akses'],
             ['code' => 'PermissionController::edit', 'name' => 'Mengubah Hak Akses'],

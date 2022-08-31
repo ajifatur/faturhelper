@@ -3,6 +3,7 @@
 /**
  * @method bool|void       has_access(string $permission_code, int $role, bool $isAbort = true)
  * @method string          method(string $method)
+ * @method string|array    fetch(string $url, array $query)
  * @method string|int|null role(string|int $key)
  * @method string          setting(string $code)
  * @method string          meta(string $code)
@@ -24,6 +25,9 @@
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Ajifatur\Helpers\FileExt;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7;
+use GuzzleHttp\Exception\ClientException;
 use hisorange\BrowserDetect\Parser as Browser;
 use Stevebauman\Location\Facades\Location;
 
@@ -70,6 +74,28 @@ if(!function_exists('method')) {
     function method($method) {
         $explode = explode('\\', $method);
         return end($explode);
+    }
+}
+
+/**
+ * Fetch data by GET method.
+ *
+ * @param  string $url
+ * @param  array  $query
+ * @return array|string
+ */
+if(!function_exists('fetch')) {
+    function fetch($url, $query = []) {
+        try {
+            $client = new Client;
+            $response = $client->request('GET', $url, [
+                'query' => $query
+            ]);
+        }
+        catch (ClientException $e) {
+            return Psr7\Message::toString($e->getResponse());
+        }
+        return json_decode($response->getBody(), true);
     }
 }
 

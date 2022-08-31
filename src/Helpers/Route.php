@@ -117,6 +117,7 @@ class RouteExt
     {
         Route::group(['middleware' => ['faturhelper.admin']], function() {
             Route::get('/admin', self::NAMESPACE.'\DashboardController@index')->name('admin.dashboard');
+            Route::get('/admin/summary', self::NAMESPACE.'\DashboardController@summary')->name('admin.summary');
         });
     }
 

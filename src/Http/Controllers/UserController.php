@@ -285,7 +285,7 @@ class UserController extends \App\Http\Controllers\Controller
     public function deleteBulk(Request $request)
     {
         // Check the access
-        // has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(method(__METHOD__), Auth::user()->role_id);
 
         // Explode ids
         $ids = explode(",", $request->ids);
