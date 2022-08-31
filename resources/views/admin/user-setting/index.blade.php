@@ -44,11 +44,11 @@
                     </li>
                     <li class="list-group-item px-0 py-1 d-sm-flex justify-content-between">
                         <div>Tanggal Lahir:</div>
-                        <div>{{ $user->attribute ? date('d/m/Y', strtotime($user->attribute->birthdate)) : '-' }}</div>
+                        <div>{{ $user->attribute && $user->attribute->birthdate != null ? date('d/m/Y', strtotime($user->attribute->birthdate)) : '-' }}</div>
                     </li>
                     <li class="list-group-item px-0 py-1 d-sm-flex justify-content-between">
                         <div>Jenis Kelamin:</div>
-                        <div>{{ $user->attribute ? gender($user->attribute->gender) : '-' }}</div>
+                        <div>{{ $user->attribute && $user->attribute->gender != null ? gender($user->attribute->gender) : '-' }}</div>
                     </li>
                     <li class="list-group-item px-0 py-1 d-sm-flex justify-content-between">
                         <div>Email:</div>

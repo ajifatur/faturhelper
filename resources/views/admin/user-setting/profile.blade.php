@@ -39,7 +39,7 @@
                         <label class="col-lg-3 col-md-4 col-form-label">Tanggal Lahir <span class="text-danger">*</span></label>
                         <div class="col-lg-9 col-md-8">
                             <div class="input-group input-group-sm">
-                                <input type="text" name="birthdate" class="form-control form-control-sm {{ $errors->has('birthdate') ? 'border-danger' : '' }}" value="{{ Auth::user()->attribute ? date('d/m/Y', strtotime(Auth::user()->attribute->birthdate)) : '' }}" autocomplete="off">
+                                <input type="text" name="birthdate" class="form-control form-control-sm {{ $errors->has('birthdate') ? 'border-danger' : '' }}" value="{{ Auth::user()->attribute && Auth::user()->attribute->birthdate != null ? date('d/m/Y', strtotime(Auth::user()->attribute->birthdate)) : '' }}" autocomplete="off">
                                 <span class="input-group-text"><i class="bi-calendar2"></i></span>
                             </div>
                             @if($errors->has('birthdate'))
