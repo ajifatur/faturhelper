@@ -11,14 +11,17 @@
 	<div class="col-12">
 		<div class="card">
             <div class="card-body">
-                <table class="table table-sm table-hover table-bordered mb-0" id="table-dataset">
-                    <thead class="bg-light"></thead>
-                    <tbody>
-                        <tr>
-                            <td align="center"><span class="text-primary fst-italic">Memuat...</span></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <p class="d-none" id="total"></p>
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover table-bordered mb-0" id="table-dataset">
+                        <thead class="bg-light"></thead>
+                        <tbody>
+                            <tr>
+                                <td align="center"><span class="text-primary fst-italic">Memuat...</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
 		</div>
 	</div>
@@ -58,6 +61,9 @@
                 tbody += '</tr>';
             }
             $("#table-dataset tbody").html(tbody);
+
+            // Show total
+            $("#total").text("Menampilkan " + Spandiv.NumberFormat(keys.length.toString()) + " data.").removeClass("d-none");
         },
         error: function() {
             console.log("File not found");

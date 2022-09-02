@@ -55,6 +55,7 @@
 						<li><a href="{{ route('admin.system.index') }}">Lingkungan Sistem</a></li>
 						<li><a href="{{ route('admin.database.index') }}">Database</a></li>
 						<li><a href="{{ route('admin.route.index') }}">Route</a></li>
+						<li><a href="{{ route('admin.summary') }}">Summary</a></li>
 					</ul>
 				</div>
 				<div class="col-6">
