@@ -16,6 +16,6 @@
     <link rel="stylesheet" href="https://ajifatur.github.io/assets/spandiv.min.css">
     <link rel="stylesheet" href="https://ajifatur.github.io/assets/adminkit-themes.min.css">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">
     
