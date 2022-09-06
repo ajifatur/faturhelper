@@ -30,7 +30,9 @@ class SettingSeeder extends Seeder
             ['code' => 'google_maps', 'content' => ''],
             ['code' => 'google_tag_manager', 'content' => ''],
             ['code' => 'theme', 'content' => 'default'],
-            ['code' => 'show_brand', 'content' => '1'],
+            ['code' => 'brand_name', 'content' => 'Spandiv Digital'],
+            ['code' => 'brand_url', 'content' => 'https://spandiv.xyz'],
+            ['code' => 'brand_visibility', 'content' => '1'],
         ];
 
         foreach($settings as $setting) {

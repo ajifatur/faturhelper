@@ -186,22 +186,44 @@
                         </div>
                     </div>
                     <hr>
-                    <h5 class="card-title mb-3">Konfigurasi</h5>
+                    <h5 class="card-title mb-3">Footer Copyright</h5>
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">
-                            Tampilkan Brand<span class="text-danger">*</span><br><code>setting('show_brand')</code>
+                            Nama Brand<br><code>setting('brand_name')</code>
+                        </label>
+                        <div class="col-lg-10 col-md-9">
+                            <input type="text" name="setting[brand_name]" class="form-control form-control-sm {{ $errors->has('setting.brand_name') ? 'border-danger' : '' }}" value="{{ setting('brand_name') }}">
+                            @if($errors->has('setting.brand_name'))
+                            <div class="small text-danger">{{ $errors->first('setting.brand_name') }}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-lg-2 col-md-3 col-form-label">
+                            URL Brand<br><code>setting('brand_url')</code>
+                        </label>
+                        <div class="col-lg-10 col-md-9">
+                            <input type="text" name="setting[brand_url]" class="form-control form-control-sm {{ $errors->has('setting.brand_url') ? 'border-danger' : '' }}" value="{{ setting('brand_url') }}">
+                            @if($errors->has('setting.brand_url'))
+                            <div class="small text-danger">{{ $errors->first('setting.brand_url') }}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-lg-2 col-md-3 col-form-label">
+                            Tampilkan Brand<span class="text-danger">*</span><br><code>setting('brand_visibility')</code>
                         </label>
                         <div class="col-lg-10 col-md-9">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="setting[show_brand]" id="show_brand-1" value="1" {{ setting('show_brand') == '1' ? 'checked' : '' }}>
-                                <label class="form-check-label" for="show_brand-1">Ya</label>
+                                <input class="form-check-input" type="radio" name="setting[brand_visibility]" id="brand_visibility-1" value="1" {{ setting('brand_visibility') == '1' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="brand_visibility-1">Ya</label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="setting[show_brand]" id="show_brand-0" value="0" {{ setting('show_brand') == '0' ? 'checked' : '' }}>
-                                <label class="form-check-label" for="show_brand-0">Tidak</label>
+                                <input class="form-check-input" type="radio" name="setting[brand_visibility]" id="brand_visibility-0" value="0" {{ setting('brand_visibility') == '0' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="brand_visibility-0">Tidak</label>
                             </div>
-                            @if($errors->has('setting.show_brand'))
-                            <div class="small text-danger">{{ $errors->first('setting.show_brand') }}</div>
+                            @if($errors->has('setting.brand_visibility'))
+                            <div class="small text-danger">{{ $errors->first('setting.brand_visibility') }}</div>
                             @endif
                         </div>
                     </div>
