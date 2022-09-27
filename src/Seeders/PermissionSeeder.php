@@ -15,40 +15,53 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        /*
+        // Add namespaces
+        $array = Permission::where('code','not like','%Controllers%')->get();
+        foreach($array as $key=>$data) {
+            $permission = Permission::find($data->id);
+
+            if($permission->default == 1)
+                $permission->code = 'Ajifatur\\FaturHelper\\Http\\Controllers\\' . $permission->code;
+            elseif($permission->default == 0)
+                $permission->code = 'App\\Http\\Controllers\\' . $permission->code;
+
+            $permission->save();
+        }
+
+        
         $array = [
-            ['code' => 'RoleController::index', 'name' => 'Mengelola Data Role'],
-            ['code' => 'RoleController::create', 'name' => 'Menambah Role'],
-            ['code' => 'RoleController::edit', 'name' => 'Mengubah Role'],
-            ['code' => 'RoleController::delete', 'name' => 'Menghapus Role'],
-            ['code' => 'RoleController::reorder', 'name' => 'Mengurutkan Role'],
-            ['code' => 'UserController::index', 'name' => 'Mengelola Data Pengguna'],
-            ['code' => 'UserController::create', 'name' => 'Menambah Pengguna'],
-            ['code' => 'UserController::edit', 'name' => 'Mengubah Pengguna'],
-            ['code' => 'UserController::delete', 'name' => 'Menghapus Pengguna'],
-            ['code' => 'UserController::deleteBulk', 'name' => 'Menghapus Pengguna Terpilih'],
-            ['code' => 'PermissionController::index', 'name' => 'Mengelola Data Hak Akses'],
-            ['code' => 'PermissionController::create', 'name' => 'Menambah Hak Akses'],
-            ['code' => 'PermissionController::edit', 'name' => 'Mengubah Hak Akses'],
-            ['code' => 'PermissionController::delete', 'name' => 'Menghapus Hak Akses'],
-            ['code' => 'PermissionController::reorder', 'name' => 'Mengurutkan Hak Akses'],
-            ['code' => 'PermissionController::change', 'name' => 'Mengganti Status Hak Akses'],
-            ['code' => 'MenuController::index', 'name' => 'Mengelola Data Menu'],
-            ['code' => 'MenuHeaderController::create', 'name' => 'Menambah Menu Header'],
-            ['code' => 'MenuHeaderController::edit', 'name' => 'Mengubah Menu Header'],
-            ['code' => 'MenuHeaderController::delete', 'name' => 'Menghapus Menu Header'],
-            ['code' => 'MenuItemController::create', 'name' => 'Menambah Menu Item'],
-            ['code' => 'MenuItemController::edit', 'name' => 'Mengubah Menu Item'],
-            ['code' => 'MenuItemController::delete', 'name' => 'Menghapus Menu Item'],
-            ['code' => 'MetaController::index', 'name' => 'Mengelola Meta'],
-            ['code' => 'SystemController::index', 'name' => 'Menampilkan Lingkungan Sistem'],
-            ['code' => 'DatabaseController::index', 'name' => 'Menampilkan Database'],
-            ['code' => 'RouteController::index', 'name' => 'Menampilkan Route'],
-            ['code' => 'ArtisanController::index', 'name' => 'Mengelola Perintah Artisan'],
-            ['code' => 'LogController::activity', 'name' => 'Menampilkan Log Aktivitas'],
-            ['code' => 'LogController::activityByURL', 'name' => 'Menampilkan Log Aktivitas Berdasarkan URL'],
-            ['code' => 'LogController::authentication', 'name' => 'Menampilkan Log Autentikasi'],
-            ['code' => 'VisitorController::index', 'name' => 'Menampilkan Data Visitor'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\RoleController::index', 'name' => 'Mengelola Data Role'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\RoleController::create', 'name' => 'Menambah Role'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\RoleController::edit', 'name' => 'Mengubah Role'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\RoleController::delete', 'name' => 'Menghapus Role'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\RoleController::reorder', 'name' => 'Mengurutkan Role'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\UserController::index', 'name' => 'Mengelola Data Pengguna'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\UserController::create', 'name' => 'Menambah Pengguna'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\UserController::edit', 'name' => 'Mengubah Pengguna'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\UserController::delete', 'name' => 'Menghapus Pengguna'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\UserController::deleteBulk', 'name' => 'Menghapus Pengguna Terpilih'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PermissionController::index', 'name' => 'Mengelola Data Hak Akses'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PermissionController::create', 'name' => 'Menambah Hak Akses'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PermissionController::edit', 'name' => 'Mengubah Hak Akses'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PermissionController::delete', 'name' => 'Menghapus Hak Akses'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PermissionController::reorder', 'name' => 'Mengurutkan Hak Akses'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PermissionController::change', 'name' => 'Mengganti Status Hak Akses'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuController::index', 'name' => 'Mengelola Data Menu'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuHeaderController::create', 'name' => 'Menambah Menu Header'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuHeaderController::edit', 'name' => 'Mengubah Menu Header'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuHeaderController::delete', 'name' => 'Menghapus Menu Header'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuItemController::create', 'name' => 'Menambah Menu Item'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuItemController::edit', 'name' => 'Mengubah Menu Item'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuItemController::delete', 'name' => 'Menghapus Menu Item'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MetaController::index', 'name' => 'Mengelola Meta'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\SystemController::index', 'name' => 'Menampilkan Lingkungan Sistem'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\DatabaseController::index', 'name' => 'Menampilkan Database'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\RouteController::index', 'name' => 'Menampilkan Route'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\ArtisanController::index', 'name' => 'Mengelola Perintah Artisan'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::activity', 'name' => 'Menampilkan Log Aktivitas'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::activityByURL', 'name' => 'Menampilkan Log Aktivitas Berdasarkan URL'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::authentication', 'name' => 'Menampilkan Log Autentikasi'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\VisitorController::index', 'name' => 'Menampilkan Data Visitor'],
         ];
 
         $role = Role::where('code', '=', 'super-admin')->first();
@@ -64,20 +77,6 @@ class PermissionSeeder extends Seeder
                     $permission->roles()->attach($role->id);
                 }
             }
-        }
-        */
-
-        // Add namespaces
-        $array = Permission::where('code','not like','%Controllers%')->get();
-        foreach($array as $key=>$data) {
-            $permission = Permission::find($data->id);
-
-            if($permission->default == 1)
-                $permission->code = 'Ajifatur\\FaturHelper\\Http\\Controllers\\' . $permission->code;
-            elseif($permission->default == 0)
-                $permission->code = 'App\\Http\\Controllers\\' . $permission->code;
-
-            $permission->save();
         }
     }
 }

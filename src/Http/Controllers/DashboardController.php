@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Ajifatur\FaturHelper\Models\User;
 use Ajifatur\FaturHelper\Models\Visitor;
+use Ajifatur\FaturHelper\Models\Setting;
 
 class DashboardController extends \App\Http\Controllers\Controller
 {
@@ -44,10 +45,17 @@ class DashboardController extends \App\Http\Controllers\Controller
             'today' => Visitor::has('user')->whereDate('created_at','=',date('Y-m-d'))->count()
         ];
 
+        // Count settings
+        $settings = [
+            'overall' => Setting::count(),
+            'empty' => Setting::where('content','=','')->orWhere('content','=',null)->count()
+        ];
+
         // View
         return view('faturhelper::admin/dashboard/summary', [
             'users' => $users,
-            'visitors' => $visitors
+            'visitors' => $visitors,
+            'settings' => $settings
         ]);
     }
 }
