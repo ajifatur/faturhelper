@@ -20,6 +20,9 @@ class DatabaseController extends \App\Http\Controllers\Controller
         // Check the access
         has_access(method(__METHOD__), Auth::user()->role_id);
 
+        // Set default tables
+        $default_tables = ['failed_jobs', 'menu_headers', 'menu_items', 'metas', 'migrations', 'password_resets', 'permissions', 'personal_access_tokens', 'roles', 'role__permission', 'settings', 'users', 'user_accounts', 'user_attributes', 'user_avatars', 'visitors'];
+
         // Get tables
         $tables = DB::select('SHOW TABLES');
 
@@ -33,6 +36,7 @@ class DatabaseController extends \App\Http\Controllers\Controller
 
         // View
         return view('faturhelper::admin/database/index', [
+            'default_tables' => $default_tables,
             'tables' => $tables
         ]);
     }

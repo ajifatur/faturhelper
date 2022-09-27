@@ -11,6 +11,7 @@
  * @method static int          diff(string $from, string $to)
  * @method static string       toString(int $time)
  * @method static string       elapsed(string $datetime, bool $full)
+ * @method static string       day(string $datetime)
  * @method static string|array month(int|null $number)
  * @method static string       full(string $datetime)
  */
@@ -21,6 +22,7 @@ class DateTimeExt
 {
     const DATESEPARATOR = ' - ';
     const TIMESEPARATOR = ' ';
+    const DAYS = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jum\'at', 'Sabtu'];
     const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
 
     /**
@@ -150,6 +152,21 @@ class DateTimeExt
 
         if (!$full) $string = array_slice($string, 0, 1);
         return $string ? implode(', ', $string) . ' yang lalu' : 'Baru saja';
+    }
+
+    /**
+     * Get the Indonesian day by date.
+     *
+     * @param  string $datetime
+     * @return string
+     */
+    public static function day($datetime)
+    {
+        $days = self::DAYS;
+
+        $w = date('w', strtotime($datetime));
+
+        return array_key_exists($w, $days) ? $days[$w] : '';
     }
 
     /**

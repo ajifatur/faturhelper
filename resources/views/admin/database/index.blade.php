@@ -33,7 +33,7 @@
                         <tbody>
                             @foreach($tables as $num=>$table)
                                 @foreach($table->columns as $key=>$column)
-                                <tr>
+                                <tr class="{{ !in_array($table->name, $default_tables) ? 'bg-warning' : '' }}">
                                     @if($key == 0)
                                         <td rowspan="{{ count($table->columns) }}" align="right">{{ ($num + 1) }}</td>
                                         <td rowspan="{{ count($table->columns) }}">{{ $table->name }}</td>
