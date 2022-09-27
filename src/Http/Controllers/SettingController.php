@@ -19,7 +19,7 @@ class SettingController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
         // // Check the access
-        // has_access(method(__METHOD__), Auth::user()->role_id);
+        // has_access(__METHOD__, Auth::user()->role_id);
 
         // Get timezones
         $timezones = timezone_identifiers_list(2047);

@@ -18,7 +18,7 @@ class DatabaseController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Set default tables
         $default_tables = ['failed_jobs', 'menu_headers', 'menu_items', 'metas', 'migrations', 'password_resets', 'permissions', 'personal_access_tokens', 'roles', 'role__permission', 'settings', 'users', 'user_accounts', 'user_attributes', 'user_avatars', 'visitors'];

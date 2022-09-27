@@ -17,7 +17,7 @@ class MenuHeaderController extends \App\Http\Controllers\Controller
     public function create()
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // View
         return view('faturhelper::admin/menu-header/create');
@@ -65,7 +65,7 @@ class MenuHeaderController extends \App\Http\Controllers\Controller
     public function edit($id)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get the menu header
         $menu_header = MenuHeader::findOrFail($id);
@@ -114,7 +114,7 @@ class MenuHeaderController extends \App\Http\Controllers\Controller
     public function delete(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
         
         // Get the menu header
         $menu_header = MenuHeader::find($request->id);

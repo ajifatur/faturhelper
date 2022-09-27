@@ -7,6 +7,7 @@ Methods:
 - diff
 - toString
 - elapsed
+- day
 - month
 - full
 
@@ -85,6 +86,15 @@ Get the elapsed time to the current time:
 ``` php
 echo DateTimeExt::elapsed('2021-08-01 12:00:00'); // Output: 3 bulan yang lalu
 echo DateTimeExt::elapsed('2020-01-01 12:00:00'); // Output: 1 tahun yang lalu
+```
+
+## day
+
+Get the Indonesian day by datetime:
+
+``` php
+echo DateTimeExt::day('2022-09-27');  // Output: Selasa
+echo DateTimeExt::day('2022-09-30');  // Output: Jum'at
 ```
 
 ## month

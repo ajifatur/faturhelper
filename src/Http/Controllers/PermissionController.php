@@ -20,7 +20,7 @@ class PermissionController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get permissions
         if($request->query('default') == 1)
@@ -46,7 +46,7 @@ class PermissionController extends \App\Http\Controllers\Controller
     public function create()
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // View
         return view('faturhelper::admin/permission/create');
@@ -97,7 +97,7 @@ class PermissionController extends \App\Http\Controllers\Controller
     public function edit($id)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get the permission
         $permission = Permission::findOrFail($id);
@@ -157,7 +157,7 @@ class PermissionController extends \App\Http\Controllers\Controller
     public function delete(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
         
         // Get the permission
         $permission = Permission::find($request->id);
@@ -184,7 +184,7 @@ class PermissionController extends \App\Http\Controllers\Controller
     public function reorder(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get permissions
         $permissions = Permission::where('default','=',0)->orderBy('num_order','asc')->get();
@@ -227,7 +227,7 @@ class PermissionController extends \App\Http\Controllers\Controller
     public function change(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get the role
         $role = Role::find($request->role);

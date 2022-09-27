@@ -20,7 +20,7 @@ class MenuItemController extends \App\Http\Controllers\Controller
     public function create($header_id)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get the menu header
         $menu_header = MenuHeader::find($header_id);
@@ -91,7 +91,7 @@ class MenuItemController extends \App\Http\Controllers\Controller
     public function edit($header_id, $item_id)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get the menu item
         $menu_item = MenuItem::findOrFail($item_id);
@@ -161,7 +161,7 @@ class MenuItemController extends \App\Http\Controllers\Controller
     public function delete(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
         
         // Get the menu item
         $menu_item = MenuItem::find($request->id);

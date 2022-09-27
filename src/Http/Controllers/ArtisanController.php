@@ -17,7 +17,7 @@ class ArtisanController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Set artisans
         $artisans = [

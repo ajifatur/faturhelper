@@ -15,6 +15,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
+        /*
         $array = [
             ['code' => 'RoleController::index', 'name' => 'Mengelola Data Role'],
             ['code' => 'RoleController::create', 'name' => 'Menambah Role'],
@@ -63,6 +64,20 @@ class PermissionSeeder extends Seeder
                     $permission->roles()->attach($role->id);
                 }
             }
+        }
+        */
+
+        // Add namespaces
+        $array = Permission::where('code','not like','%Controllers%')->get();
+        foreach($array as $key=>$data) {
+            $permission = Permission::find($data->id);
+
+            if($permission->default == 1)
+                $permission->code = 'Ajifatur\\FaturHelper\\Http\\Controllers\\' . $permission->code;
+            elseif($permission->default == 0)
+                $permission->code = 'App\\Http\\Controllers\\' . $permission->code;
+
+            $permission->save();
         }
     }
 }

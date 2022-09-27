@@ -79,7 +79,7 @@ class LogController extends \App\Http\Controllers\Controller
     public function activity(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get user, month, year
         $user = $request->query('user') ?: 0;
@@ -185,7 +185,7 @@ class LogController extends \App\Http\Controllers\Controller
     public function activityByURL(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get user, month, year
         $user = $request->query('user') ?: 0;
@@ -243,7 +243,7 @@ class LogController extends \App\Http\Controllers\Controller
     public function authentication(Request $request)
     {
         // Check the access
-        has_access(method(__METHOD__), Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         if($request->ajax()) {
             // DataTables
