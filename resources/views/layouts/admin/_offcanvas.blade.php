@@ -43,6 +43,7 @@
 				<div class="col-6"><a href="{{ route('admin.user.index') }}">Pengguna</a></div>
 				<div class="col-6"><a href="{{ route('admin.meta.index') }}">Meta</a></div>
 				<div class="col-6"><a href="{{ route('admin.permission.index') }}">Hak Akses</a></div>
+				<div class="col-6"><a href="{{ route('admin.schedule.index') }}">Agenda</a></div>
 			</div>
 		</div>
 		<hr>
@@ -77,8 +78,8 @@
 				<div class="col-6"><a href="{{ route('admin.log.index') }}" target="_blank">Semua Log</a></div>
 			</div>
 		</div>
-		<hr>
-		<div class="mb-3">
+		<hr class="d-none">
+		<div class="mb-3 d-none">
 			<div class="row">
 				<div class="col-6">
 					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Dataset Kecil</small>

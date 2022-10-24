@@ -14,6 +14,7 @@
  * @method static void permissions()
  * @method static void settings()
  * @method static void metas()
+ * @method static void schedules()
  * @method static void systems()
  * @method static void database()
  * @method static void dataset()
@@ -64,6 +65,7 @@ class RouteExt
         self::settings();
         self::metas();
         self::systems();
+        self::schedules();
         self::database();
         self::dataset();
         self::artisan();
@@ -242,6 +244,20 @@ class RouteExt
         Route::group(['middleware' => ['faturhelper.admin']], function() {
             Route::get('/admin/meta', self::NAMESPACE.'\MetaController@index')->name('admin.meta.index');
             Route::post('/admin/meta/update', self::NAMESPACE.'\MetaController@update')->name('admin.meta.update');
+        });
+    }
+
+    /**
+     * Set the schedule routes.
+     *
+     * @return void
+     */
+    public static function schedules()
+    {
+        Route::group(['middleware' => ['faturhelper.admin']], function() {
+            Route::get('/admin/schedule', self::NAMESPACE.'\ScheduleController@index')->name('admin.schedule.index');
+            Route::post('/admin/schedule/update', self::NAMESPACE.'\ScheduleController@update')->name('admin.schedule.update');
+            Route::post('/admin/schedule/delete', self::NAMESPACE.'\ScheduleController@delete')->name('admin.schedule.delete');
         });
     }
 
