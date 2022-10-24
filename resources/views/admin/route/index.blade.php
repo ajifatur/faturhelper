@@ -16,8 +16,7 @@
                         <thead class="bg-light">
                             <tr>
                                 <th width="20"></th>
-                                <th width="100">Name</th>
-                                <th width="100">URL</th>
+                                <th>URL</th>
                                 <th width="70">Method</th>
                                 <th>Action</th>
                                 <th width="70">Parameter</th>
@@ -30,8 +29,11 @@
                                 @if($route != null)
                                     <tr>
                                         <td align="right">{{ $i }}</td>
-                                        <td><span style="word-break: break-all;">{{ $route['name'] }}</span></td>
-                                        <td><span style="word-break: break-all;">{{ $route['url'] }}</span></td>
+                                        <td>
+                                            <span style="word-break: break-all;">{{ $route['url'] }}</span>
+                                            <br>
+                                            <code>{{ $route['name'] }}</code>
+                                        </td>
                                         <td>{{ $route['method'] }}</td>
                                         <td><span style="word-break: break-all;">{{ $route['actionName'] }}</span></td>
                                         <td>
@@ -70,7 +72,8 @@
     // DataTable
     Spandiv.DataTable("#datatable", {
         orderAll: true,
-        pageLength: -1
+        pageLength: -1,
+        fixedHeader: true
     });
 </script>
 

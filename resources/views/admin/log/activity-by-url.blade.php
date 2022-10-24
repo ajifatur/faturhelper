@@ -60,6 +60,7 @@
         serverSide: true,
         orderAll: true,
 		pageLength: 50,
+        fixedHeader: true,
         url: Spandiv.URL("{{ route('admin.log.activity.url') }}", {user: "{{ $user }}", month: "{{ $month }}", year: "{{ $year }}"}),
         columns: [
             {data: 'url', name: 'url'},

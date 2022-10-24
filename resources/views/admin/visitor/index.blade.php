@@ -41,6 +41,7 @@
         serverSide: true,
         orderAll: true,
 		pageLength: 50,
+        fixedHeader: true,
         url: Spandiv.URL("{{ route('admin.visitor.index') }}"),
         columns: [
             {data: 'datetime', name: 'datetime'},

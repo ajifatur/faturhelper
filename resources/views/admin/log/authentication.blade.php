@@ -39,6 +39,7 @@
         serverSide: true,
         orderAll: true,
 		pageLength: 50,
+        fixedHeader: true,
         url: Spandiv.URL("{{ route('admin.log.authentication') }}"),
         columns: [
             {data: 'datetime', name: 'datetime'},
