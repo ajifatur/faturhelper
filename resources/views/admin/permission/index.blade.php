@@ -97,7 +97,8 @@
 <script type="text/javascript">
     // DataTable
     Spandiv.DataTable("#datatable", {
-        pageLength: -1
+        pageLength: -1,
+        fixedHeader: true
     });
 
     // Button Delete
