@@ -24,21 +24,23 @@ class ScheduleController extends \App\Http\Controllers\Controller
 
         // Get schedules
         $schedules = Schedule::get()->toArray();
-        $array = [];
         foreach($schedules as $key=>$schedule) {
-            $schedule['sdate'] = date("F d, Y h:i A", strtotime($schedule['started_at']));
-            $schedule['edate'] = date("F d, Y h:i A", strtotime($schedule['ended_at']));
-            $schedule['sdatetext'] = DateTimeExt::full($schedule['started_at']);
-            $schedule['edatetext'] = DateTimeExt::full($schedule['ended_at']);
-            $schedule['sdaterangepicker'] = date("d/m/Y H:i", strtotime($schedule['started_at']));
-            $schedule['edaterangepicker'] = date("d/m/Y H:i", strtotime($schedule['ended_at']));
-            $schedule['daterange'] = DateTimeExt::merge([$schedule['started_at'], $schedule['ended_at']]);
-            $array[$schedule['id']] = $schedule;
+            $schedules[$key]['start'] = $schedule['started_at'];
+            $schedules[$key]['end'] = $schedule['ended_at'];
+            $schedules[$key]['sdatetext'] = DateTimeExt::full($schedule['started_at']);
+            $schedules[$key]['edatetext'] = DateTimeExt::full($schedule['ended_at']);
+            $schedules[$key]['sdaterangepicker'] = date("d/m/Y H:i", strtotime($schedule['started_at']));
+            $schedules[$key]['edaterangepicker'] = date("d/m/Y H:i", strtotime($schedule['ended_at']));
+            $schedules[$key]['daterange'] = DateTimeExt::merge([$schedule['started_at'], $schedule['ended_at']]);
+        }
+
+        if($request->ajax()) {
+            return response()->json($schedules);
         }
 
         // View
         return view('faturhelper::admin/schedule/index', [
-            'schedules' => $array
+            'schedules' => $schedules
         ]);
     }
 

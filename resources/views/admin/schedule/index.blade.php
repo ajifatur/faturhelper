@@ -54,7 +54,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="color" class="form-label">Waktu <span class="text-danger">*</span></label>
-                        <input type="text" name="time" class="form-control form-control-sm {{ $errors->has('time') ? 'border-danger' : '' }}" value="{{ old('time') }}">
+                        <input type="text" name="time" class="form-control form-control-sm {{ $errors->has('time') ? 'border-danger' : '' }}" value="{{ old('time') }}" autocomplete="off">
                         @if($errors->has('time'))
                         <div class="small text-danger">{{ $errors->first('time') }}</div>
                         @endif
@@ -116,93 +116,91 @@
 <script>
     // Daterangepicker
     Spandiv.DateRangePicker("input[name=time]");
-</script>
-<script>
-    var schedules = $.parseJSON('<?= json_encode($schedules) ?>');
-    var events = [];
 
-    $(function() {
-        if(!!schedules) {
-            Object.keys(schedules).map(k => {
-                var row = schedules[k];
-                events.push({ id: row.id, title: row.title, color: row.color, start: row.started_at, end: row.ended_at });
+    $.ajax({
+        type: "get",
+        url: "{{ route('admin.schedule.index') }}",
+        success: function(response) {
+            var schedules = response;
+
+            // Init FullCalendar
+            var calendar = new FullCalendar.Calendar(document.getElementById("calendar"), {
+                headerToolbar: {
+                    left: 'prev,next today',
+                    right: 'dayGridMonth,dayGridWeek,list',
+                    center: 'title',
+                },
+                businessHours: {
+                    daysOfWeek: [1, 2, 3, 4, 5, 6], // Monday - Saturday
+                },
+                selectable: true,
+                themeSystem: 'bootstrap5',
+                eventMinHeight: '100',
+                events: schedules,
+                locale: 'id',
+                eventClick: function(info) {
+                    var details = $("#event-details-modal");
+                    var id = info.event.id;
+                    var schedule;
+                    for(var i=0; i<schedules.length; i++) {
+                        if(schedules[i].id == id)
+                            schedule = schedules[i];
+                    }
+                    if(schedule) {
+                        details.find("#title").text(schedule.title);
+                        details.find("#description").text(schedule.description);
+                        details.find("#start").text(schedule.sdatetext + " WIB");
+                        details.find("#end").text(schedule.edatetext + " WIB");
+                        details.find(".btn-edit, .btn-delete").attr('data-id', id);
+                        details.modal("show");
+                    }
+                    else {
+                        Spandiv.SwalBasic("Tidak ada agenda!");
+                    }
+                },
+                eventDidMount: function(info) {
+                    // Do something after events mounted
+                },
+                editable: true
             });
-        }
-        
-        var date = new Date();
-        var d = date.getDate(),
-            m = date.getMonth(),
-            y = date.getFullYear();
+            calendar.render();
 
-        // Init FullCalendar
-        var calendar = new FullCalendar.Calendar(document.getElementById("calendar"), {
-            headerToolbar: {
-                left: 'prev,next today',
-                right: 'dayGridMonth,dayGridWeek,list',
-                center: 'title',
-            },
-            businessHours: {
-                daysOfWeek: [ 1, 2, 3, 4, 5, 6 ], // Monday - Saturday
-            },
-            selectable: true,
-            themeSystem: 'bootstrap5',
-            eventMinHeight: '100',
-            events: events,
-            locale: 'id',
-            eventClick: function(info) {
-                var details = $("#event-details-modal");
-                var id = info.event.id;
-                if(!!schedules[id]) {
-                    details.find("#title").text(schedules[id].title);
-                    details.find("#description").text(schedules[id].description);
-                    details.find("#start").text(schedules[id].sdatetext + " WIB");
-                    details.find("#end").text(schedules[id].edatetext + " WIB");
-                    details.find(".btn-edit, .btn-delete").attr('data-id', id);
-                    details.modal("show");
+            // Button Edit
+            $(document).on("click", ".btn-edit", function() {
+                var id = $(this).attr('data-id');
+                $("#form-schedule").parents(".card").find(".card-header h5").text("Edit Agenda");
+                for(var i=0; i<schedules.length; i++) {
+                    if(schedules[i].id == id)
+                        schedule = schedules[i];
+                }
+                if(schedule) {
+                    var form = $("#form-schedule");
+                    form.find("[name=id]").val(id);
+                    form.find("[name=title]").val(schedule.title);
+                    form.find("[name=description]").val(schedule.description);
+                    form.find("[name=color]").val(schedule.color);
+                    form.find("[name=time]").val(schedule.daterange);
+                    form.find("[name=time]").data("daterangepicker").setStartDate(schedule.sdaterangepicker);
+                    form.find("[name=time]").data("daterangepicker").setEndDate(schedule.edaterangepicker);
+                    $("#event-details-modal").modal("hide");
+                    form.find("[name=title]").focus();
                 }
                 else {
                     Spandiv.SwalBasic("Tidak ada agenda!");
                 }
-            },
-            eventDidMount: function(info) {
-                // Do Something after events mounted
-            },
-            editable: true
-        });
-
-        calendar.render();
-
-        // Form reset listener
-        $("#form-schedule").on("reset", function() {
-            $("#form-schedule").parents(".card").find(".card-header h5").text("Tambah Agenda");
-            $(this).find("input[name=id]").val("");
-            $(this).find("input:visible").first().focus();
-        });
-
-        // Button Edit
-        $(document).on("click", ".btn-edit", function() {
-            var id = $(this).attr('data-id');
-            $("#form-schedule").parents(".card").find(".card-header h5").text("Edit Agenda");
-            if(!!schedules[id]) {
-                var form = $("#form-schedule");
-                form.find("[name=id]").val(id);
-                form.find("[name=title]").val(schedules[id].title);
-                form.find("[name=description]").val(schedules[id].description);
-                form.find("[name=color]").val(schedules[id].color);
-                form.find("[name=time]").val(schedules[id].daterange);
-                form.find("[name=time]").data("daterangepicker").setStartDate(schedules[id].sdaterangepicker);
-                form.find("[name=time]").data("daterangepicker").setEndDate(schedules[id].edaterangepicker);
-                $("#event-details-modal").modal("hide");
-                form.find("[name=title]").focus();
-            }
-            else {
-                Spandiv.SwalBasic("Tidak ada agenda!");
-            }
-        });
-        
-        // Button Delete
-        Spandiv.ButtonDelete(".btn-delete", ".form-delete");
+            });
+        }
     });
+
+    // Form reset listener
+    $("#form-schedule").on("reset", function() {
+        $("#form-schedule").parents(".card").find(".card-header h5").text("Tambah Agenda");
+        $(this).find("input[name=id]").val("");
+        $(this).find("input:visible").first().focus();
+    });
+
+    // Button Delete
+    Spandiv.ButtonDelete(".btn-delete", ".form-delete");
 </script>
 
 @endsection
