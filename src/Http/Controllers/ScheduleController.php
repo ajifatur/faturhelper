@@ -35,13 +35,14 @@ class ScheduleController extends \App\Http\Controllers\Controller
         }
 
         if($request->ajax()) {
-            return response()->json($schedules);
+            return response()->json([
+                'schedules' => $schedules,
+                'businessDays' => [1,2,3,4,5,6] // Monday - Saturday
+            ]);
         }
 
         // View
-        return view('faturhelper::admin/schedule/index', [
-            'schedules' => $schedules
-        ]);
+        return view('faturhelper::admin/schedule/index');
     }
 
     /**

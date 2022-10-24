@@ -121,7 +121,8 @@
         type: "get",
         url: "{{ route('admin.schedule.index') }}",
         success: function(response) {
-            var schedules = response;
+            var schedules = response.schedules;
+            var businessDays = response.businessDays;
 
             // Init FullCalendar
             var calendar = new FullCalendar.Calendar(document.getElementById("calendar"), {
@@ -131,7 +132,7 @@
                     center: 'title',
                 },
                 businessHours: {
-                    daysOfWeek: [1, 2, 3, 4, 5, 6], // Monday - Saturday
+                    daysOfWeek: businessDays
                 },
                 selectable: true,
                 themeSystem: 'bootstrap5',
