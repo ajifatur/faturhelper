@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Ajifatur\FaturHelper\Models\Period;
+use Ajifatur\FaturHelper\Models\Setting;
 
 class PeriodController extends \App\Http\Controllers\Controller
 {
@@ -196,5 +197,65 @@ class PeriodController extends \App\Http\Controllers\Controller
             echo 'Berhasil mengurutkan data.';
         }
         else echo 'Terjadi kesalahan dalam mengurutkan data.';
+    }
+
+    /**
+     * Show the setting form
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function setting(Request $request)
+    {
+        // Check the access
+        has_access(__METHOD__, Auth::user()->role_id);
+
+        // Get periods
+        $periods = Period::orderBy('num_order','asc')->get();
+
+        // View
+        return view('faturhelper::admin/period/setting', [
+            'periods' => $periods
+        ]);
+    }
+
+    /**
+     * Store the setting.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function set(Request $request)
+    {
+        // Validation
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|max:200',
+            'period' => 'required',
+        ]);
+        
+        // Check errors
+        if($validator->fails()) {
+            // Back to form page with validation error messages
+            return redirect()->back()->withErrors($validator->errors())->withInput();
+        }
+        else {
+            // Update the period alias
+            $period_alias = Setting::where('code','=','period_alias')->first();
+            $period_alias->content = $request->name;
+            $period_alias->save();
+
+            // Update the period status from active to inactive
+            $active_period = Period::where('status','=',1)->first();
+            $active_period->status = 0;
+            $active_period->save();
+
+            // Update the selected period status to active
+            $period = Period::find($request->period);
+            $period->status = 1;
+            $period->save();
+
+            // Redirect
+            return redirect()->route('admin.period.setting')->with(['message' => 'Berhasil mengupdate data.']);
+        }
     }
 }

@@ -9,6 +9,7 @@
     <div class="btn-group">
         <a href="{{ route('admin.period.create') }}" class="btn btn-sm btn-primary"><i class="bi-plus me-1"></i> Tambah Periode</a>
         <a href="{{ route('admin.period.reorder') }}" class="btn btn-sm btn-success"><i class="bi-shuffle me-1"></i> Urutkan Periode</a>
+        <a href="{{ route('admin.period.setting') }}" class="btn btn-sm btn-secondary"><i class="bi-gear me-1"></i> Pengaturan</a>
     </div>
 </div>
 <div class="row">

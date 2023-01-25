@@ -5,16 +5,13 @@
 	</a>
 	<ul class="navbar-nav d-none d-lg-flex">
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle text-dark" href="#" id="periodeDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false">
-				Periode
-			</a>
-			<div class="dropdown-menu" aria-labelledby="periodeDropdown">
-				<div class="dropdown-header">Periode Aktif</div>
-				@foreach(period() as $periode)
+			<a class="nav-link dropdown-toggle text-dark" href="#" id="periodDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ setting('period_alias') }} </a>
+			<div class="dropdown-menu" aria-labelledby="periodDropdown">
+				<div class="dropdown-header">{{ setting('period_alias') }} Aktif</div>
+				@foreach(period() as $period)
 				<a class="dropdown-item d-flex justify-content-between" href="#">
-					<span>{{ $periode->name }}</span>
-					@if($periode->status == 1)
+					<span>{{ $period->name }}</span>
+					@if($period->status == 1)
 					<span><i class="bi bi-check-circle-fill"></i></span>
 					@endif
 				</a>

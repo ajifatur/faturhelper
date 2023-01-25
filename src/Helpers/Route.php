@@ -265,6 +265,8 @@ class RouteExt
             Route::post('/admin/period/delete', self::NAMESPACE.'\PeriodController@delete')->name('admin.period.delete');
             Route::get('/admin/period/reorder', self::NAMESPACE.'\PeriodController@reorder')->name('admin.period.reorder');
             Route::post('/admin/period/sort', self::NAMESPACE.'\PeriodController@sort')->name('admin.period.sort');
+            Route::get('/admin/period/setting', self::NAMESPACE.'\PeriodController@setting')->name('admin.period.setting');
+            Route::post('/admin/period/set', self::NAMESPACE.'\PeriodController@set')->name('admin.period.set');
         });
     }
 

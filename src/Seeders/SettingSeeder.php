@@ -33,6 +33,7 @@ class SettingSeeder extends Seeder
             ['code' => 'brand_name', 'content' => 'Spandiv Digital'],
             ['code' => 'brand_url', 'content' => 'https://spandiv.xyz'],
             ['code' => 'brand_visibility', 'content' => '1'],
+            ['code' => 'period_alias', 'content' => 'Periode'],
         ];
 
         foreach($settings as $setting) {

@@ -58,6 +58,7 @@ class PermissionSeeder extends Seeder
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::edit', 'name' => 'Mengubah Periode'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::delete', 'name' => 'Menghapus Periode'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::reorder', 'name' => 'Mengurutkan Periode'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::setting', 'name' => 'Pengaturan Periode'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\ScheduleController::index', 'name' => 'Mengelola Data Agenda'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\ScheduleController::update', 'name' => 'Mengupdate Agenda'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\ScheduleController::delete', 'name' => 'Menghapus Agenda'],
