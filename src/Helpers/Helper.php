@@ -7,6 +7,7 @@
  * @method string|int|null role(string|int $key)
  * @method string          setting(string $code)
  * @method string          meta(string $code)
+ * @method array           periode()
  * @method array           menu()
  * @method void            eval_sidebar(string $condition, string $true, string $false)
  * @method string          slugify(string $text, array $array)
@@ -143,6 +144,19 @@ if(!function_exists('meta')) {
         // Get the meta by key
         $meta = \Ajifatur\FaturHelper\Models\Meta::where('code','=',$key)->first();
         return $meta ? $meta->content : '';
+    }
+}
+
+/**
+ * Get periodes.
+ *
+ * @return array
+ */
+if(!function_exists('periode')) {
+    function periode() {
+        // Get periodes
+        $periodes = \Ajifatur\FaturHelper\Models\Periode::orderBy('num_order','asc')->get();
+        return $periodes;
     }
 }
 

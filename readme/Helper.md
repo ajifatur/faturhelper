@@ -6,6 +6,7 @@ Methods:
 - role
 - setting
 - meta
+- periode
 - menu
 - eval_sidebar
 - slugify
@@ -71,6 +72,15 @@ Get the meta content by key:
 ``` php
 echo meta('author'); // Output: Aji Fatur
 ```
+
+## periode
+
+Get periodes:
+
+``` php
+print_r(periode()); // Output: [...]
+```
+
 ## menu
 
 ## eval_sidebar

@@ -16,5 +16,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionSeeder::class);
         $this->call(SettingSeeder::class);
         $this->call(MetaSeeder::class);
+        $this->call(PeriodeSeeder::class);
     }
 }
