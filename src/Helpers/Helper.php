@@ -7,7 +7,7 @@
  * @method string|int|null role(string|int $key)
  * @method string          setting(string $code)
  * @method string          meta(string $code)
- * @method array           periode()
+ * @method array           period()
  * @method array           menu()
  * @method void            eval_sidebar(string $condition, string $true, string $false)
  * @method string          slugify(string $text, array $array)
@@ -152,11 +152,11 @@ if(!function_exists('meta')) {
  *
  * @return array
  */
-if(!function_exists('periode')) {
-    function periode() {
+if(!function_exists('period')) {
+    function period() {
         // Get periodes
-        $periodes = \Ajifatur\FaturHelper\Models\Periode::orderBy('num_order','asc')->get();
-        return $periodes;
+        $periods = \Ajifatur\FaturHelper\Models\Period::orderBy('num_order','asc')->get();
+        return $periods;
     }
 }
 

@@ -27,7 +27,6 @@ class PermissionSeeder extends Seeder
 
             $permission->save();
         }
-
         
         $array = [
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\RoleController::index', 'name' => 'Mengelola Data Role'],
@@ -54,6 +53,11 @@ class PermissionSeeder extends Seeder
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuItemController::edit', 'name' => 'Mengubah Menu Item'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuItemController::delete', 'name' => 'Menghapus Menu Item'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MetaController::index', 'name' => 'Mengelola Meta'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::index', 'name' => 'Mengelola Data Periode'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::create', 'name' => 'Menambah Periode'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::edit', 'name' => 'Mengubah Periode'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::delete', 'name' => 'Menghapus Periode'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::reorder', 'name' => 'Mengurutkan Periode'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\ScheduleController::index', 'name' => 'Mengelola Data Agenda'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\ScheduleController::update', 'name' => 'Mengupdate Agenda'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\ScheduleController::delete', 'name' => 'Menghapus Agenda'],

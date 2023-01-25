@@ -11,7 +11,7 @@
 			</a>
 			<div class="dropdown-menu" aria-labelledby="periodeDropdown">
 				<div class="dropdown-header">Periode Aktif</div>
-				@foreach(periode() as $periode)
+				@foreach(period() as $periode)
 				<a class="dropdown-item d-flex justify-content-between" href="#">
 					<span>{{ $periode->name }}</span>
 					@if($periode->status == 1)

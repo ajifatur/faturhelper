@@ -14,6 +14,7 @@
  * @method static void permissions()
  * @method static void settings()
  * @method static void metas()
+ * @method static void periods()
  * @method static void schedules()
  * @method static void systems()
  * @method static void database()
@@ -64,6 +65,7 @@ class RouteExt
         self::permissions();
         self::settings();
         self::metas();
+        self::periods();
         self::systems();
         self::schedules();
         self::database();
@@ -244,6 +246,25 @@ class RouteExt
         Route::group(['middleware' => ['faturhelper.admin']], function() {
             Route::get('/admin/meta', self::NAMESPACE.'\MetaController@index')->name('admin.meta.index');
             Route::post('/admin/meta/update', self::NAMESPACE.'\MetaController@update')->name('admin.meta.update');
+        });
+    }
+
+    /**
+     * Set the period routes.
+     *
+     * @return void
+     */
+    public static function periods()
+    {
+        Route::group(['middleware' => ['faturhelper.admin']], function() {
+            Route::get('/admin/period', self::NAMESPACE.'\PeriodController@index')->name('admin.period.index');
+            Route::get('/admin/period/create', self::NAMESPACE.'\PeriodController@create')->name('admin.period.create');
+            Route::post('/admin/period/store', self::NAMESPACE.'\PeriodController@store')->name('admin.period.store');
+            Route::get('/admin/period/edit/{id}', self::NAMESPACE.'\PeriodController@edit')->name('admin.period.edit');
+            Route::post('/admin/period/update', self::NAMESPACE.'\PeriodController@update')->name('admin.period.update');
+            Route::post('/admin/period/delete', self::NAMESPACE.'\PeriodController@delete')->name('admin.period.delete');
+            Route::get('/admin/period/reorder', self::NAMESPACE.'\PeriodController@reorder')->name('admin.period.reorder');
+            Route::post('/admin/period/sort', self::NAMESPACE.'\PeriodController@sort')->name('admin.period.sort');
         });
     }
 

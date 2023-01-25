@@ -6,9 +6,9 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use Ajifatur\FaturHelper\Models\Role;
+use Ajifatur\FaturHelper\Models\Period;
 
-class RoleController extends \App\Http\Controllers\Controller
+class PeriodController extends \App\Http\Controllers\Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,12 +21,12 @@ class RoleController extends \App\Http\Controllers\Controller
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 
-        // Get roles
-        $roles = Role::orderBy('num_order','asc')->get();
+        // Get periods
+        $periods = Period::orderBy('num_order','asc')->get();
 
         // View
-        return view('faturhelper::admin/role/index', [
-            'roles' => $roles
+        return view('faturhelper::admin/period/index', [
+            'periods' => $periods
         ]);
     }
 
@@ -41,7 +41,7 @@ class RoleController extends \App\Http\Controllers\Controller
         has_access(__METHOD__, Auth::user()->role_id);
 
         // View
-        return view('faturhelper::admin/role/create');
+        return view('faturhelper::admin/period/create');
     }
 
     /**
@@ -55,9 +55,6 @@ class RoleController extends \App\Http\Controllers\Controller
         // Validation
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:200',
-            'code' => 'required|alpha_dash|unique:roles',
-            'is_admin' => 'required',
-            'is_global' => 'required'
         ]);
         
         // Check errors
@@ -66,20 +63,18 @@ class RoleController extends \App\Http\Controllers\Controller
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
         else {
-            // Get the latest role
-            $latest_role = Role::orderBy('num_order','desc')->first();
+            // Get the latest period
+            $latest_period = Period::orderBy('num_order','desc')->first();
 
-            // Save the role
-            $role = new Role;
-            $role->name = $request->name;
-            $role->code = $request->code;
-            $role->is_admin = $request->is_admin;
-            $role->is_global = $request->is_global;
-            $role->num_order = $latest_role ? $latest_role->num_order + 1 : 1;
-            $role->save();
+            // Save the period
+            $period = new Period;
+            $period->name = $request->name;
+            $period->status = 0;
+            $period->num_order = $latest_period ? $latest_period->num_order + 1 : 1;
+            $period->save();
 
             // Redirect
-            return redirect()->route('admin.role.index')->with(['message' => 'Berhasil menambah data.']);
+            return redirect()->route('admin.period.index')->with(['message' => 'Berhasil menambah data.']);
         }
     }
 
@@ -94,26 +89,13 @@ class RoleController extends \App\Http\Controllers\Controller
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 
-        // Get the role
-        $role = Role::findOrFail($id);
+        // Get the period
+        $period = Period::findOrFail($id);
 
-        // Check role code
-        if($role->code == 'super-admin') {
-            // Redirect
-            return redirect()->route('admin.role.index')->with(['message' => 'Tidak bisa mengubah Super Admin.']);
-        }
-
-        // Check role hierarchy
-        if($role->num_order >= Auth::user()->role->num_order) {
-            // View
-            return view('faturhelper::admin/role/edit', [
-                'role' => $role
-            ]);
-        }
-        else {
-            // Redirect
-            return redirect()->route('admin.role.index')->with(['message' => 'Tidak bisa mengubah data yang tingkatannya lebih tinggi.']);
-        }
+        // View
+        return view('faturhelper::admin/period/edit', [
+            'period' => $period
+        ]);
     }
 
     /**
@@ -127,11 +109,6 @@ class RoleController extends \App\Http\Controllers\Controller
         // Validation
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:200',
-            'code' => [
-                'required', 'alpha_dash', Rule::unique('roles')->ignore($request->id, 'id')
-            ],
-            'is_admin' => 'required',
-            'is_global' => 'required'
         ]);
         
         // Check errors
@@ -140,16 +117,13 @@ class RoleController extends \App\Http\Controllers\Controller
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
         else {
-            // Update the role
-            $role = Role::find($request->id);
-            $role->name = $request->name;
-            $role->code = $request->code;
-            $role->is_admin = $request->is_admin;
-            $role->is_global = $request->is_global;
-            $role->save();
+            // Update the period
+            $period = Period::find($request->id);
+            $period->name = $request->name;
+            $period->save();
 
             // Redirect
-            return redirect()->route('admin.role.index')->with(['message' => 'Berhasil mengupdate data.']);
+            return redirect()->route('admin.period.index')->with(['message' => 'Berhasil mengupdate data.']);
         }
     }
 
@@ -164,26 +138,20 @@ class RoleController extends \App\Http\Controllers\Controller
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
         
-        // Get the role
-        $role = Role::find($request->id);
+        // Get the period
+        $period = Period::find($request->id);
 
-        // Check role code
-        if($role->code == 'super-admin') {
+        // Check period status
+        if($period->status == 1) {
             // Redirect
-            return redirect()->route('admin.role.index')->with(['message' => 'Tidak bisa menghapus Super Admin.']);
-        }
-
-        // Check role hierarchy
-        if($role->num_order >= Auth::user()->role->num_order) {
-            // Delete the role
-            $role->delete();
-
-            // Redirect
-            return redirect()->route('admin.role.index')->with(['message' => 'Berhasil menghapus data.']);
+            return redirect()->route('admin.period.index')->with(['message' => 'Tidak bisa menghapus data yang berstatus aktif.']);
         }
         else {
+            // Delete the period
+            $period->delete();
+
             // Redirect
-            return redirect()->route('admin.role.index')->with(['message' => 'Tidak bisa menghapus data yang tingkatannya lebih tinggi.']);
+            return redirect()->route('admin.period.index')->with(['message' => 'Berhasil menghapus data.']);
         }
     }
 
@@ -198,12 +166,12 @@ class RoleController extends \App\Http\Controllers\Controller
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 
-        // Get roles
-        $roles = Role::orderBy('num_order','asc')->get();
+        // Get periods
+        $periods = Period::orderBy('num_order','asc')->get();
 
         // View
-        return view('faturhelper::admin/role/reorder', [
-            'roles' => $roles
+        return view('faturhelper::admin/period/reorder', [
+            'periods' => $periods
         ]);
     }
 
@@ -215,13 +183,13 @@ class RoleController extends \App\Http\Controllers\Controller
      */
     public function sort(Request $request)
     {
-        // Loop roles
+        // Loop periods
         if(count($request->get('ids')) > 0) {
             foreach($request->get('ids') as $key=>$id) {
-                $role = Role::find($id);
-                if($role) {
-                    $role->num_order = $key + 2;
-                    $role->save();
+                $period = Period::find($id);
+                if($period) {
+                    $period->num_order = $key + 1;
+                    $period->save();
                 }
             }
 

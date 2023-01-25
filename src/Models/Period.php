@@ -5,7 +5,7 @@ namespace Ajifatur\FaturHelper\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Periode extends Model
+class Period extends Model
 {
     use HasFactory;
 
@@ -14,7 +14,7 @@ class Periode extends Model
      *
      * @var string
      */
-    protected $table = 'periodes';
+    protected $table = 'periods';
 
     /**
      * The attributes that are mass assignable.
