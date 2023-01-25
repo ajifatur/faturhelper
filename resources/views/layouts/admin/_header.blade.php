@@ -10,7 +10,7 @@
 				<div class="dropdown-header">{{ setting('period_alias') }} Aktif</div>
 				@foreach(period() as $period)
 				<a class="dropdown-item d-flex justify-content-between" href="#">
-					<span>{{ $period->name }}</span>
+					<span class="me-2">{{ $period->name }}</span>
 					@if($period->status == 1)
 					<span><i class="bi bi-check-circle-fill"></i></span>
 					@endif
