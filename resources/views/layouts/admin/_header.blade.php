@@ -4,6 +4,7 @@
 		<i class="hamburger align-self-center"></i>
 	</a>
 	<ul class="navbar-nav d-none d-lg-flex">
+		@if(setting('period_visibility') == 1)
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle text-dark" href="#" id="periodDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ setting('period_alias') }} </a>
 			<div class="dropdown-menu" aria-labelledby="periodDropdown">
@@ -24,6 +25,7 @@
 				<input type="hidden" name="id">
 			</form>
 		</li>
+		@endif
 	</ul>
 	<div class="navbar-collapse collapse">
 		<ul class="navbar-nav navbar-align">

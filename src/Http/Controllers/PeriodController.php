@@ -229,8 +229,9 @@ class PeriodController extends \App\Http\Controllers\Controller
     {
         // Validation
         $validator = Validator::make($request->all(), [
-            'name' => 'required|max:200',
-            'period' => 'required',
+            'visibility' => 'required',
+            'name' => $request->visibility == 1 ? 'required|max:200' : '',
+            'period' => $request->visibility == 1 ? 'required' : '',
         ]);
         
         // Check errors
@@ -239,6 +240,16 @@ class PeriodController extends \App\Http\Controllers\Controller
             return redirect()->back()->withErrors($validator->errors())->withInput();
         }
         else {
+            // Update the period visibility
+            $period_visibility = Setting::where('code','=','period_visibility')->first();
+            $period_visibility->content = $request->visibility;
+            $period_visibility->save();
+
+            if($request->visibility == 0) {
+                // Redirect
+                return redirect()->route('admin.period.setting')->with(['message' => 'Berhasil mengupdate data.']);
+            }
+
             // Update the period alias
             $period_alias = Setting::where('code','=','period_alias')->first();
             $period_alias->content = $request->name;
