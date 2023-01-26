@@ -9,14 +9,20 @@
 			<div class="dropdown-menu" aria-labelledby="periodDropdown">
 				<div class="dropdown-header">{{ setting('period_alias') }} Aktif</div>
 				@foreach(period() as $period)
-				<a class="dropdown-item d-flex justify-content-between" href="#">
+				<a class="dropdown-item d-flex justify-content-between btn-period" href="#" data-id="{{ $period->id }}">
 					<span class="me-2">{{ $period->name }}</span>
-					@if($period->status == 1)
-					<span><i class="bi bi-check-circle-fill"></i></span>
+					@if(session()->has('period') && session('period') == $period->id)
+						<span><i class="bi bi-check-circle-fill"></i></span>
+					@elseif(!session()->has('period') && $period->status == 1)
+						<span><i class="bi bi-check-circle-fill"></i></span>
 					@endif
 				</a>
 				@endforeach
 			</div>
+			<form class="form-period d-none" method="post" action="{{ route('admin.period.change') }}">
+				@csrf
+				<input type="hidden" name="id">
+			</form>
 		</li>
 	</ul>
 	<div class="navbar-collapse collapse">

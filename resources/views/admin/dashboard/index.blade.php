@@ -10,7 +10,7 @@
 <div class="alert alert-success" role="alert">
     <div class="alert-message">
         <h4 class="alert-heading">Selamat Datang!</h4>
-        <p class="mb-0">Selamat datang kembali <strong>{{ Auth::user()->name }}</strong> di {{ config('app.name') }}.</p>
+        <p class="mb-0">Selamat datang kembali <strong>{{ Auth::user()->name }}</strong> di {{ setting('name') }}.</p>
     </div>
 </div>
 

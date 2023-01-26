@@ -141,6 +141,7 @@ class RouteExt
             Route::post('/admin/period/sort', self::NAMESPACE.'\PeriodController@sort')->name('admin.period.sort');
             Route::get('/admin/period/setting', self::NAMESPACE.'\PeriodController@setting')->name('admin.period.setting');
             Route::post('/admin/period/set', self::NAMESPACE.'\PeriodController@set')->name('admin.period.set');
+            Route::post('/admin/period/change', self::NAMESPACE.'\PeriodController@change')->name('admin.period.change');
 
             // Schedule
             Route::get('/admin/schedule', self::NAMESPACE.'\ScheduleController@index')->name('admin.schedule.index');

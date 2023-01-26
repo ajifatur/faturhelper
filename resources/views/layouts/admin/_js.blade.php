@@ -23,4 +23,12 @@
 			}
 		});
 	});
+
+	// Change period
+	$(document).on("click", ".btn-period", function(e) {
+		e.preventDefault();
+		var id = $(this).data("id");
+		$(".form-period").find("input[name=id]").val(id);
+		$(".form-period").submit();
+	});
 </script>

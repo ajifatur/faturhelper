@@ -258,4 +258,19 @@ class PeriodController extends \App\Http\Controllers\Controller
             return redirect()->route('admin.period.setting')->with(['message' => 'Berhasil mengupdate data.']);
         }
     }
+
+    /**
+     * Change the period session.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function change(Request $request)
+    {
+        // Update session
+        $request->session()->put('period', $request->id);
+
+        // Redirect
+        return redirect(url()->previous());
+    }
 }
