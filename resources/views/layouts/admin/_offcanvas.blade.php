@@ -57,7 +57,7 @@
 						<li><a href="{{ route('admin.system.index') }}">Lingkungan Sistem</a></li>
 						<li><a href="{{ route('admin.database.index') }}">Database</a></li>
 						<li><a href="{{ route('admin.route.index') }}">Route</a></li>
-						<li><a href="{{ route('admin.summary') }}">Summary</a></li>
+						<li><a href="{{ route('admin.summary') }}">Rangkuman</a></li>
 					</ul>
 				</div>
 				<div class="col-6">
@@ -77,27 +77,6 @@
 				<div class="col-6"><a href="{{ route('admin.log.activity.url') }}">Aktivitas (URL)</a></div>
 				<div class="col-6"><a href="{{ route('admin.visitor.index') }}">Visitor</a></div>
 				<div class="col-6"><a href="{{ route('admin.log.index') }}" target="_blank">Semua Log</a></div>
-			</div>
-		</div>
-		<hr class="d-none">
-		<div class="mb-3 d-none">
-			<div class="row">
-				<div class="col-6">
-					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Dataset Kecil</small>
-					<ul class="list-unstyled p-0">
-						@foreach(datasets('small') as $key=>$dataset)
-						<li><a href="{{ route('admin.dataset.index', ['json' => $key]) }}">{{ $dataset }}</a></li>
-						@endforeach
-					</ul>
-				</div>
-				<div class="col-6">
-					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Dataset Besar</small>
-					<ul class="list-unstyled p-0">
-						@foreach(datasets('large') as $key=>$dataset)
-						<li><a href="{{ route('admin.dataset.index', ['json' => $key]) }}">{{ $dataset }}</a></li>
-						@endforeach
-					</ul>
-				</div>
 			</div>
 		</div>
 	</div>

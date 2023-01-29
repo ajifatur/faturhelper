@@ -154,9 +154,6 @@ class RouteExt
             // Database
             Route::get('/admin/database', self::NAMESPACE.'\DatabaseController@index')->name('admin.database.index');
 
-            // Dataset
-            Route::get('/admin/dataset', self::NAMESPACE.'\DatasetController@index')->name('admin.dataset.index');
-
             // Artisan
             Route::get('/admin/artisan', self::NAMESPACE.'\ArtisanController@index')->name('admin.artisan.index');
             Route::post('/admin/artisan/run', self::NAMESPACE.'\ArtisanController@run')->name('admin.artisan.run');

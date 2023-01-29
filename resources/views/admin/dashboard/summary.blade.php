@@ -1,11 +1,11 @@
 @extends('faturhelper::layouts/admin/main')
 
-@section('title', 'Summary')
+@section('title', 'Rangkuman')
 
 @section('content')
 
 <div class="d-sm-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Summary</h1>
+    <h1 class="h3 mb-0">Rangkuman</h1>
 </div>
 
 <div class="row">
