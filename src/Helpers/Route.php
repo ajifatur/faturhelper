@@ -205,5 +205,14 @@ class RouteExt
         Route::get('/dataset/country-code', function() {
             return response()->json(country(), 200);
         })->name('api.country-code');
+
+        // Version
+        Route::get('/version', function() {
+            // Get the package
+            $package = package('ajifatur/faturhelper');
+            
+            // Return
+            return response()->json($package['version'], 200);
+        })->name('api.version');
     }
 }
