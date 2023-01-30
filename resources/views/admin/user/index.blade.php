@@ -8,7 +8,6 @@
     <h1 class="h3 mb-2 mb-sm-0">Kelola Pengguna</h1>
     <div class="btn-group">
         <a href="{{ route('admin.user.create') }}" class="btn btn-sm btn-primary"><i class="bi-plus me-1"></i> Tambah Pengguna</a>
-        <!-- <a href="#" class="btn btn-sm btn-danger btn-delete-bulk"><i class="bi-trash me-1"></i> Hapus Terpilih</a> -->
     </div>
 </div>
 <div class="row">
@@ -37,12 +36,12 @@
                     <table class="table table-sm table-hover table-bordered" id="datatable">
                         <thead class="bg-light">
                             <tr>
-                                <th width="30"><input type="checkbox" class="form-check-input checkbox-all"></th>
+                                <th width="30" class="notexport"><input type="checkbox" class="form-check-input checkbox-all"></th>
                                 <th>Nama</th>
                                 <th width="100">Username</th>
                                 <th width="100">Role</th>
                                 <th width="80">Status</th>
-                                <th width="60">Opsi</th>
+                                <th width="60" class="notexport">Opsi</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -88,7 +87,10 @@
 
 <script type="text/javascript">
     // DataTable
-    Spandiv.DataTable("#datatable");
+    Spandiv.DataTable("#datatable", {
+        buttons: true,
+        deleteBulk: true
+    });
 
     // Button Delete
     Spandiv.ButtonDelete(".btn-delete", ".form-delete");
