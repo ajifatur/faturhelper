@@ -8,7 +8,7 @@
     <h1 class="h3 mb-2 mb-sm-0">Kelola Pengguna</h1>
     <div class="btn-group">
         <a href="{{ route('admin.user.create') }}" class="btn btn-sm btn-primary"><i class="bi-plus me-1"></i> Tambah Pengguna</a>
-        <a href="#" class="btn btn-sm btn-danger btn-delete-bulk"><i class="bi-trash me-1"></i> Hapus Terpilih</a>
+        <!-- <a href="#" class="btn btn-sm btn-danger btn-delete-bulk"><i class="bi-trash me-1"></i> Hapus Terpilih</a> -->
     </div>
 </div>
 <div class="row">
