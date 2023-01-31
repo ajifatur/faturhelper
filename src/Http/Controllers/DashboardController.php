@@ -47,8 +47,8 @@ class DashboardController extends \App\Http\Controllers\Controller
 
         // Count settings
         $settings = [
-            'overall' => Setting::count(),
-            'empty' => Setting::where('content','=','')->orWhere('content','=',null)->count()
+            'overall' => Setting::whereNotIn('code',['period_alias', 'period_visibility'])->count(),
+            'empty' => Setting::whereNotIn('code',['period_alias', 'period_visibility'])->where('content','=','')->orWhere('content','=',null)->count()
         ];
 
         // View

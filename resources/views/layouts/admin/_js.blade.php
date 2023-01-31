@@ -16,7 +16,7 @@
 <!-- <script src="{{ asset('spandiv/assets/spandiv.js') }}"></script> -->
 <script>
 	// Change theme
-	$(document).on("change", "input[name=theme]", function(e) {
+	$(document).on("change", ".offcanvas input[name=theme]", function(e) {
 		e.preventDefault();
         if(typeof Pace !== "undefined") Pace.restart();
 		var theme = $(this).val();
