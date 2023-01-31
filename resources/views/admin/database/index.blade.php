@@ -5,7 +5,10 @@
 @section('content')
 
 <div class="d-sm-flex justify-content-between align-items-center mb-3">
-    <h1 class="h3 mb-0">Database</h1>
+    <h1 class="h3 mb-2 mb-sm-0">Database</h1>
+    <div class="btn-group">
+        <a href="#" class="btn btn-sm btn-primary btn-toggle-field"><i class="bi-eye-slash me-1"></i> <span>Sembunyikan Field</span></a>
+    </div>
 </div>
 <div class="row">
     <div class="col-12">
@@ -17,11 +20,11 @@
                             <tr>
                                 <th rowspan="2" width="30">#</th>
                                 <th rowspan="2">Table</th>
-                                <th colspan="6">Field</th>
+                                <th colspan="6" class="db-field">Field</th>
                                 <th rowspan="2" width="50">Total</th>
                                 <th rowspan="2" width="100">Last Update</th>
                             </tr>
-                            <tr>
+                            <tr class="db-field">
                                 <th>Name</th>
                                 <th>Type</th>
                                 <th>Null</th>
@@ -39,7 +42,7 @@
                                         <td rowspan="{{ count($table->columns) }}">{{ $table->name }}</td>
                                     @endif
                                     @foreach($column as $column_attr)
-                                        <td>{{ $column_attr }}</td>
+                                        <td class="db-field">{{ $column_attr }}</td>
                                     @endforeach
                                     @if($key == 0)
                                         <td rowspan="{{ count($table->columns) }}" align="right">{{ $table->total }}</td>
@@ -65,6 +68,28 @@
         </div>
     </div>
 </div>
+
+@endsection
+
+@section('js')
+
+<script>
+    $(document).on("click", ".btn-toggle-field", function(e) {
+        e.preventDefault();
+        if($(this).find(".bi-eye-slash").length === 1) {
+            $(".table").find(".db-field").addClass("d-none");
+            $(".table tr td").addClass("align-top");
+            $(this).find("i").removeClass("bi-eye-slash").addClass("bi-eye");
+            $(this).find("span").text("Tampilkan Field");
+        }
+        else {
+            $(".table").find(".db-field").removeClass("d-none");
+            $(".table tr td").removeClass("align-top");
+            $(this).find("i").addClass("bi-eye-slash").removeClass("bi-eye");
+            $(this).find("span").text("Sembunyikan Field");
+        }
+    });
+</script>
 
 @endsection
 
