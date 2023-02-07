@@ -21,7 +21,8 @@ class FaturHelperServiceProvider extends ServiceProvider
         if(Schema::hasTable('settings')) {
             config([
                 'app.name' => setting('name'),
-                'app.timezone' => setting('timezone')
+                'app.timezone' => setting('timezone'),
+                'app.locale' => 'id'
             ]);
         }
 
@@ -98,6 +99,9 @@ class FaturHelperServiceProvider extends ServiceProvider
             ],
             'templates' => [
                 "{$publishablePath}/templates" => public_path('templates'),
+            ],
+            'lang' => [
+                "{$publishablePath}/lang" => resource_path('lang'),
             ],
         ];
 

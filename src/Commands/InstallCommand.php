@@ -49,6 +49,7 @@ class InstallCommand extends Command
         $this->call('vendor:publish', ['--provider' => FaturHelperServiceProvider::class, '--tag' => 'config']);
         $this->call('vendor:publish', ['--provider' => FaturHelperServiceProvider::class, '--tag' => 'assets']);
         $this->call('vendor:publish', ['--provider' => FaturHelperServiceProvider::class, '--tag' => 'templates']);
+        $this->call('vendor:publish', ['--provider' => FaturHelperServiceProvider::class, '--tag' => 'lang']);
 
         // Update app/models/User.php
         $this->info('Updating app/models/User.php.');
