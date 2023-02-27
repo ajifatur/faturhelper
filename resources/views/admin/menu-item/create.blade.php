@@ -54,11 +54,46 @@
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">Kondisi Item akan Terlihat</label>
                         <div class="col-lg-10 col-md-9">
-                            <textarea name="visible_conditions" class="form-control form-control-sm {{ $errors->has('visible_conditions') ? 'border-danger' : '' }}" rows="3">{{ old('visible_conditions') }}</textarea>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="visible_radio" id="visible-radio-1" value="1" {{ old('visible_conditions') == '' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="visible-radio-1">
+                                    Selalu Terlihat
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="visible_radio" id="visible-radio-2" value="2" {{ is_int(strpos(old('visible_conditions'), 'Auth::user()->role_id')) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="visible-radio-2">
+                                    Terlihat Berdasarkan Role
+                                </label>
+                            </div>
+                            <div class="card border my-2 {{ is_int(strpos(old('visible_conditions'), 'Auth::user()->role_id')) ? '' : 'd-none' }}" id="card-role">
+                                <div class="card-body p-2 ps-4">
+                                    @foreach($roles as $role)
+                                        @if($role->code == 'super-admin')
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="role" id="role-{{ $role->id }}" value="{{ $role->code }}" disabled checked>
+                                                <label class="form-check-label" for="role-{{ $role->id }}">{{ $role->name }}</label>
+                                            </div>
+                                        @else
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="checkbox" name="role" id="role-{{ $role->id }}" value="{{ $role->code }}" {{ is_int(strpos(old('visible_conditions'), 'Auth::user()->role_id')) && is_int(strpos(old('visible_conditions'), "role('".$role->code."')")) ? 'checked' : '' }}>
+                                                <label class="form-check-label" for="role-{{ $role->id }}">{{ $role->name }}</label>
+                                            </div>
+                                        @endif
+                                    @endforeach
+                                </div>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="visible_radio" id="visible-radio-0" value="0">
+                                <label class="form-check-label" for="visible-radio-0">
+                                    Kustom
+                                </label>
+                            </div>
+                            <textarea name="visible_conditions" class="form-control form-control-sm {{ $errors->has('visible_conditions') ? 'border-danger' : '' }} mt-2" rows="3" readonly>{{ old('visible_conditions') }}</textarea>
                             @if($errors->has('visible_conditions'))
                             <div class="small text-danger">{{ $errors->first('visible_conditions') }}</div>
                             @endif
-                            <div class="small text-muted">Jika tidak diisi maka item akan selalu terlihat.</div>
+                            <!-- <div class="small text-muted">Jika tidak diisi maka item akan selalu terlihat.</div> -->
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -116,6 +151,37 @@
         var value = $(this).val();
         $(this).siblings(".h3").find("i").attr("class",value);
     });
+
+    // Change Visible Radio
+    $(document).on("click", "input[name=visible_radio]", function() {
+        var value = $("input[name=visible_radio]:checked").val();
+        if(value == 1) {
+            $("#card-role").addClass("d-none");
+            $("textarea[name=visible_conditions]").attr("readonly","readonly").val("");
+        }
+        else if(value == 2) {
+            $("#card-role").removeClass("d-none");
+            $("textarea[name=visible_conditions]").attr("readonly","readonly").val(roles());
+        }
+        else if(value == 0) {
+            $("#card-role").addClass("d-none");
+            $("textarea[name=visible_conditions]").removeAttr("readonly");
+        }
+    });
+
+    // Change Role Radio
+    $(document).on("click", "input[name=role]", function() {
+        $("textarea[name=visible_conditions]").val(roles());
+    });
+
+    function roles() {
+        var array = [];
+        var roles = $("input[name=role]:checked");
+        for(var i=0; i<roles.length; i++) {
+            array.push("Auth::user()->role_id == role('" + $(roles[i]).val() + "')");
+        }
+        return array.join(" || ");
+    }
 </script>
 
 @endsection

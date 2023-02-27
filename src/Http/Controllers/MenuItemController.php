@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Ajifatur\FaturHelper\Models\MenuHeader;
 use Ajifatur\FaturHelper\Models\MenuItem;
+use Ajifatur\FaturHelper\Models\Role;
 
 class MenuItemController extends \App\Http\Controllers\Controller
 {
@@ -28,10 +29,14 @@ class MenuItemController extends \App\Http\Controllers\Controller
         // Get parent menu items
         $menu_parents = MenuItem::where('parent','=',0)->orderBy('num_order','asc')->get();
 
+        // Get roles
+        $roles = Role::orderBy('num_order','asc')->get();
+
         // View
         return view('faturhelper::admin/menu-item/create', [
             'menu_header' => $menu_header,
-            'menu_parents' => $menu_parents
+            'menu_parents' => $menu_parents,
+            'roles' => $roles
         ]);
     }
 
@@ -102,11 +107,15 @@ class MenuItemController extends \App\Http\Controllers\Controller
         // Get parent menu items
         $menu_parents = MenuItem::where('parent','=',0)->orderBy('num_order','asc')->get();
 
+        // Get roles
+        $roles = Role::orderBy('num_order','asc')->get();
+
         // View
         return view('faturhelper::admin/menu-item/edit', [
             'menu_item' => $menu_item,
             'menu_header' => $menu_header,
-            'menu_parents' => $menu_parents
+            'menu_parents' => $menu_parents,
+            'roles' => $roles
         ]);
     }
 
