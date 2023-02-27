@@ -4,6 +4,7 @@ namespace Ajifatur\FaturHelper\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Ajifatur\FaturHelper\Models\MenuHeader;
@@ -12,6 +13,8 @@ use Ajifatur\FaturHelper\Models\Role;
 
 class MenuItemController extends \App\Http\Controllers\Controller
 {
+    public $getMethodRoutes, $indexRoutes;
+
     /**
      * Show the form for creating a new resource.
      *
@@ -32,11 +35,16 @@ class MenuItemController extends \App\Http\Controllers\Controller
         // Get roles
         $roles = Role::orderBy('num_order','asc')->get();
 
+        // Configure routes
+        self::routes();
+
         // View
         return view('faturhelper::admin/menu-item/create', [
             'menu_header' => $menu_header,
             'menu_parents' => $menu_parents,
-            'roles' => $roles
+            'roles' => $roles,
+            'getMethodRoutes' => $this->getMethodRoutes,
+            'indexRoutes' => $this->indexRoutes,
         ]);
     }
 
@@ -110,12 +118,17 @@ class MenuItemController extends \App\Http\Controllers\Controller
         // Get roles
         $roles = Role::orderBy('num_order','asc')->get();
 
+        // Configure routes
+        self::routes();
+
         // View
         return view('faturhelper::admin/menu-item/edit', [
             'menu_item' => $menu_item,
             'menu_header' => $menu_header,
             'menu_parents' => $menu_parents,
-            'roles' => $roles
+            'roles' => $roles,
+            'getMethodRoutes' => $this->getMethodRoutes,
+            'indexRoutes' => $this->indexRoutes,
         ]);
     }
 
@@ -203,5 +216,35 @@ class MenuItemController extends \App\Http\Controllers\Controller
             echo 'Berhasil mengurutkan data.';
         }
         else echo 'Terjadi kesalahan dalam mengurutkan data.';
+    }
+
+    /**
+     * Configure Routes.
+     *
+     * @return void
+     */
+    public function routes()
+    {
+        // Get and filter routes
+        $routes = collect(Route::getRoutes())->map(function($route) {
+            if($route->getName() != '' && in_array('web', $route->middleware()) && $route->methods()[0] == 'GET' && $route->getName() != 'auth.login') {
+                return [
+                    'name' => $route->getName(),
+                    'parameterName' => $route->parameterNames()
+                ];
+            }
+        });
+
+        // Loop and plot routes
+        $getMethodRoutes = [];
+        $indexRoutes = [];
+        foreach($routes as $route) {
+            if($route != null && count($route['parameterName']) == 0) {
+                array_push($getMethodRoutes, $route['name']);
+                if(is_int(strpos($route['name'], '.index'))) array_push($indexRoutes, $route['name']);
+            }
+        }
+        $this->getMethodRoutes = $getMethodRoutes;
+        $this->indexRoutes = $indexRoutes;
     }
 }

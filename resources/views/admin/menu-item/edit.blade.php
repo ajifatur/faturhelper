@@ -27,7 +27,12 @@
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">Route</label>
                         <div class="col-lg-10 col-md-9">
-                            <input type="text" name="route" class="form-control form-control-sm {{ $errors->has('route') ? 'border-danger' : '' }}" value="{{ $menu_item->route }}">
+                            <select name="route" class="form-select form-select-sm {{ $errors->has('route') ? 'border-danger' : '' }}">
+                                <option value="" disabled selected>--Pilih--</option>
+                                @foreach($getMethodRoutes as $route)
+                                <option value="{{ $route }}" {{ $menu_item->route == $route ? 'selected' : '' }}>{{ $route }}</option>
+                                @endforeach
+                            </select>
                             @if($errors->has('route'))
                             <div class="small text-danger">{{ $errors->first('route') }}</div>
                             @endif
@@ -94,13 +99,59 @@
                             @if($errors->has('visible_conditions'))
                             <div class="small text-danger">{{ $errors->first('visible_conditions') }}</div>
                             @endif
-                            <!-- <div class="small text-muted">Jika tidak diisi maka item akan selalu terlihat.</div> -->
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">Kondisi Item akan Aktif <span class="text-danger">*</span></label>
                         <div class="col-lg-10 col-md-9">
-                            <textarea name="active_conditions" class="form-control form-control-sm {{ $errors->has('active_conditions') ? 'border-danger' : '' }}" rows="3">{{ $menu_item->active_conditions }}</textarea>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="active_radio" id="active-radio-1" value="1" {{ is_int(strpos($menu_item->active_conditions, ' == ')) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="active-radio-1">
+                                    Sama Dengan Route Tertentu
+                                </label>
+                            </div>
+                            <div class="my-2 ms-4 {{ is_int(strpos($menu_item->active_conditions, ' == ')) ? '' : 'd-none' }}" id="card-route-1">
+                                <?php
+                                    $filter = str_replace("Request::url() == route('", "", $menu_item->active_conditions);
+                                    $filter = str_replace("')", "", $filter);
+                                ?>
+                                <select name="getMethodRoutes" class="form-select form-select-sm {{ $errors->has('getMethodRoutes') ? 'border-danger' : '' }}">
+                                    <option value="" disabled selected>--Pilih--</option>
+                                    @foreach($getMethodRoutes as $route)
+                                    <option value="{{ $route }}" {{ $filter == $route ? 'selected' : '' }}>{{ $route }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="active_radio" id="active-radio-2" value="2" {{ is_int(strpos($menu_item->active_conditions, 'is_int(strpos(Request::url()')) ? 'checked' : '' }}>
+                                <label class="form-check-label" for="active-radio-2">
+                                    Sama Dengan Route Index
+                                </label>
+                            </div>
+                            <div class="my-2 ms-4 {{ is_int(strpos($menu_item->active_conditions, 'is_int(strpos(Request::url()')) ? '' : 'd-none' }}" id="card-route-2">
+                                <?php
+                                    $array = [];
+                                    $explode = explode(" || ", $menu_item->active_conditions);
+                                    foreach($explode as $e) {
+                                        $filter = str_replace("is_int(strpos(Request::url(), route('", "", $e);
+                                        $filter = str_replace("')))", "", $filter);
+                                        array_push($array, $filter);
+                                    }
+                                ?>
+                                <select name="indexRoutes[]" class="form-select form-select-sm {{ $errors->has('indexRoutes') ? 'border-danger' : '' }}" multiple="multiple">
+                                    <option value="" disabled>--Pilih--</option>
+                                    @foreach($indexRoutes as $route)
+                                    <option value="{{ $route }}" {{ in_array($route, $array) ? 'selected' : '' }}>{{ $route }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="active_radio" id="active-radio-0" value="0">
+                                <label class="form-check-label" for="active-radio-0">
+                                    Kustom
+                                </label>
+                            </div>
+                            <textarea name="active_conditions" class="form-control form-control-sm {{ $errors->has('active_conditions') ? 'border-danger' : '' }} mt-2" rows="3" readonly>{{ $menu_item->active_conditions }}</textarea>
                             @if($errors->has('active_conditions'))
                             <div class="small text-danger">{{ $errors->first('active_conditions') }}</div>
                             @endif
@@ -139,7 +190,10 @@
 @section('js')
 
 <script type="text/javascript">
-    // Get Bootstrap Icons
+    // Select2
+    Spandiv.Select2("select[name=route]");
+    Spandiv.Select2("select[name=getMethodRoutes]");
+    Spandiv.Select2("select[name='indexRoutes[]']");
     Spandiv.Select2ServerSide("#select2", {
         url: "{{ route('api.bootstrap-icons') }}",
         value: "{{ $menu_item->icon }}",
@@ -162,7 +216,7 @@
         }
         else if(value == 2) {
             $("#card-role").removeClass("d-none");
-            $("textarea[name=visible_conditions]").attr("readonly","readonly").val(roles());
+            $("textarea[name=visible_conditions]").attr("readonly","readonly").val(generateRoles());
         }
         else if(value == 0) {
             $("#card-role").addClass("d-none");
@@ -172,14 +226,61 @@
 
     // Change Role Radio
     $(document).on("click", "input[name=role]", function() {
-        $("textarea[name=visible_conditions]").val(roles());
+        $("textarea[name=visible_conditions]").val(generateRoles());
     });
 
-    function roles() {
+    // Change Active Radio
+    $(document).on("click", "input[name=active_radio]", function() {
+        var value = $("input[name=active_radio]:checked").val();
+        if(value == 1) {
+            $("#card-route-1").removeClass("d-none");
+            $("#card-route-2").addClass("d-none");
+            Spandiv.Select2("select[name=getMethodRoutes]");
+            $("textarea[name=active_conditions]").attr("readonly","readonly").val(generateRoutes1());
+        }
+        else if(value == 2) {
+            $("#card-route-1").addClass("d-none");
+            $("#card-route-2").removeClass("d-none");
+            Spandiv.Select2("select[name='indexRoutes[]']");
+            $("textarea[name=active_conditions]").attr("readonly","readonly").val(generateRoutes2());
+        }
+        else if(value == 0) {
+            $("#card-route-1").addClass("d-none");
+            $("#card-route-2").addClass("d-none");
+            $("textarea[name=active_conditions]").removeAttr("readonly");
+        }
+    });
+
+    // Change Get Method Routes
+    $(document).on("change", "select[name=getMethodRoutes]", function() {
+        $("textarea[name=active_conditions]").val(generateRoutes1());
+    });
+
+    // Change Index Routes
+    $(document).on("change", "select[name='indexRoutes[]']", function() {
+        $("textarea[name=active_conditions]").val(generateRoutes2());
+    });
+</script>
+<script>
+    function generateRoles() {
         var array = [];
         var roles = $("input[name=role]:checked");
         for(var i=0; i<roles.length; i++) {
             array.push("Auth::user()->role_id == role('" + $(roles[i]).val() + "')");
+        }
+        return array.join(" || ");
+    }
+
+    function generateRoutes1() {
+        var route = $("select[name=getMethodRoutes]").val();
+        return route != null ? "Request::url() == route('" + route + "')" : "";
+    }
+
+    function generateRoutes2() {
+        var array = [];
+        var routes = $("select[name='indexRoutes[]']").val();
+        for(var i=0; i<routes.length; i++) {
+            array.push("is_int(strpos(Request::url(), route('" + routes[i] + "')))")
         }
         return array.join(" || ");
     }
