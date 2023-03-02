@@ -125,8 +125,11 @@ class RouteExt
             // Setting
             Route::get('/admin/setting', self::NAMESPACE.'\SettingController@index')->name('admin.setting.index');
             Route::post('/admin/setting/update', self::NAMESPACE.'\SettingController@update')->name('admin.setting.update');
+            Route::get('/admin/setting/image', self::NAMESPACE.'\SettingController@image')->name('admin.setting.image');
             Route::get('/admin/setting/icon', self::NAMESPACE.'\SettingController@icon')->name('admin.setting.icon');
-            Route::post('/admin/setting/icon/update', self::NAMESPACE.'\SettingController@updateIcon')->name('admin.setting.icon.update');
+            Route::get('/admin/setting/logo', self::NAMESPACE.'\SettingController@logo')->name('admin.setting.logo');
+            Route::post('/admin/setting/image/update', self::NAMESPACE.'\SettingController@updateImage')->name('admin.setting.image.update');
+            Route::post('/admin/setting/image/delete', self::NAMESPACE.'\SettingController@deleteImage')->name('admin.setting.image.delete');
 
             // Meta
             Route::get('/admin/meta', self::NAMESPACE.'\MetaController@index')->name('admin.meta.index');

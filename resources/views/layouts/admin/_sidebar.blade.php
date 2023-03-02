@@ -2,7 +2,11 @@
 <nav id="sidebar" class="sidebar js-sidebar">
 	<div class="sidebar-content js-simplebar">
 		<a class="sidebar-brand" href="/" target="_blank">
-			<span class="align-middle">{{ config('app.name') }}</span>
+			@if(setting('logo') != '' && File::exists(public_path('assets/images/logos/'.setting('logo'))))
+				<img src="{{ asset('assets/images/logos/'.setting('logo')) }}" height="40" alt="{{ config('app.name') }}" style="max-width: 100%;">
+			@else
+				<span class="align-middle">{{ config('app.name') }}</span>
+			@endif
 		</a>
 		<ul class="sidebar-nav">
 			@foreach(menu() as $menu)

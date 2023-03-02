@@ -53,12 +53,10 @@
 				<div class="col-6">
 					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Sistem</small>
 					<ul class="list-unstyled p-0 mb-0">
-						<li><a href="{{ route('admin.setting.index') }}">Pengaturan</a></li>
-						<li><a href="{{ route('admin.setting.icon') }}">Pengaturan Icon</a></li>
 						<li><a href="{{ route('admin.system.index') }}">Lingkungan Sistem</a></li>
 						<li><a href="{{ route('admin.database.index') }}">Database</a></li>
 						<li><a href="{{ route('admin.route.index') }}">Route</a></li>
-						<li><a href="{{ route('admin.summary') }}">Rangkuman</a></li>
+						<li><a href="{{ route('admin.summary') }}">Insight</a></li>
 					</ul>
 				</div>
 				<div class="col-6">
@@ -71,13 +69,24 @@
 		</div>
 		<hr>
 		<div class="mb-3">
-			<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Log</small>
 			<div class="row">
-				<div class="col-6"><a href="{{ route('admin.log.activity') }}">Aktivitas</a></div>
-				<div class="col-6"><a href="{{ route('admin.log.authentication') }}">Autentikasi</a></div>
-				<div class="col-6"><a href="{{ route('admin.log.activity.url') }}">Aktivitas (URL)</a></div>
-				<div class="col-6"><a href="{{ route('admin.visitor.index') }}">Visitor</a></div>
-				<div class="col-6"><a href="{{ route('admin.log.index') }}" target="_blank">Semua Log</a></div>
+				<div class="col-6">
+					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Pengaturan</small>
+					<ul class="list-unstyled p-0 mb-0">
+						<li><a href="{{ route('admin.setting.index') }}">Umum</a></li>
+						<li><a href="{{ route('admin.setting.image') }}">Gambar</a></li>
+					</ul>
+				</div>
+				<div class="col-6">
+					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Log</small>
+					<div class="row">
+						<div class="col-12"><a href="{{ route('admin.log.activity') }}">Aktivitas</a></div>
+						<div class="col-12"><a href="{{ route('admin.log.authentication') }}">Autentikasi</a></div>
+						<div class="col-12"><a href="{{ route('admin.log.activity.url') }}">Aktivitas (URL)</a></div>
+						<div class="col-12"><a href="{{ route('admin.visitor.index') }}">Visitor</a></div>
+						<div class="col-12"><a href="{{ route('admin.log.index') }}" target="_blank">Semua Log</a></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>

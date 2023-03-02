@@ -86,17 +86,30 @@ class SettingController extends \App\Http\Controllers\Controller
             return redirect()->route('admin.setting.index')->with(['message' => 'Berhasil mengupdate data.']);
         }
     }
+
     /**
-     * Display a form of icon.
+     * Display the image setting.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function image(Request $request)
+    {
+        // Check the access
+        has_access(__METHOD__, Auth::user()->role_id);
+
+        // View
+        return view('faturhelper::admin/setting/image');
+    }
+
+    /**
+     * Fetch icons.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function icon(Request $request)
     {
-        // // Check the access
-        has_access(__METHOD__, Auth::user()->role_id);
-
         if($request->ajax()) {
             // Get the icons
             $icons = FileExt::get(public_path('assets/images/icons'));
@@ -109,26 +122,47 @@ class SettingController extends \App\Http\Controllers\Controller
             // Return
             return response()->json($files);
         }
-
-        // View
-        return view('faturhelper::admin/setting/icon');
     }
 
     /**
-     * Update the icon.
+     * Fetch logos.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function updateIcon(Request $request)
+    public function logo(Request $request)
     {
+        if($request->ajax()) {
+            // Get the logos
+            $logos = FileExt::get(public_path('assets/images/logos'));
+            $files = [];
+            foreach ($logos as $icon) {
+                $file_info = FileExt::info($icon->getRelativePathname());
+                array_push($files, $file_info['name']);
+            }
+
+            // Return
+            return response()->json($files);
+        }
+    }
+
+    /**
+     * Update the image.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateImage(Request $request)
+    {
+        $type = $request->type;
+
         // Make directory if not exists
-        if(!File::exists(public_path('assets/images/icons')))
-            File::makeDirectory(public_path('assets/images/icons'));
+        if(!File::exists(public_path('assets/images/'.$type.'s')))
+            File::makeDirectory(public_path('assets/images/'.$type.'s'));
 
         if($request->choose == 1) {
-            // Update the icon
-            $setting = Setting::where('code','=','icon')->first();
+            // Update the image
+            $setting = Setting::where('code','=',$type)->first();
             $setting->content = $request->image;
             $setting->save();
         }
@@ -138,15 +172,34 @@ class SettingController extends \App\Http\Controllers\Controller
             $image = str_replace('data:image/png;base64,', '', $image);
             $image = str_replace(' ', '+', $image);
             $imageName = date('Y-m-d-H-i-s').'.'.'png';
-            File::put(public_path('assets/images/icons'). '/' . $imageName, base64_decode($image));
+            File::put(public_path('assets/images/'.$type.'s'). '/' . $imageName, base64_decode($image));
 
-            // Update the icon
-            $setting = Setting::where('code','=','icon')->first();
+            // Update the image
+            $setting = Setting::where('code','=',$type)->first();
             $setting->content = $imageName;
             $setting->save();
         }
 
         // Redirect
-        return redirect()->route('admin.setting.icon')->with(['message' => 'Berhasil mengupdate icon.']);
+        return redirect()->route('admin.setting.image')->with(['message' => 'Berhasil mengupdate '.$type.'.']);
+    }
+
+    /**
+     * Delete the image.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteImage(Request $request)
+    {
+        $type = $request->type;
+
+        // Update the image
+        $setting = Setting::where('code','=',$type)->first();
+        $setting->content = '';
+        $setting->save();
+
+        // Redirect
+        return redirect()->route('admin.setting.image')->with(['message' => 'Berhasil menghapus '.$type.'.']);
     }
 }
