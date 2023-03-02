@@ -6,15 +6,15 @@
     <meta name="author" content="{{ meta('author') }}">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-  	<!-- <link rel="shortcut icon" href="{{ asset('assets/images/1599633828-icon.png') }}"> -->
+  	<link rel="shortcut icon" href="{{ asset('assets/images/icons/'.setting('icon')) }}">
     <link rel="canonical" href="https://ajifatur.github.io/">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
     <link rel="stylesheet" href="{{ asset('templates/adminkit/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('templates/adminkit/css/light.css') }}">
-    <!-- <link rel="stylesheet" href="{{ asset('spandiv/assets/spandiv.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ asset('spandiv/assets/dist/2.0.0/spandiv.css') }}"> -->
     <!-- <link rel="stylesheet" href="{{ asset('spandiv/assets/adminkit-themes.min.css') }}"> -->
-    <link rel="stylesheet" href="https://ajifatur.github.io/assets/spandiv.min.css">
-    <link rel="stylesheet" href="https://ajifatur.github.io/assets/adminkit-themes.min.css">
+    <link rel="stylesheet" href="https://ajifatur.github.io/assets/dist/2.0.0/spandiv.min.css">
+    <link rel="stylesheet" href="https://ajifatur.github.io/assets/external/adminkit/adminkit-themes.min.css">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css">

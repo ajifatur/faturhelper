@@ -6,6 +6,7 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
+use Ajifatur\Helpers\FileExt;
 use Ajifatur\FaturHelper\Models\Setting;
 
 class SettingController extends \App\Http\Controllers\Controller
@@ -19,7 +20,7 @@ class SettingController extends \App\Http\Controllers\Controller
     public function index(Request $request)
     {
         // // Check the access
-        // has_access(__METHOD__, Auth::user()->role_id);
+        has_access(__METHOD__, Auth::user()->role_id);
 
         // Get timezones
         $timezones = timezone_identifiers_list(2047);
@@ -84,5 +85,68 @@ class SettingController extends \App\Http\Controllers\Controller
             // Redirect
             return redirect()->route('admin.setting.index')->with(['message' => 'Berhasil mengupdate data.']);
         }
+    }
+    /**
+     * Display a form of icon.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function icon(Request $request)
+    {
+        // // Check the access
+        has_access(__METHOD__, Auth::user()->role_id);
+
+        if($request->ajax()) {
+            // Get the icons
+            $icons = FileExt::get(public_path('assets/images/icons'));
+            $files = [];
+            foreach ($icons as $icon) {
+                $file_info = FileExt::info($icon->getRelativePathname());
+                array_push($files, $file_info['name']);
+            }
+
+            // Return
+            return response()->json($files);
+        }
+
+        // View
+        return view('faturhelper::admin/setting/icon');
+    }
+
+    /**
+     * Update the icon.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function updateIcon(Request $request)
+    {
+        // Make directory if not exists
+        if(!File::exists(public_path('assets/images/icons')))
+            File::makeDirectory(public_path('assets/images/icons'));
+
+        if($request->choose == 1) {
+            // Update the icon
+            $setting = Setting::where('code','=','icon')->first();
+            $setting->content = $request->image;
+            $setting->save();
+        }
+        else {
+            // Upload the image
+            $image = $request->image;
+            $image = str_replace('data:image/png;base64,', '', $image);
+            $image = str_replace(' ', '+', $image);
+            $imageName = date('Y-m-d-H-i-s').'.'.'png';
+            File::put(public_path('assets/images/icons'). '/' . $imageName, base64_decode($image));
+
+            // Update the icon
+            $setting = Setting::where('code','=','icon')->first();
+            $setting->content = $imageName;
+            $setting->save();
+        }
+
+        // Redirect
+        return redirect()->route('admin.setting.icon')->with(['message' => 'Berhasil mengupdate icon.']);
     }
 }

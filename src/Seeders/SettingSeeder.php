@@ -35,6 +35,7 @@ class SettingSeeder extends Seeder
             ['code' => 'brand_visibility', 'content' => '1'],
             ['code' => 'period_alias', 'content' => 'Periode'],
             ['code' => 'period_visibility', 'content' => '0'],
+            ['code' => 'icon', 'content' => ''],
         ];
 
         foreach($settings as $setting) {

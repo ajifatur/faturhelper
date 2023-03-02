@@ -1,4 +1,3 @@
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 <script src="{{ asset('templates/adminkit/js/app.js') }}"></script>
 <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
@@ -12,8 +11,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
-<script src="https://ajifatur.github.io/assets/spandiv.min.js"></script>
-<!-- <script src="{{ asset('spandiv/assets/spandiv.js') }}"></script> -->
+<script src="https://ajifatur.github.io/assets/dist/2.0.0/spandiv.min.js"></script>
+<!-- <script src="{{ asset('spandiv/assets/dist/2.0.0/spandiv.js') }}"></script> -->
 <script>
 	// Change theme
 	$(document).on("change", ".offcanvas input[name=theme]", function(e) {

@@ -45,6 +45,8 @@ class PermissionSeeder extends Seeder
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PermissionController::delete', 'name' => 'Menghapus Hak Akses'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PermissionController::reorder', 'name' => 'Mengurutkan Hak Akses'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PermissionController::change', 'name' => 'Mengganti Status Hak Akses'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\SettingController::index', 'name' => 'Menampilkan Pengaturan'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\SettingController::icon', 'name' => 'Menampilkan Pengaturan Icon'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuController::index', 'name' => 'Mengelola Data Menu'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuHeaderController::create', 'name' => 'Menambah Menu Header'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuHeaderController::edit', 'name' => 'Mengubah Menu Header'],
