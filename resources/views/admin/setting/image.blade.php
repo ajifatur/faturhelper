@@ -250,7 +250,7 @@
                         html += '<div class="row">';
                         for(var i=0; i<response.length; i++) {
                             html += '<div class="col-auto text-center">';
-                            html += '<img src="{{ asset("assets/images/icons") }}/' + response[i] + '" class="img-thumbnail rounded-circle mb-2 btn-choose-icon" data-image="' + response[i] + '" data-bs-toggle="tooltip" title="Pilih Gambar" width="150" style="cursor: pointer;">';
+                            html += '<img src="{{ asset("assets/images/icons") }}/' + response[i] + '" class="img-thumbnail mb-2 btn-choose-icon" data-image="' + response[i] + '" data-bs-toggle="tooltip" title="Pilih Gambar" width="150" style="cursor: pointer;">';
                             html += '</div>';
                         }
                         html += '</div>';
@@ -285,7 +285,7 @@
                         html += '<div class="row">';
                         for(var i=0; i<response.length; i++) {
                             html += '<div class="col-auto text-center">';
-                            html += '<img src="{{ asset("assets/images/logos") }}/' + response[i] + '" class="img-thumbnail rounded-circle mb-2 btn-choose-logo" data-image="' + response[i] + '" data-bs-toggle="tooltip" title="Pilih Gambar" width="150" style="cursor: pointer;">';
+                            html += '<img src="{{ asset("assets/images/logos") }}/' + response[i] + '" class="img-thumbnail mb-2 btn-choose-logo" data-image="' + response[i] + '" data-bs-toggle="tooltip" title="Pilih Gambar" width="150" style="cursor: pointer;">';
                             html += '</div>';
                         }
                         html += '</div>';

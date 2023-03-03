@@ -37,6 +37,14 @@
                         <div>Zona Waktu:</div>
                         <div>{{ config('app.timezone') }}</div>
                     </li>
+                    <li class="list-group-item px-0 py-1 d-sm-flex justify-content-between fw-bold">
+                        <div>Laravel:</div>
+                        <div>{{ app()->version() }}</div>
+                    </li>
+                    <li class="list-group-item px-0 py-1 d-sm-flex justify-content-between fw-bold">
+                        <div>PHP:</div>
+                        <div>{{ phpversion() }}</div>
+                    </li>
                 </ul>
             </div>
         </div>

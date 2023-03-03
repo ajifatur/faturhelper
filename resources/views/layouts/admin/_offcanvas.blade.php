@@ -58,8 +58,9 @@
 				<div class="col-6"><a href="{{ route('admin.user.index') }}">Pengguna</a></div>
 				<div class="col-6"><a href="{{ route('admin.meta.index') }}">Meta</a></div>
 				<div class="col-6"><a href="{{ route('admin.permission.index') }}">Hak Akses</a></div>
-				<div class="col-6"><a href="{{ route('admin.schedule.index') }}">Agenda</a></div>
+				<div class="col-6"><a href="{{ route('admin.media.index') }}">Media</a></div>
 				<div class="col-6"><a href="{{ route('admin.period.index') }}">Periode</a></div>
+				<div class="col-6"><a href="{{ route('admin.schedule.index') }}">Agenda</a></div>
 			</div>
 		</div>
 		<hr>

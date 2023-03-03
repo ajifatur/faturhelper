@@ -135,6 +135,9 @@ class RouteExt
             Route::get('/admin/meta', self::NAMESPACE.'\MetaController@index')->name('admin.meta.index');
             Route::post('/admin/meta/update', self::NAMESPACE.'\MetaController@update')->name('admin.meta.update');
 
+            // Media
+            Route::get('/admin/media', self::NAMESPACE.'\MediaController@index')->name('admin.media.index');
+
             // Period
             Route::get('/admin/period', self::NAMESPACE.'\PeriodController@index')->name('admin.period.index');
             Route::get('/admin/period/create', self::NAMESPACE.'\PeriodController@create')->name('admin.period.create');
