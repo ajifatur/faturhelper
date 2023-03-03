@@ -55,6 +55,7 @@ class PermissionSeeder extends Seeder
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuItemController::edit', 'name' => 'Mengubah Menu Item'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MenuItemController::delete', 'name' => 'Menghapus Menu Item'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MetaController::index', 'name' => 'Mengelola Meta'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\MediaController::index', 'name' => 'Menampilkan Media'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::index', 'name' => 'Mengelola Data Periode'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::create', 'name' => 'Menambah Periode'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\PeriodController::edit', 'name' => 'Mengubah Periode'],

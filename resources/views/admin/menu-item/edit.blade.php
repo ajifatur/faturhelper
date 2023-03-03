@@ -40,10 +40,25 @@
                     </div>
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">Route Parameter</label>
-                        <div class="col-lg-10 col-md-9">
-                            <input type="text" name="routeparams" class="form-control form-control-sm {{ $errors->has('routeparams') ? 'border-danger' : '' }}" value="{{ $menu_item->routeparams }}">
-                            @if($errors->has('routeparams'))
-                            <div class="small text-danger">{{ $errors->first('routeparams') }}</div>
+                        <div class="col-lg-10 col-md-9" id="route-params">
+                            @if(count(json_decode($menu_item->routeparams, true)) > 0)
+                                @php $i = 1; @endphp
+                                @foreach(json_decode($menu_item->routeparams, true) as $param=>$value)
+                                    <div class="input-group input-group-sm mb-2" data-id="{{ $i }}">
+                                        <input type="text" name="params[]" class="form-control form-control-sm" value="{{ $param }}" placeholder="Parameter">
+                                        <input type="text" name="values[]" class="form-control form-control-sm" value="{{ $value }}" placeholder="Value">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary btn-add-row" data-id="{{ $i }}"><i class="bi-plus"></i></button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary btn-delete-row" data-id="{{ $i }}"><i class="bi-trash"></i></button>
+                                    </div>
+                                    @php $i++; @endphp
+                                @endforeach
+                            @else
+                                <div class="input-group input-group-sm mb-2" data-id="1">
+                                    <input type="text" name="params[]" class="form-control form-control-sm" placeholder="Parameter">
+                                    <input type="text" name="values[]" class="form-control form-control-sm" placeholder="Value">
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-add-row" data-id="1"><i class="bi-plus"></i></button>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary btn-delete-row" data-id="1"><i class="bi-trash"></i></button>
+                                </div>
                             @endif
                         </div>
                     </div>
@@ -207,6 +222,31 @@
         $(this).siblings(".h3").find("i").attr("class",value);
     });
 
+    // Button Add Row
+    $(document).on("click", "#route-params .btn-add-row", function(e) {
+        e.preventDefault();
+        var html = '';
+        html += '<div class="input-group input-group-sm mb-2" data-id="1">';
+        html += '<input type="text" name="params[]" class="form-control form-control-sm" placeholder="Parameter">';
+        html += '<input type="text" name="values[]" class="form-control form-control-sm" placeholder="Value">';
+        html += '<button type="button" class="btn btn-sm btn-outline-secondary btn-add-row" data-id="1"><i class="bi-plus"></i></button>';
+        html += '<button type="button" class="btn btn-sm btn-outline-secondary btn-delete-row" data-id="1"><i class="bi-trash"></i></button>';
+        html += '</div>';
+        $("#route-params").append(html);
+        generateRow();
+    });
+
+    // Button Delete Row
+    $(document).on("click", "#route-params .btn-delete-row", function(e) {
+        e.preventDefault();
+        var id = $(this).data("id");
+        if($("#route-params .input-group").length > 1)
+            $("#route-params .input-group[data-id=" + id + "]").remove();
+        else
+            $("#route-params .input-group[data-id=" + id + "]").find("input").val(null);
+        generateRow();
+    });
+
     // Change Visible Radio
     $(document).on("click", "input[name=visible_radio]", function() {
         var value = $("input[name=visible_radio]:checked").val();
@@ -262,6 +302,14 @@
     });
 </script>
 <script>
+    function generateRow() {
+        $("#route-params .input-group").each(function(key,elem) {
+            $(elem).attr("data-id",(key+1));
+            $(elem).find(".btn-add-row").attr("data-id",(key+1));
+            $(elem).find(".btn-delete-row").attr("data-id",(key+1));
+        });
+    }
+
     function generateRoles() {
         var array = [];
         var roles = $("input[name=role]:checked");

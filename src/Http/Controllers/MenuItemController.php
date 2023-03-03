@@ -73,6 +73,19 @@ class MenuItemController extends \App\Http\Controllers\Controller
             // Get the latest menu item
             $latest_menu_item = MenuItem::where('menuheader_id','=',$request->header_id)->orderBy('num_order','desc')->first();
 
+            // Set route params
+            $route_params = '';
+            $route_params_temp = [];
+            if(count(array_filter($request->params)) > 0 && count(array_filter($request->values)) > 0) {
+                for($i=0; $i<count($request->params); $i++) {
+                    if($request->params[$i] != '') {
+                        $param = preg_replace("/[^a-zA-Z0-9]+/", "", $request->params[$i]);
+                        $route_params_temp[$param] = $request->values[$i];
+                    }
+                }
+                $route_params = json_encode($route_params_temp);
+            }
+
             // Get the parent menu
             $menu_parent = MenuItem::find($request->parent);
 
@@ -81,7 +94,7 @@ class MenuItemController extends \App\Http\Controllers\Controller
             $menu_item->menuheader_id = $menu_parent ? $menu_parent->menuheader_id : $request->header_id;
             $menu_item->name = $request->name;
             $menu_item->route = $request->route;
-            $menu_item->routeparams = $request->routeparams != '' ? $request->routeparams : '';
+            $menu_item->routeparams = $route_params;
             $menu_item->icon = $request->icon;
             $menu_item->visible_conditions = $request->visible_conditions != '' ? $request->visible_conditions : '';
             $menu_item->active_conditions = $request->active_conditions != '' ? $request->active_conditions : '';
@@ -157,12 +170,25 @@ class MenuItemController extends \App\Http\Controllers\Controller
             // Get the parent menu
             $menu_parent = MenuItem::find($request->parent);
 
+            // Set route params
+            $route_params = '';
+            $route_params_temp = [];
+            if(count(array_filter($request->params)) > 0 && count(array_filter($request->values)) > 0) {
+                for($i=0; $i<count($request->params); $i++) {
+                    if($request->params[$i] != '') {
+                        $param = preg_replace("/[^a-zA-Z0-9]+/", "", $request->params[$i]);
+                        $route_params_temp[$param] = $request->values[$i];
+                    }
+                }
+                $route_params = json_encode($route_params_temp);
+            }
+
             // Update the menu item
             $menu_item = MenuItem::find($request->id);
             $menu_item->menuheader_id = $menu_parent ? $menu_parent->menuheader_id : $menu_item->menuheader_id;
             $menu_item->name = $request->name;
             $menu_item->route = $request->route;
-            $menu_item->routeparams = $request->routeparams != '' ? $request->routeparams : '';
+            $menu_item->routeparams = $route_params;
             $menu_item->icon = $request->icon;
             $menu_item->visible_conditions = $request->visible_conditions != '' ? $request->visible_conditions : '';
             $menu_item->active_conditions = $request->active_conditions != '' ? $request->active_conditions : '';
