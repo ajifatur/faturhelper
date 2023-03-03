@@ -6,7 +6,7 @@
 
     <title>@yield('title') :: {{ config('app.name') }} {{ setting('tagline') != '' ? ' - '.setting('tagline') : '' }}</title>
 </head>
-<body data-theme="{{ setting('theme') }}">
+<body data-theme="{{ setting('theme') }}" data-size="{{ setting('size') }}">
 	<div class="wrapper">
         @include('faturhelper::layouts/admin/_sidebar')
         

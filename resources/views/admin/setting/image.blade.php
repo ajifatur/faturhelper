@@ -50,7 +50,7 @@
                 <div class="d-flex justify-content-center text-center">
                     @if(setting('logo') != '' && File::exists(public_path('assets/images/logos/'.setting('logo'))))
                         <div class="btn-avatar text-center" style="width: auto!important;" data-type="logo" data-bs-toggle="tooltip" title="Klik untuk mengganti logo">
-                            <img src="{{ asset('assets/images/logos/'.setting('logo')) }}" height="150" alt="Logo" style="max-width: 100%;">
+                            <img src="{{ asset('assets/images/logos/'.setting('logo')) }}" class="border" height="150" alt="Logo" style="max-width: 100%;">
                         </div>
                     @else
                         <div class="btn-avatar text-center bg-dark" data-type="logo" style="width: auto!important;" data-bs-toggle="tooltip" title="Klik untuk mengganti logo">
