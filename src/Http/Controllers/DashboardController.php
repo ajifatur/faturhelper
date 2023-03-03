@@ -4,6 +4,7 @@ namespace Ajifatur\FaturHelper\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Ajifatur\FaturHelper\Models\User;
 use Ajifatur\FaturHelper\Models\Visitor;
 use Ajifatur\FaturHelper\Models\Setting;
@@ -17,13 +18,8 @@ class DashboardController extends \App\Http\Controllers\Controller
      */
     public function index()
     {
-        // Get the random quote
-        // $quote = quote('random');
-
         // View
-        return view('faturhelper::admin/dashboard/index', [
-            // 'quote' => $quote
-        ]);
+        return view('faturhelper::admin/dashboard/index');
     }
 
     /**

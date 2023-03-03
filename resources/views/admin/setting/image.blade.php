@@ -42,7 +42,9 @@
             <div class="card-body">
                 <div class="d-flex justify-content-between">
                     <h4>Logo</h4>
+                    @if(setting('logo') != '' && File::exists(public_path('assets/images/logos/'.setting('logo'))))
                     <button class="btn btn-sm btn-danger btn-delete-logo">Hapus Logo</button>
+                    @endif
                 </div>
                 <p>Klik gambar di bawah ini untuk mengganti logo:</p>
                 <div class="d-flex justify-content-center text-center">
