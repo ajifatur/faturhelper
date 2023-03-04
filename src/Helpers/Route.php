@@ -193,6 +193,7 @@ class RouteExt
             // User
             Route::get('/user/role', self::NAMESPACE.'\API\UserController@role')->name('api.user.role');
             Route::get('/user/status', self::NAMESPACE.'\API\UserController@status')->name('api.user.status');
+            Route::get('/user/gender', self::NAMESPACE.'\API\UserController@gender')->name('api.user.gender');
 
             // Visitor
             Route::get('/visitor/device/type', self::NAMESPACE.'\API\VisitorController@deviceType')->name('api.visitor.device.type');

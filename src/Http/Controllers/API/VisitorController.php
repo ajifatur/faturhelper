@@ -7,13 +7,6 @@ use Ajifatur\FaturHelper\Models\Visitor;
 
 class VisitorController extends \App\Http\Controllers\Controller
 {
-    const DATASET = [
-        'labels' => [],
-        'colors' => [],
-        'data' => [],
-        'total' => 0
-    ];
-
     /**
      * Get visitor label and data.
      * 
@@ -23,10 +16,7 @@ class VisitorController extends \App\Http\Controllers\Controller
      */
     function getVisitorLabelAndData($field, $category)
     {
-        $dataset = [
-            'labels' => [],
-            'data' => []
-        ];
+        $data = [];
         $array = [];
 
         // Get visitors
@@ -44,12 +34,14 @@ class VisitorController extends \App\Http\Controllers\Controller
 
         // Loop array
         foreach(array_count_values($array) as $key=>$value) {
-            // Push to dataset
-            array_push($dataset['labels'], $key);
-            array_push($dataset['data'], $value);
+            // Push to data
+            $data[] = [
+                'name' => $key,
+                'y' => $value
+            ];
         }
 
-        return $dataset;
+        return $data;
     }
 
     /**
@@ -59,16 +51,10 @@ class VisitorController extends \App\Http\Controllers\Controller
      */
     public function deviceType()
     {
-        // Set dataset
-        $dataset = self::DATASET;
-        $dataset['labels'] = $this->getVisitorLabelAndData('device', 'type')['labels'];
-        $dataset['data'] = $this->getVisitorLabelAndData('device', 'type')['data'];
-        $dataset['total'] = array_sum($dataset['data']);
-
         // Response
         return response()->json([
             'message' => 'Success.',
-            'data' => $dataset
+            'data' => $this->getVisitorLabelAndData('device', 'type')
         ], 200);
     }
 
@@ -79,16 +65,10 @@ class VisitorController extends \App\Http\Controllers\Controller
      */
     public function deviceFamily()
     {
-        // Set dataset
-        $dataset = self::DATASET;
-        $dataset['labels'] = $this->getVisitorLabelAndData('device', 'family')['labels'];
-        $dataset['data'] = $this->getVisitorLabelAndData('device', 'family')['data'];
-        $dataset['total'] = array_sum($dataset['data']);
-
         // Response
         return response()->json([
             'message' => 'Success.',
-            'data' => $dataset
+            'data' => $this->getVisitorLabelAndData('device', 'family')
         ], 200);
     }
 
@@ -99,16 +79,10 @@ class VisitorController extends \App\Http\Controllers\Controller
      */
     public function browser()
     {
-        // Set dataset
-        $dataset = self::DATASET;
-        $dataset['labels'] = $this->getVisitorLabelAndData('browser', 'family')['labels'];
-        $dataset['data'] = $this->getVisitorLabelAndData('browser', 'family')['data'];
-        $dataset['total'] = array_sum($dataset['data']);
-
         // Response
         return response()->json([
             'message' => 'Success.',
-            'data' => $dataset
+            'data' => $this->getVisitorLabelAndData('browser', 'family')
         ], 200);
     }
 
@@ -119,16 +93,10 @@ class VisitorController extends \App\Http\Controllers\Controller
      */
     public function platform()
     {
-        // Set dataset
-        $dataset = self::DATASET;
-        $dataset['labels'] = $this->getVisitorLabelAndData('platform', 'family')['labels'];
-        $dataset['data'] = $this->getVisitorLabelAndData('platform', 'family')['data'];
-        $dataset['total'] = array_sum($dataset['data']);
-
         // Response
         return response()->json([
             'message' => 'Success.',
-            'data' => $dataset
+            'data' => $this->getVisitorLabelAndData('platform', 'family')
         ], 200);
     }
 }

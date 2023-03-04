@@ -2,40 +2,13 @@
 
 namespace Ajifatur\FaturHelper\Http\Controllers\API;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Ajifatur\FaturHelper\Models\Role;
 use Ajifatur\FaturHelper\Models\User;
 
 class UserController extends \App\Http\Controllers\Controller
 {
-    const DATASET = [
-        'labels' => [],
-        'colors' => [],
-        'data' => [],
-        'total' => 0
-    ];
-
-    /**
-     * Get colors / color.
-     * 
-     * @param  string|null $key
-     * @return string
-     */
-    public function getColor($key = null)
-    {
-        $colors = [
-            color('Green', 'hex'),
-            color('Yellow', 'hex'),
-            color('Red', 'hex'),
-            color('Blue', 'hex'),
-            color('Orange', 'hex'),
-            color('Purple', 'hex'),
-            color('Pink', 'hex'),
-        ];
-
-        return $key === null ? $colors : $colors[$key];
-    }
-
     /**
      * Get user role.
      * 
@@ -43,8 +16,7 @@ class UserController extends \App\Http\Controllers\Controller
      */
     public function role()
     {
-        // Set dataset
-        $dataset = self::DATASET;
+        $data = [];
 
         // Get roles
         $roles = Role::orderBy('is_admin','desc')->orderBy('num_order','asc')->get();
@@ -54,19 +26,17 @@ class UserController extends \App\Http\Controllers\Controller
             // Count users
             $users = User::where('role_id','=',$role->id)->count();
 
-            // Push to dataset
-            array_push($dataset['labels'], $role->name);
-            array_push($dataset['colors'], $this->getColor($key % count($this->getColor())));
-            array_push($dataset['data'], $users);
+            // Push to data
+            $data[] = [
+                'name' => $role->name,
+                'y' => $users
+            ];
         }
-
-        // Sum data
-        $dataset['total'] = array_sum($dataset['data']);
 
         // Response
         return response()->json([
             'message' => 'Success.',
-            'data' => $dataset
+            'data' => $data
         ], 200);
     }
 
@@ -77,27 +47,54 @@ class UserController extends \App\Http\Controllers\Controller
      */
     public function status()
     {
-        // Set dataset
-        $dataset = self::DATASET;
+        $data = [];
 
         // Loop statuses
         foreach(status() as $key=>$status) {
             // Count users
             $users = User::where('status','=',$status['key'])->count();
 
-            // Push to dataset
-            array_push($dataset['labels'], $status['name']);
-            array_push($dataset['colors'], $this->getColor($key % count($this->getColor())));
-            array_push($dataset['data'], $users);
+            // Push to data
+            $data[] = [
+                'name' => $status['name'],
+                'y' => $users
+            ];
         }
-
-        // Sum data
-        $dataset['total'] = array_sum($dataset['data']);
 
         // Response
         return response()->json([
             'message' => 'Success.',
-            'data' => $dataset
+            'data' => $data
+        ], 200);
+    }
+
+    /**
+     * Get user gender.
+     * 
+     * @return \Illuminate\Http\Response
+     */
+    public function gender()
+    {
+        $data = [];
+
+        // Loop genders
+        foreach(gender() as $key=>$gender) {
+            // Count users
+            $users = User::whereHas('attribute', function (Builder $query) use ($gender) {
+                return $query->where('gender','=',$gender['key']);
+            })->count();
+
+            // Push to data
+            $data[] = [
+                'name' => $gender['name'],
+                'y' => $users
+            ];
+        }
+
+        // Response
+        return response()->json([
+            'message' => 'Success.',
+            'data' => $data
         ], 200);
     }
 }

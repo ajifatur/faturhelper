@@ -4,7 +4,6 @@ namespace Ajifatur\FaturHelper\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Ajifatur\FaturHelper\Models\User;
 use Ajifatur\FaturHelper\Models\Visitor;
 use Ajifatur\FaturHelper\Models\Setting;
