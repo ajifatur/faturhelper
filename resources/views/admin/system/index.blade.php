@@ -110,7 +110,8 @@
                                 <td>{{ ucfirst($package['type']) }}</td>
                                 <td align="center">
                                     <div class="btn-group">
-                                        <a href="https://github.com/{{ $package['name'] }}" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Kunjungi Repository" target="_blank"><i class="bi-github"></i></a>
+                                        <a href="{{ route('admin.system.package', ['repo' => $package['name']]) }}" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi-eye"></i></a>
+                                        <a href="https://github.com/{{ $package['name'] }}" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" title="Kunjungi Repository" target="_blank"><i class="bi-github"></i></a>
                                     </div>
                                 </td>
                             </tr>

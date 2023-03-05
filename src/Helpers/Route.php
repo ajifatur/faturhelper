@@ -158,6 +158,7 @@ class RouteExt
 
             // System
             Route::get('/admin/system', self::NAMESPACE.'\SystemController@index')->name('admin.system.index');
+            Route::get('/admin/system/package', self::NAMESPACE.'\SystemController@package')->name('admin.system.package');
 
             // Database
             Route::get('/admin/database', self::NAMESPACE.'\DatabaseController@index')->name('admin.database.index');

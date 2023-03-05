@@ -50,4 +50,28 @@ class SystemController extends \App\Http\Controllers\Controller
         // Display output
         dd($process->getOutput());
     }
+
+    /**
+     * Display the package
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function package(Request $request)
+    {
+        // Check the access
+        // has_access(__METHOD__, Auth::user()->role_id);
+
+        // Get the package
+        $package = package($request->query('repo'));
+        
+        // Get releases
+        $releases = fetch("https://api.github.com/repos/" . $request->query('repo') . "/releases?per_page=100");
+
+        // View
+        return view('faturhelper::admin/system/package', [
+            'package' => $package,
+            'releases' => $releases
+        ]);
+    }
 }
