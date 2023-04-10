@@ -97,8 +97,8 @@
 					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Log</small>
 					<div class="row">
 						<div class="col-12"><a href="{{ route('admin.log.activity') }}">Aktivitas</a></div>
-						<div class="col-12"><a href="{{ route('admin.log.authentication') }}">Autentikasi</a></div>
 						<div class="col-12"><a href="{{ route('admin.log.activity.url') }}">Aktivitas (URL)</a></div>
+						<div class="col-12"><a href="{{ route('admin.log.authentication') }}">Autentikasi</a></div>
 						<div class="col-12"><a href="{{ route('admin.visitor.index') }}">Visitor</a></div>
 						<div class="col-12"><a href="{{ route('admin.log.index') }}" target="_blank">Semua Log</a></div>
 					</div>
