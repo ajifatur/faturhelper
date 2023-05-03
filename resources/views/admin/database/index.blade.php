@@ -48,9 +48,13 @@
                                         <td rowspan="{{ count($table->columns) }}" align="right">{{ $table->total }}</td>
                                         <td rowspan="{{ count($table->columns) }}">
                                             @if($table->latest_data)
-                                                {{ date('d/m/Y', strtotime($table->latest_data->updated_at)) }}
-                                                <br>
-                                                <small class="text-muted">{{ date('H:i', strtotime($table->latest_data->updated_at)) }} WIB</small>
+                                                @if($table->latest_data->updated_at != null)
+                                                    {{ date('d/m/Y', strtotime($table->latest_data->updated_at)) }}
+                                                    <br>
+                                                    <small class="text-muted">{{ date('H:i', strtotime($table->latest_data->updated_at)) }} WIB</small>
+                                                @else
+                                                    <span class="text-danger">NULL</span>
+                                                @endif
                                             @elseif($table->latest_data === null)
                                                 <span class="text-danger">Empty data.</span>
                                             @else
