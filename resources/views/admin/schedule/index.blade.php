@@ -18,7 +18,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endif
-                <div id="calendar"><div class="text-center fst-italic">Sedang Memuat...</div></div>
+                <div id="calendar">Sedang Memuat...</div>
             </div>
         </div>
     </div>

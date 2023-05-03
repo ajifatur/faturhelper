@@ -95,54 +95,72 @@
     </div>
 </div>
 <div class="row">
-	<div class="col-sm-6">
-        <div class="card">
-            <div class="card-body">
-                <div id="highcharts-user-role">Sedang memuat...</div>
+    <div class="col-sm-9">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users" aria-selected="true">Pengguna</button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="visitors-tab" data-bs-toggle="tab" data-bs-target="#visitors" type="button" role="tab" aria-controls="visitors" aria-selected="false">Pengunjung</button>
+            </li>
+        </ul>
+        <div class="tab-content py-3" id="myTabContent">
+            <div class="tab-pane fade show active" id="users" role="tabpanel" aria-labelledby="users-tab">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="highcharts-user-role">Sedang memuat...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="highcharts-user-status">Sedang memuat...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="highcharts-user-gender">Sedang memuat...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-	<div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
-                <div id="highcharts-user-status">Sedang memuat...</div>
-            </div>
-        </div>
-    </div>
-	<div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
-                <div id="highcharts-user-gender">Sedang memuat...</div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="row">
-	<div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
-                <div id="highcharts-device-type">Sedang memuat...</div>
-            </div>
-        </div>
-    </div>
-	<div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
-                <div id="highcharts-device-family">Sedang memuat...</div>
-            </div>
-        </div>
-    </div>
-	<div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
-                <div id="highcharts-browser">Sedang memuat...</div>
-            </div>
-        </div>
-    </div>
-	<div class="col-sm-6 col-xl-3">
-        <div class="card">
-            <div class="card-body">
-                <div id="highcharts-platform">Sedang memuat...</div>
+            <div class="tab-pane fade" id="visitors" role="tabpanel" aria-labelledby="visitors-tab">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="highcharts-device-type">Sedang memuat...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="highcharts-device-family">Sedang memuat...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="highcharts-browser">Sedang memuat...</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="highcharts-platform">Sedang memuat...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
