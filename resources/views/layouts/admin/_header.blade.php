@@ -29,6 +29,40 @@
 	</ul>
 	<div class="navbar-collapse collapse">
 		<ul class="navbar-nav navbar-align">
+			@if(Auth::user()->role_id == role('super-admin') && count(notifications()) > 0)
+			<li class="nav-item dropdown">
+				<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
+					<div class="position-relative">
+						<i class="align-middle bi-bell" style="font-size: 85%;"></i>
+						<span class="indicator">{{ count(notifications()) }}</span>
+					</div>
+				</a>
+				<div class="dropdown-menu dropdown-menu-lg dropdown-menu-end py-0" aria-labelledby="alertsDropdown">
+					<div class="dropdown-menu-header">
+						{{ count(notifications()) }} Notifikasi Baru
+					</div>
+					<div class="list-group">
+						@foreach(notifications() as $notification)
+						<a href="{{ $notification['route'] }}" class="list-group-item">
+							<div class="row g-0 align-items-center">
+								<div class="col-2">
+									<i class="h4 {{ $notification['icon_name'] }} {{ $notification['icon_color'] }}"></i>
+								</div>
+								<div class="col-10">
+									<div class="text-dark">{{ $notification['title'] }}</div>
+									<div class="text-muted small mt-1">{{ $notification['description'] }}</div>
+									<!-- <div class="text-muted small mt-1">30m ago</div> -->
+								</div>
+							</div>
+						</a>
+						@endforeach
+					<div>
+					<div class="dropdown-menu-footer d-none">
+						<a href="#" class="text-muted">Lihat Semua Notifikasi</a>
+					</div>
+				</div>
+			</li>
+			@endif
 			<li class="nav-item nav-item-user dropdown">
 				<a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">
 					@if(Auth::user()->avatar != '' && File::exists(public_path('assets/images/users/'.Auth::user()->avatar)))

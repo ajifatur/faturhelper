@@ -13,6 +13,7 @@
  * @method string          slugify(string $text, array $array)
  * @method string          access_token()
  * @method array|null      package(string|null $name)
+ * @method array           notifications()
  * @method string          quill(string $html, string $path)
  * @method string          hex_to_rgb(string $code)
  * @method object          rgb_to_hsl(string $code)
@@ -311,6 +312,33 @@ if(!function_exists('package')) {
             }
             return array_key_exists($index, $packages) ? $packages[$index] : null;
         }
+    }
+}
+
+/**
+ * Get the notifications.
+ *
+ * @return array
+ */
+if(!function_exists('notifications')) {
+    function notifications() {
+        // Set notifications
+        $notifications = [];
+
+        // Check whether super admin account still using default password
+        $default_password = Hash::check('password', \Ajifatur\FaturHelper\Models\User::first()->password);
+        if($default_password === true) {
+            array_push($notifications, [
+                'title' => 'Password Akun',
+                'description' => 'Anda masih menggunakan password default. Segera ganti demi keamanan akun Anda.',
+                'route' => route('admin.settings.password'),
+                'icon_name' => 'bi-exclamation-circle',
+                'icon_color' => 'text-danger',
+            ]);
+        }
+
+        // Return
+        return $notifications;
     }
 }
 

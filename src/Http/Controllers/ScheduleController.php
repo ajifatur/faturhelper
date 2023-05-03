@@ -27,11 +27,31 @@ class ScheduleController extends \App\Http\Controllers\Controller
         foreach($schedules as $key=>$schedule) {
             $schedules[$key]['start'] = $schedule['started_at'];
             $schedules[$key]['end'] = $schedule['ended_at'];
-            $schedules[$key]['sdatetext'] = DateTimeExt::full($schedule['started_at']);
-            $schedules[$key]['edatetext'] = DateTimeExt::full($schedule['ended_at']);
+            $schedules[$key]['sdatetext'] = DateTimeExt::full($schedule['started_at']).' WIB';
+            $schedules[$key]['edatetext'] = DateTimeExt::full($schedule['ended_at']).' WIB';
             $schedules[$key]['sdaterangepicker'] = date("d/m/Y H:i", strtotime($schedule['started_at']));
             $schedules[$key]['edaterangepicker'] = date("d/m/Y H:i", strtotime($schedule['ended_at']));
             $schedules[$key]['daterange'] = DateTimeExt::merge([$schedule['started_at'], $schedule['ended_at']]);
+            $schedules[$key]['holiday'] = false;
+        }
+
+        // Get holidays
+        $holidays = fetch("https://raw.githubusercontent.com/guangrei/Json-Indonesia-holidays/master/calendar.json");
+        foreach($holidays as $key=>$holiday) {
+            if(is_array($holiday)) {
+                $date = substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2);
+                array_push($schedules, [
+                    'id' => $key,
+                    'title' => $holiday['deskripsi'],
+                    'description' => $holiday['deskripsi'],
+                    'color' => '#dc3545',
+                    'start' => $date,
+                    'end' => $date,
+                    'sdatetext' => DateTimeExt::full($date),
+                    'edatetext' => DateTimeExt::full($date),
+                    'holiday' => true
+                ]);
+            }
         }
 
         if($request->ajax()) {

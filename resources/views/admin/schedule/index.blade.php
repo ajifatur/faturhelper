@@ -18,7 +18,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 @endif
-                <div id="calendar"></div>
+                <div id="calendar"><div class="text-center fst-italic">Sedang Memuat...</div></div>
             </div>
         </div>
     </div>
@@ -150,10 +150,11 @@
                             schedule = schedules[i];
                     }
                     if(schedule) {
+                        schedule.holiday == true ? details.find(".btn-edit, .btn-delete").addClass('d-none') : details.find(".btn-edit, .btn-delete").removeClass('d-none');
                         details.find("#title").text(schedule.title);
                         details.find("#description").text(schedule.description);
-                        details.find("#start").text(schedule.sdatetext + " WIB");
-                        details.find("#end").text(schedule.edatetext + " WIB");
+                        details.find("#start").text(schedule.sdatetext);
+                        details.find("#end").text(schedule.edatetext);
                         details.find(".btn-edit, .btn-delete").attr('data-id', id);
                         details.modal("show");
                     }
