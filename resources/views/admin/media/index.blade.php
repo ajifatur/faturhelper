@@ -21,15 +21,19 @@
             <div class="card-body">
                 @if(Request::query('dir') != null)
                     <p><i class="bi bi-folder me-1"></i> {{ asset(Request::query('dir')) }}</p>
-                    <div class="row">
-                        @foreach($files as $file)
-                            <div class="col-auto text-center">
-                                <a class="btn-mpopup" href="{{ asset(Request::query('dir').'/'.$file) }}" title="{{ $file }}">
-                                    <img src="{{ asset(Request::query('dir').'/'.$file) }}" class="border p-1 mb-2" height="100">
-                                </a>
-                            </div>
-                        @endforeach
-                    </div>
+                    @if(count($files)>0)
+                        <div class="row">
+                            @foreach($files as $file)
+                                <div class="col-auto text-center">
+                                    <a class="btn-mpopup" href="{{ asset(Request::query('dir').'/'.$file) }}" title="{{ $file }}">
+                                        <img src="{{ asset(Request::query('dir').'/'.$file) }}" class="border p-1 mb-2" height="100">
+                                    </a>
+                                </div>
+                            @endforeach
+                        </div>
+                    @else
+                        <div class="alert alert-message alert-danger text-center mb-0">Tidak ada file.</div>
+                    @endif
                 @else
                     <div class="d-flex justify-content-center align-items-center" style="height: 150px">
                         <div class="text-center">

@@ -27,11 +27,14 @@ class MediaController extends \App\Http\Controllers\Controller
         ];
 
         // Get the files
-        $files = FileExt::get(public_path($request->query('dir')));
         $array = [];
-        foreach ($files as $file) {
-            $file_info = FileExt::info($file->getRelativePathname());
-            array_push($array, $file_info['name']);
+        if(File::exists(public_path($request->query('dir')))) {
+            $files = FileExt::get(public_path($request->query('dir')));
+            $array = [];
+            foreach ($files as $file) {
+                $file_info = FileExt::info($file->getRelativePathname());
+                array_push($array, $file_info['name']);
+            }
         }
 
         // View
