@@ -167,6 +167,11 @@ class RouteExt
             Route::get('/admin/artisan', self::NAMESPACE.'\ArtisanController@index')->name('admin.artisan.index');
             Route::post('/admin/artisan/run', self::NAMESPACE.'\ArtisanController@run')->name('admin.artisan.run');
 
+            // Stats
+            Route::get('/admin/stats/user', self::NAMESPACE.'\StatsController@user')->name('admin.stats.user');
+            Route::get('/admin/stats/visitor', self::NAMESPACE.'\StatsController@visitor')->name('admin.stats.visitor');
+            Route::get('/admin/stats/visitor/location', self::NAMESPACE.'\StatsController@visitorLocation')->name('admin.stats.visitor.location');
+
             // Log
             Route::get('/admin/log', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index')->name('admin.log.index');
             Route::get('/admin/log/activity', self::NAMESPACE.'\LogController@activity')->name('admin.log.activity');
@@ -201,6 +206,11 @@ class RouteExt
             Route::get('/visitor/device/family', self::NAMESPACE.'\API\VisitorController@deviceFamily')->name('api.visitor.device.family');
             Route::get('/visitor/browser', self::NAMESPACE.'\API\VisitorController@browser')->name('api.visitor.browser');
             Route::get('/visitor/platform', self::NAMESPACE.'\API\VisitorController@platform')->name('api.visitor.platform');
+
+            // Visitor Location
+            Route::get('/visitor/location/city', self::NAMESPACE.'\API\VisitorLocationController@city')->name('api.visitor.location.city');
+            Route::get('/visitor/location/region', self::NAMESPACE.'\API\VisitorLocationController@region')->name('api.visitor.location.region');
+            Route::get('/visitor/location/country', self::NAMESPACE.'\API\VisitorLocationController@country')->name('api.visitor.location.country');
 
             // Notification
             Route::get('/notification', function() {

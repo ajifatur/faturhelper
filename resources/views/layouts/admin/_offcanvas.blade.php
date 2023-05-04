@@ -73,12 +73,15 @@
 						<li><a href="{{ route('admin.database.index') }}">Database</a></li>
 						<li><a href="{{ route('admin.route.index') }}">Route</a></li>
 						<li><a href="{{ route('admin.summary') }}">Insight</a></li>
+						<li><a href="{{ route('admin.artisan.index') }}">Artisan</a></li>
 					</ul>
 				</div>
 				<div class="col-6">
-					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Tools</small>
+					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Statistik</small>
 					<ul class="list-unstyled p-0 mb-0">
-						<li><a href="{{ route('admin.artisan.index') }}">Artisan</a></li>
+						<li><a href="{{ route('admin.stats.user') }}">Pengguna</a></li>
+						<li><a href="{{ route('admin.stats.visitor') }}">Visitor</a></li>
+						<li><a href="{{ route('admin.stats.visitor.location') }}">Lokasi Visitor</a></li>
 					</ul>
 				</div>
 			</div>
