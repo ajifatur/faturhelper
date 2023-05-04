@@ -66,7 +66,7 @@ class SystemController extends \App\Http\Controllers\Controller
         $package = package($request->query('repo'));
         
         // Get releases
-        $releases = fetch("https://api.github.com/repos/" . $request->query('repo') . "/releases?per_page=100");
+        $releases = fetch("https://api.github.com/repos/" . $package['path'] . "/releases?per_page=100");
 
         // View
         return view('faturhelper::admin/system/package', [

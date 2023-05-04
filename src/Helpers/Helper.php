@@ -298,6 +298,11 @@ if(!function_exists('package')) {
         // Get packages
         $array = json_decode($composer, true);
         $packages = array_key_exists('packages', $array) ? $array['packages'] : [];
+        foreach($packages as $key=>$package) {
+            $path = str_replace('https://api.github.com/repos/', '', $package['dist']['url']);
+            $paths = explode('/', $path);
+            $packages[$key]['path'] = $paths[0].'/'.$paths[1];
+        }
 
         // Get the package if name is not null
         if($name === null) {

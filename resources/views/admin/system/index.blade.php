@@ -102,16 +102,17 @@
                             <tr>
                                 <td align="center"><input type="checkbox" class="form-check-input checkbox-one"></td>
                                 <td>
-                                    <a href="https://github.com/{{ $package['name'] }}" target="_blank">{{ $package['name'] }}</a>
+                                    <a href="https://github.com/{{ $package['path'] }}" target="_blank">{{ $package['name'] }}</a>
                                     <br>
                                     <small class="text-muted">{{ array_key_exists('description', $package) ? $package['description'] : '' }}</small>
+                                    <br>
                                 </td>
                                 <td>{{ $package['version'] }}</td>
                                 <td>{{ ucfirst($package['type']) }}</td>
                                 <td align="center">
                                     <div class="btn-group">
                                         <a href="{{ route('admin.system.package', ['repo' => $package['name']]) }}" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi-eye"></i></a>
-                                        <a href="https://github.com/{{ $package['name'] }}" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" title="Kunjungi Repository" target="_blank"><i class="bi-github"></i></a>
+                                        <a href="https://github.com/{{ $package['path'] }}" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" title="Kunjungi Repository" target="_blank"><i class="bi-github"></i></a>
                                     </div>
                                 </td>
                             </tr>
