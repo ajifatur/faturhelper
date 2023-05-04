@@ -201,6 +201,11 @@ class RouteExt
             Route::get('/visitor/device/family', self::NAMESPACE.'\API\VisitorController@deviceFamily')->name('api.visitor.device.family');
             Route::get('/visitor/browser', self::NAMESPACE.'\API\VisitorController@browser')->name('api.visitor.browser');
             Route::get('/visitor/platform', self::NAMESPACE.'\API\VisitorController@platform')->name('api.visitor.platform');
+
+            // Notification
+            Route::get('/notification', function() {
+                return response()->json(notifications(), 200);
+            })->name('api.notification');
         });
 
         // Bootstrap Icons

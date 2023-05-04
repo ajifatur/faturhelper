@@ -95,3 +95,39 @@
 		}
 	}
 </script>
+
+@if(Auth::user()->role_id == role('super-admin'))
+<script>
+	// Load Notification
+	$(window).on("load", function() {
+		$.ajax({
+			type: "get",
+			url: "{{ route('api.notification', ['access_token' => Auth::user()->access_token]) }}",
+			success: function(response) {
+				if(response.length > 0) {
+					$("#nav-notification").find("span.indicator").text(response.length).removeClass("d-none");
+					$("#nav-notification").find(".dropdown-menu-header").text(response.length + " Notifikasi Baru");
+					var html = '';
+					for(var i=0; i<response.length; i++) {
+						html += '<a href="' + response[i].route + '" class="list-group-item">';
+						html += '<div class="row g-0 align-items-center">';
+						html += '<div class="col-2">';
+						html += '<i class="h4 ' + response[i].icon_name + ' ' + response[i].icon_color + '"></i>';
+						html += '</div>';
+						html += '<div class="col-10">';
+						html += '<div class="text-dark">' + response[i].title + '</div>';
+						html += '<div class="text-muted small mt-1">' + response[i].description + '</div>';
+						html += '</div>';
+						html += '</div>';
+						html += '</a>';
+					}
+					$("#nav-notification").find(".list-group").removeClass("d-none").html(html);
+				}
+				else {
+					$("#nav-notification").find(".dropdown-menu-header").text("Tidak ada notifikasi");
+				}
+			}
+		})
+	});
+</script>
+@endif
