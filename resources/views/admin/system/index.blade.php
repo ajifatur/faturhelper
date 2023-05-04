@@ -99,10 +99,10 @@
                         </thead>
                         <tbody>
                             @foreach($packages as $package)
-                            <tr>
+                            <tr data-url="{{ route('admin.system.package', ['repo' => $package['name']]) }}">
                                 <td align="center"><input type="checkbox" class="form-check-input checkbox-one"></td>
                                 <td>
-                                    <a href="https://github.com/{{ $package['path'] }}" target="_blank">{{ $package['name'] }}</a>
+                                    {{ $package['name'] }}
                                     <br>
                                     <small class="text-muted">{{ array_key_exists('description', $package) ? $package['description'] : '' }}</small>
                                     <br>
@@ -111,7 +111,6 @@
                                 <td>{{ ucfirst($package['type']) }}</td>
                                 <td align="center">
                                     <div class="btn-group">
-                                        <a href="{{ route('admin.system.package', ['repo' => $package['name']]) }}" class="btn btn-sm btn-info" data-bs-toggle="tooltip" title="Lihat Detail"><i class="bi-eye"></i></a>
                                         <a href="https://github.com/{{ $package['path'] }}" class="btn btn-sm btn-secondary" data-bs-toggle="tooltip" title="Kunjungi Repository" target="_blank"><i class="bi-github"></i></a>
                                     </div>
                                 </td>
@@ -132,6 +131,24 @@
 <script type="text/javascript">
     // DataTable
     Spandiv.DataTable("#datatable");
+
+    // DataTable rows clicked
+    $(document).on("click", "#datatable tbody tr td:not([align])", function(e) {
+        e.preventDefault();
+        var selection = getSelection().toString();
+        if(selection == '') {
+            var url = $(this).parents('tr').data("url");
+            window.location.href = url;
+        }
+    });
 </script>
+
+@endsection
+
+@section('css')
+
+<style>
+    #datatable tbody tr td:not([align]) {cursor: pointer;}
+</style>
 
 @endsection
