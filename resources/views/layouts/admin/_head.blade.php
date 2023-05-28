@@ -6,8 +6,8 @@
     <meta name="author" content="{{ meta('author') }}">
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
-  	<link rel="shortcut icon" href="{{ asset('assets/images/icons/'.setting('icon')) }}">
     <link rel="canonical" href="https://ajifatur.github.io/">
+  	<link rel="shortcut icon" href="{{ asset('assets/images/icons/'.setting('icon')) }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap">
     <link rel="stylesheet" href="{{ asset('templates/adminkit/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('templates/adminkit/css/light.css') }}">

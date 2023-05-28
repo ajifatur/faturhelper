@@ -300,7 +300,7 @@
         var array = [];
         var roles = $("input[name=role]:checked");
         for(var i=0; i<roles.length; i++) {
-            array.push("Auth::user()->role_id == role('" + $(roles[i]).val() + "')");
+            array.push("((!session()->has('role') && Auth::user()->role_id == role('" + $(roles[i]).val() + "')) || (session()->has('role') && session('role') == role('" + $(roles[i]).val() + "')))");
         }
         return array.join(" || ");
     }

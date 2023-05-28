@@ -38,6 +38,7 @@ class SettingSeeder extends Seeder
             ['code' => 'icon', 'content' => ''],
             ['code' => 'logo', 'content' => ''],
             ['code' => 'size', 'content' => 'small'],
+            ['code' => 'multiple_roles', 'content' => '0'],
         ];
 
         foreach($settings as $setting) {

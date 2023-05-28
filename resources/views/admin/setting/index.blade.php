@@ -228,6 +228,26 @@
                         </div>
                     </div>
                     <hr>
+                    <h5 class="card-title mb-3">Roles</h5>
+                    <div class="row mb-3">
+                        <label class="col-lg-2 col-md-3 col-form-label">
+                            Multiple Roles<span class="text-danger">*</span><br><code>setting('multiple_roles')</code>
+                        </label>
+                        <div class="col-lg-10 col-md-9">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="setting[multiple_roles]" id="multiple_roles-1" value="1" {{ setting('multiple_roles') == '1' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="multiple_roles-1">Ya</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="setting[multiple_roles]" id="multiple_roles-0" value="0" {{ setting('multiple_roles') == '0' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="multiple_roles-0">Tidak</label>
+                            </div>
+                            @if($errors->has('setting.multiple_roles'))
+                            <div class="small text-danger">{{ $errors->first('setting.multiple_roles') }}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <hr>
                     <div class="row">
                         <div class="col-lg-2 col-md-3"></div>
                         <div class="col-lg-10 col-md-9">

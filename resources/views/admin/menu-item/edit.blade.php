@@ -41,7 +41,7 @@
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">Route Parameter</label>
                         <div class="col-lg-10 col-md-9" id="route-params">
-                            @if(count(json_decode($menu_item->routeparams, true)) > 0)
+                            @if(is_array(json_decode($menu_item->routeparams, true)) && count(json_decode($menu_item->routeparams, true)) > 0)
                                 @php $i = 1; @endphp
                                 @foreach(json_decode($menu_item->routeparams, true) as $param=>$value)
                                     <div class="input-group input-group-sm mb-2" data-id="{{ $i }}">
@@ -314,7 +314,7 @@
         var array = [];
         var roles = $("input[name=role]:checked");
         for(var i=0; i<roles.length; i++) {
-            array.push("Auth::user()->role_id == role('" + $(roles[i]).val() + "')");
+            array.push("((!session()->has('role') && Auth::user()->role_id == role('" + $(roles[i]).val() + "')) || (session()->has('role') && session('role') == role('" + $(roles[i]).val() + "')))");
         }
         return array.join(" || ");
     }

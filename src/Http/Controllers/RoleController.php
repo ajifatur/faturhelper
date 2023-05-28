@@ -229,4 +229,19 @@ class RoleController extends \App\Http\Controllers\Controller
         }
         else echo 'Terjadi kesalahan dalam mengurutkan data.';
     }
+
+    /**
+     * Change the role session.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function change(Request $request)
+    {
+        // Update session
+        $request->session()->put('role', $request->id);
+
+        // Redirect
+        return redirect()->route('admin.dashboard');
+    }
 }

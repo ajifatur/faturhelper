@@ -110,6 +110,7 @@ class RouteExt
             Route::post('/admin/role/delete', self::NAMESPACE.'\RoleController@delete')->name('admin.role.delete');
             Route::get('/admin/role/reorder', self::NAMESPACE.'\RoleController@reorder')->name('admin.role.reorder');
             Route::post('/admin/role/sort', self::NAMESPACE.'\RoleController@sort')->name('admin.role.sort');
+            Route::post('/admin/role/change', self::NAMESPACE.'\RoleController@change')->name('admin.role.change');
 
             // Permission
             Route::get('/admin/permission', self::NAMESPACE.'\PermissionController@index')->name('admin.permission.index');

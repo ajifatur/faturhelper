@@ -53,6 +53,14 @@
 		});
 	});
 
+	// Change role
+	$(document).on("click", ".btn-role", function(e) {
+		e.preventDefault();
+		var id = $(this).data("id");
+		$(".form-role").find("input[name=id]").val(id);
+		$(".form-role").submit();
+	});
+
 	// Change period
 	$(document).on("click", ".btn-period", function(e) {
 		e.preventDefault();

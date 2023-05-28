@@ -4,9 +4,31 @@
 		<i class="hamburger align-self-center"></i>
 	</a>
 	<ul class="navbar-nav d-none d-lg-flex">
+		@if(setting('multiple_roles') == 1)
+		<li class="nav-item dropdown">
+			<a class="nav-link dropdown-toggle text-dark" href="#" id="roleDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Role</a>
+			<div class="dropdown-menu" aria-labelledby="roleDropdown">
+				<div class="dropdown-header">Role Aktif</div>
+				@foreach(Auth::user()->roles as $role)
+				<a class="dropdown-item d-flex justify-content-between btn-role" href="#" data-id="{{ $role->id }}">
+					<span class="me-2">{{ $role->name }}</span>
+					@if(session()->has('role') && session('role') == $role->id)
+						<span><i class="bi bi-check-circle-fill"></i></span>
+					@elseif(!session()->has('role') && $role->id == Auth::user()->role_id)
+						<span><i class="bi bi-check-circle-fill"></i></span>
+					@endif
+				</a>
+				@endforeach
+			</div>
+			<form class="form-role d-none" method="post" action="{{ route('admin.role.change') }}">
+				@csrf
+				<input type="hidden" name="id">
+			</form>
+		</li>
+		@endif
 		@if(setting('period_visibility') == 1)
 		<li class="nav-item dropdown">
-			<a class="nav-link dropdown-toggle text-dark" href="#" id="periodDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ setting('period_alias') }} </a>
+			<a class="nav-link dropdown-toggle text-dark" href="#" id="periodDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ setting('period_alias') }}</a>
 			<div class="dropdown-menu" aria-labelledby="periodDropdown">
 				<div class="dropdown-header">{{ setting('period_alias') }} Aktif</div>
 				@foreach(period() as $period)

@@ -52,6 +52,9 @@ if(!function_exists('has_access')) {
             else return false;
         }
 
+        // Check whether has role session
+        if(session()->has('role')) $role = session('role');
+
         // Check role permission
         if(in_array($role, $permission->roles()->pluck('role_id')->toArray())) {
             return true;
