@@ -53,6 +53,15 @@
 		});
 	});
 
+	// Sidebar toggle
+	$(document).on("click", ".sidebar-toggle", function(e) {
+		e.preventDefault();
+		setNavBrand();
+	});
+	$(window).on("resize", function() {
+		setNavBrand();
+	});
+
 	// Change role
 	$(document).on("click", ".btn-role", function(e) {
 		e.preventDefault();
@@ -101,6 +110,16 @@
 			$(".select2-container .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__rendered").css("height", "37px");
 			$(".select2-container--default .select2-selection--single .select2-selection__rendered, select2-selection__clear, select2-selection__arrow").css("height", "34px");
 		}
+	}
+
+	// Set nav brand
+	function setNavBrand() {
+		if($(".sidebar").hasClass("collapsed") && $(window).width() > 991.98)
+			$(".nav-brand").css("display","block");
+		else if(!$(".sidebar").hasClass("collapsed") && $(window).width() <= 991.98)
+			$(".nav-brand").css("display","block");
+		else
+			$(".nav-brand").css("display","none");
 	}
 </script>
 

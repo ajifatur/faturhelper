@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="{{ asset('templates/adminkit/css/app.css') }}">
     <link rel="stylesheet" href="{{ asset('templates/adminkit/css/light.css') }}">
     <!-- <link rel="stylesheet" href="{{ asset('spandiv/assets/dist/2.0.0/spandiv.css') }}"> -->
-    <!-- <link rel="stylesheet" href="{{ asset('spandiv/assets/adminkit-themes.min.css') }}"> -->
+    <!-- <link rel="stylesheet" href="{{ asset('spandiv/assets/external/adminkit/adminkit-themes.min.css') }}"> -->
     <link rel="stylesheet" href="https://ajifatur.github.io/assets/dist/2.0.0/spandiv.min.css">
     <link rel="stylesheet" href="https://ajifatur.github.io/assets/external/adminkit/adminkit-themes.min.css">
 
@@ -23,5 +23,9 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
     <style>
       body {overflow-y: auto;}
+      .nav-brand {text-align: center!important; background: #222e3c;}
+      @media(min-width: 991.99px) {
+        .nav-brand {display: none;}
+      }
     </style>
     

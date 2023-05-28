@@ -1,9 +1,19 @@
 
+<div class="nav-brand">
+	<a class="sidebar-brand" href="/" target="_blank">
+		@if(setting('logo') != '' && File::exists(public_path('assets/images/logos/'.setting('logo'))))
+			<img src="{{ asset('assets/images/logos/'.setting('logo')) }}" height="40" alt="{{ config('app.name') }}" style="max-width: 100%;">
+		@else
+			<span class="align-middle">{{ config('app.name') }}</span>
+		@endif
+	</a>
+</div>
 <nav class="navbar navbar-expand navbar-light navbar-bg">
 	<a class="sidebar-toggle js-sidebar-toggle">
 		<i class="hamburger align-self-center"></i>
 	</a>
-	<ul class="navbar-nav d-none d-lg-flex">
+	<!-- <ul class="navbar-nav d-none d-lg-flex"> -->
+	<ul class="navbar-nav">
 		@if(setting('multiple_roles') == 1)
 		<li class="nav-item dropdown">
 			<a class="nav-link dropdown-toggle text-dark" href="#" id="roleDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Role</a>
@@ -50,7 +60,7 @@
 		@endif
 	</ul>
 	<div class="navbar-collapse collapse">
-		<ul class="navbar-nav navbar-align">
+		<ul class="navbar-nav navbar-align align-items-center">
 			@if(Auth::user()->role_id == role('super-admin'))
 			<li class="nav-item dropdown" id="nav-notification">
 				<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
