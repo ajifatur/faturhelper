@@ -19,16 +19,23 @@
 			<a class="nav-link dropdown-toggle text-dark" href="#" id="roleDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Role</a>
 			<div class="dropdown-menu" aria-labelledby="roleDropdown">
 				<div class="dropdown-header">Role Aktif</div>
-				@foreach(Auth::user()->roles as $role)
-				<a class="dropdown-item d-flex justify-content-between btn-role" href="#" data-id="{{ $role->id }}">
-					<span class="me-2">{{ $role->name }}</span>
-					@if(session()->has('role') && session('role') == $role->id)
+				@if(count(Auth::user()->roles) > 0)
+					@foreach(Auth::user()->roles as $role)
+					<a class="dropdown-item d-flex justify-content-between btn-role" href="#" data-id="{{ $role->id }}">
+						<span class="me-2">{{ $role->name }}</span>
+						@if(session()->has('role') && session('role') == $role->id)
+							<span><i class="bi bi-check-circle-fill"></i></span>
+						@elseif(!session()->has('role') && $role->id == Auth::user()->role_id)
+							<span><i class="bi bi-check-circle-fill"></i></span>
+						@endif
+					</a>
+					@endforeach
+				@else
+					<a class="dropdown-item d-flex justify-content-between btn-role" href="#" data-id="{{ Auth::user()->role_id }}">
+						<span class="me-2">{{ role(Auth::user()->role_id) }}</span>
 						<span><i class="bi bi-check-circle-fill"></i></span>
-					@elseif(!session()->has('role') && $role->id == Auth::user()->role_id)
-						<span><i class="bi bi-check-circle-fill"></i></span>
-					@endif
-				</a>
-				@endforeach
+					</a>
+				@endif
 			</div>
 			<form class="form-role d-none" method="post" action="{{ route('admin.role.change') }}">
 				@csrf
@@ -92,9 +99,15 @@
 					@endif
 				</a>
 				<div class="dropdown-menu dropdown-menu-end">
+					@if(has_access('Ajifatur\\FaturHelper\\Http\\Controllers\\UserSettingController::index', Auth::user()->role_id, false))
 					<a class="dropdown-item" href="{{ route('admin.profile') }}"><i class="align-middle me-1" data-feather="user"></i> Profil</a>
+					@endif
+					@if(has_access('Ajifatur\\FaturHelper\\Http\\Controllers\\UserSettingController::profile', Auth::user()->role_id, false) && has_access('Ajifatur\\FaturHelper\\Http\\Controllers\\UserSettingController::account', Auth::user()->role_id, false) && has_access('Ajifatur\\FaturHelper\\Http\\Controllers\\UserSettingController::password', Auth::user()->role_id, false))
 					<a class="dropdown-item" href="{{ route('admin.settings.profile') }}"><i class="align-middle me-1" data-feather="settings"></i> Pengaturan</a>
+					@endif
+					@if(has_access('Ajifatur\\FaturHelper\\Http\\Controllers\\UserSettingController::index', Auth::user()->role_id, false) || (has_access('Ajifatur\\FaturHelper\\Http\\Controllers\\UserSettingController::profile', Auth::user()->role_id, false) && has_access('Ajifatur\\FaturHelper\\Http\\Controllers\\UserSettingController::account', Auth::user()->role_id, false) && has_access('Ajifatur\\FaturHelper\\Http\\Controllers\\UserSettingController::password', Auth::user()->role_id, false)))
 					<div class="dropdown-divider"></div>
+					@endif
 					<a class="dropdown-item btn-logout" href="#"><i class="align-middle me-1" data-feather="power"></i> Keluar</a>
 					<form id="form-logout" class="d-none" method="post" action="{{ route('admin.logout') }}">@csrf</form>
 				</div>

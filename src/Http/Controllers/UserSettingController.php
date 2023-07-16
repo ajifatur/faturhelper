@@ -21,6 +21,9 @@ class UserSettingController extends \App\Http\Controllers\Controller
      */
     public function index()
     {
+        // Check the access
+        has_access(__METHOD__, Auth::user()->role_id);
+
         // Get the user
         $user = User::findOrFail(Auth::user()->id);
 
@@ -37,6 +40,9 @@ class UserSettingController extends \App\Http\Controllers\Controller
      */
     public function profile()
     {
+        // Check the access
+        has_access(__METHOD__, Auth::user()->role_id);
+        
         // View
         return view('faturhelper::admin/user-setting/profile');
     }
@@ -91,6 +97,9 @@ class UserSettingController extends \App\Http\Controllers\Controller
      */
     public function account()
     {
+        // Check the access
+        has_access(__METHOD__, Auth::user()->role_id);
+        
         // View
         return view('faturhelper::admin/user-setting/account');
     }
@@ -137,6 +146,9 @@ class UserSettingController extends \App\Http\Controllers\Controller
      */
     public function password()
     {
+        // Check the access
+        has_access(__METHOD__, Auth::user()->role_id);
+        
         // View
         return view('faturhelper::admin/user-setting/password');
     }

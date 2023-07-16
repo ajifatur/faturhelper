@@ -228,10 +228,10 @@
                         </div>
                     </div>
                     <hr>
-                    <h5 class="card-title mb-3">Roles</h5>
+                    <h5 class="card-title mb-3">Role</h5>
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">
-                            Multiple Roles<span class="text-danger">*</span><br><code>setting('multiple_roles')</code>
+                            Multi-Role<span class="text-danger">*</span><br><code>setting('multiple_roles')</code>
                         </label>
                         <div class="col-lg-10 col-md-9">
                             <div class="form-check">
