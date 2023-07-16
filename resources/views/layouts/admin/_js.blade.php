@@ -110,6 +110,9 @@
 			$(".select2-container .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__rendered").css("height", "37px");
 			$(".select2-container--default .select2-selection--single .select2-selection__rendered, select2-selection__clear, select2-selection__arrow").css("height", "34px");
 		}
+		if($.fn.DataTable.isDataTable("table")) {
+			$("table").DataTable().columns.adjust().draw();
+		}
 	}
 
 	// Set nav brand
