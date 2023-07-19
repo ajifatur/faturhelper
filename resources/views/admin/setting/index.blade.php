@@ -248,6 +248,26 @@
                         </div>
                     </div>
                     <hr>
+                    <h5 class="card-title mb-3">Gender</h5>
+                    <div class="row mb-3">
+                        <label class="col-lg-2 col-md-3 col-form-label">
+                            Tampilkan Gender N<span class="text-danger">*</span><br><code>setting('n_gender_visibility')</code>
+                        </label>
+                        <div class="col-lg-10 col-md-9">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="setting[n_gender_visibility]" id="n_gender_visibility-1" value="1" {{ setting('n_gender_visibility') == '1' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="n_gender_visibility-1">Ya</label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="setting[n_gender_visibility]" id="n_gender_visibility-0" value="0" {{ setting('n_gender_visibility') == '0' ? 'checked' : '' }}>
+                                <label class="form-check-label" for="n_gender_visibility-0">Tidak</label>
+                            </div>
+                            @if($errors->has('setting.n_gender_visibility'))
+                            <div class="small text-danger">{{ $errors->first('setting.n_gender_visibility') }}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <hr>
                     <div class="row">
                         <div class="col-lg-2 col-md-3"></div>
                         <div class="col-lg-10 col-md-9">

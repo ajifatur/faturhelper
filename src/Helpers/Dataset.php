@@ -60,6 +60,15 @@ if(!function_exists('gender')) {
         // Get genders from datasets
         $array = FileExt::json('gender.json');
 
+        // Remove N gender
+        if(setting('n_gender_visibility') == 0) {
+            $index = '';
+            foreach($array as $key=>$value) {
+                if($value['key'] == 'N') $index = $key;
+            }
+            unset($array[$index]);
+        }
+
         // Set the gender / genders
         if($code === null) return $array;
         else {
