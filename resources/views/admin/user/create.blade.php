@@ -68,12 +68,23 @@
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">Role <span class="text-danger">*</span></label>
                         <div class="col-lg-10 col-md-9">
-                            <select name="role" class="form-select form-select-sm {{ $errors->has('role') ? 'border-danger' : '' }}">
-                                <option value="" disabled selected>--Pilih--</option>
-                                @foreach($roles as $role)
-                                <option value="{{ $role->id }}" {{ old('role') == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
-                                @endforeach
-                            </select>
+                            @if(setting('multiple_roles') == 1)
+                                <div>
+                                    @foreach($roles as $role)
+                                    <div class="form-check">
+                                        <input class="form-check-input" name="role[]" type="checkbox" value="{{ $role->id }}" id="role-{{ $role->id }}" {{ is_array(old('role')) && in_array($role->id, old('role')) ? 'checked' : '' }}>
+                                        <label class="form-check-label" for="role-{{ $role->id }}">{{ $role->name }}</label>
+                                    </div>
+                                    @endforeach
+                                </div>
+                            @else
+                                <select name="role" class="form-select form-select-sm {{ $errors->has('role') ? 'border-danger' : '' }}">
+                                    <option value="" disabled selected>--Pilih--</option>
+                                    @foreach($roles as $role)
+                                    <option value="{{ $role->id }}" {{ old('role') == $role->id ? 'selected' : '' }}>{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            @endif
                             @if($errors->has('role'))
                             <div class="small text-danger">{{ $errors->first('role') }}</div>
                             @endif

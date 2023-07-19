@@ -24,7 +24,7 @@
 		</div>
 	</div>
 
-    @if(Auth::user()->role_id == role('super-admin'))
+    @if((!session()->has('role') && Auth::user()->role_id == role('super-admin')) || (session()->has('role') && session('role') == role('super-admin')))
         @include('faturhelper::layouts/admin/_offcanvas')
     @endif
     

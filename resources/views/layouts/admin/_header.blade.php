@@ -68,7 +68,7 @@
 	</ul>
 	<div class="navbar-collapse collapse">
 		<ul class="navbar-nav navbar-align align-items-center">
-			@if(Auth::user()->role_id == role('super-admin'))
+			@if(Auth::user()->id == 1)
 			<li class="nav-item dropdown" id="nav-notification">
 				<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
 					<div class="position-relative">

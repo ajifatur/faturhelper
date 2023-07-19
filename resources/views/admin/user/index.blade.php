@@ -53,7 +53,22 @@
                                     <div class="small text-muted">{{ $user->email }}</div>
                                 </td>
                                 <td>{{ $user->username }}</td>
-                                <td>{{ $user->role->name }}</td>
+                                <td>
+                                    @if(setting('multiple_roles') == 1)
+                                        @if(count($user->roles) <= 0)
+                                            {{ $user->role->name }}
+                                        @else
+                                            @foreach($user->roles as $key=>$role)
+                                                {{ $role->name }}
+                                                @if($key < count($user->roles)-1)
+                                                <hr class="my-0">
+                                                @endif
+                                            @endforeach
+                                        @endif
+                                    @else
+                                        {{ $user->role->name }}
+                                    @endif
+                                </td>
                                 <td><span class="badge {{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">{{ status($user->status) }}</span></td>
                                 <td align="center">
                                     <div class="btn-group">

@@ -86,7 +86,7 @@
 	}
 </script>
 
-@if(Auth::user()->role_id == role('super-admin'))
+@if((!session()->has('role') && Auth::user()->role_id == role('super-admin')) || (session()->has('role') && session('role') == role('super-admin')))
 <script>
 	// Load Notification
 	$(window).on("load", function() {

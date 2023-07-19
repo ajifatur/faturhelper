@@ -91,7 +91,7 @@ class UserController extends \App\Http\Controllers\Controller
         else {
             // Save the user
             $user = new User;
-            $user->role_id = $request->role;
+            $user->role_id = setting('multiple_roles') == 1 ? $request->role[0] : $request->role;
             $user->name = $request->name;
             $user->username = $request->username;
             $user->email = $request->email;
@@ -113,6 +113,11 @@ class UserController extends \App\Http\Controllers\Controller
             $user_attribute->dial_code = dial_code($request->country_code);
             $user_attribute->phone_number = $request->phone_number;
             $user_attribute->save();
+
+            // Add user roles
+            if(setting('multiple_roles') == 1) {
+                $user->roles()->sync($request->role);
+            }
             
             // Upload the image
             if($request->photo_source != '') {
@@ -196,7 +201,7 @@ class UserController extends \App\Http\Controllers\Controller
         else {
             // Update the user
             $user = User::find($request->id);
-            $user->role_id = $request->role;
+            $user->role_id = setting('multiple_roles') == 1 ? $request->role[0] : $request->role;
             $user->name = $request->name;
             $user->username = $request->username;
             $user->email = $request->email;
@@ -214,6 +219,11 @@ class UserController extends \App\Http\Controllers\Controller
             $user_attribute->dial_code = dial_code($request->country_code);
             $user_attribute->phone_number = $request->phone_number;
             $user_attribute->save();
+
+            // Update user roles
+            if(setting('multiple_roles') == 1) {
+                $user->roles()->sync($request->role);
+            }
             
             // Upload the image
             if($request->photo_source != '') {
@@ -272,6 +282,11 @@ class UserController extends \App\Http\Controllers\Controller
             $user_avatars = UserAvatar::where('user_id','=',$user->id)->delete();
         }
 
+        // Delete the user roles
+        if(count($user->roles) > 0) {
+            $user->roles()->detach();
+        }
+
         // Redirect
         return redirect()->route('admin.user.index')->with(['message' => 'Berhasil menghapus data.']);
     }
@@ -307,6 +322,11 @@ class UserController extends \App\Http\Controllers\Controller
                     // Delete the user avatars
                     if(count($user->avatars) > 0) {
                         $user_avatars = UserAvatar::where('user_id','=',$user->id)->delete();
+                    }
+
+                    // Delete the user roles
+                    if(count($user->roles) > 0) {
+                        $user->roles()->detach();
                     }
                 }
             }
