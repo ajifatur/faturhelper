@@ -22,6 +22,7 @@
  * @method string          browser_info()
  * @method string          platform_info()
  * @method string          location_info(string $ip)
+ * @method string          counted(int $number)
  */
 
 use Illuminate\Support\Str;
@@ -550,7 +551,7 @@ if(!function_exists('location_info')) {
 /**
  * Get the counted from the number.
  *
- * @param  int $value
+ * @param  int $number
  * @return string
  */
 if(!function_exists('counted')) {
