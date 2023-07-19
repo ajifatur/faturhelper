@@ -546,3 +546,45 @@ if(!function_exists('location_info')) {
         return $location ? json_encode($location) : '';
     }
 }
+
+/**
+ * Get the counted from the number.
+ *
+ * @param  int $value
+ * @return string
+ */
+if(!function_exists('counted')) {
+    function counted($number) {
+        $value = abs($number);
+		$letters = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
+		$temp = "";
+		if ($value < 12) {
+			$temp = " ". $letters[$value];
+		} else if ($value <20) {
+			$temp = counted($value - 10). " belas ";
+		} else if ($value < 100) {
+			$temp = counted($value/10)." puluh ". counted($value % 10);
+		} else if ($value < 200) {
+			$temp = " seratus " . counted($value - 100);
+		} else if ($value < 1000) {
+			$temp = counted($value/100) . " ratus " . counted($value % 100);
+		} else if ($value < 2000) {
+			$temp = " seribu " . counted($value - 1000);
+		} else if ($value < 1000000) {
+			$temp = counted($value/1000) . " ribu " . counted($value % 1000);
+		} else if ($value < 1000000000) {
+			$temp = counted($value/1000000) . " juta " . counted($value % 1000000);
+		} else if ($value < 1000000000000) {
+			$temp = counted($value/1000000000) . " milyar " . counted(fmod($value,1000000000));
+		} else if ($value < 1000000000000000) {
+			$temp = counted($value/1000000000000) . " trilyun " . counted(fmod($value,1000000000000));
+		}
+
+        if($number<0) {
+			$result = "minus ". $temp;
+		} else {
+			$result = $temp;
+		}
+		return trim($result);
+    }
+}

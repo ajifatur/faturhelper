@@ -14,12 +14,6 @@
 <script src="https://ajifatur.github.io/assets/dist/2.0.0/spandiv.min.js"></script>
 <!-- <script src="{{ asset('spandiv/assets/dist/2.0.0/spandiv.js') }}"></script> -->
 <script>
-	// Load size
-	$(window).on("load", function() {
-		var size = $("body").data("size");
-		setSize(size);
-	});
-
 	// Change theme
 	$(document).on("change", ".offcanvas input[name=theme]", function(e) {
 		e.preventDefault();
@@ -41,14 +35,17 @@
 		e.preventDefault();
         if(typeof Pace !== "undefined") Pace.restart();
 		var size = $(this).val();
-		setSize(size);
 		$.ajax({
 			type: "post",
 			url: "{{ route('admin.setting.update') }}",
 			data: {_token: "{{ csrf_token() }}", isAjax: true, code: "size", content: size},
 			success: function(response) {
-				if(response === "Success!")
+				if(response === "Success!") {
 					$("body").attr("data-size",size);
+					if($.fn.DataTable.isDataTable("table")) {
+						$("table").DataTable().columns.adjust().draw();
+					}
+				}
 			}
 		});
 	});
@@ -77,43 +74,6 @@
 		$(".form-period").find("input[name=id]").val(id);
 		$(".form-period").submit();
 	});
-
-	// Set size
-	function setSize(size) {
-		if(size == "small") {
-			$(".form-control").removeClass("form-control-lg").addClass("form-control-sm");
-			$(".form-select").removeClass("form-select-lg").addClass("form-select-sm");
-			$(".input-group").removeClass("input-group-lg").addClass("input-group-sm");
-			$(".btn").removeClass("btn-lg").addClass("btn-sm");
-			$("body").css("font-size", ".875rem");
-			$(".select2-container").css("font-size", ".875rem");
-			$(".select2-container .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__rendered").css("height", "28px");
-			$(".select2-container--default .select2-selection--single .select2-selection__rendered, select2-selection__clear, select2-selection__arrow").css("height", "26px");
-		}
-		else if(size == "medium") {
-			$(".form-control").removeClass("form-control-sm form-control-lg");
-			$(".form-select").removeClass("form-select-sm form-select-lg");
-			$(".input-group").removeClass("input-group-sm input-group-lg");
-			$(".btn").removeClass("btn-sm btn-lg");
-			$("body").css("font-size", ".925rem");
-			$(".select2-container").css("font-size", ".925rem");
-			$(".select2-container .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__rendered").css("height", "32.59px");
-			$(".select2-container--default .select2-selection--single .select2-selection__rendered, select2-selection__clear, select2-selection__arrow").css("height", "30.59px");
-		}
-		else if(size == "large") {
-			$(".form-control").removeClass("form-control-sm").addClass("form-control-lg");
-			$(".form-select").removeClass("form-select-sm").addClass("form-select-lg");
-			$(".input-group").removeClass("input-group-sm").addClass("input-group-lg");
-			$(".btn").removeClass("btn-sm").addClass("btn-lg");
-			$("body").css("font-size", "1rem");
-			$(".select2-container").css("font-size", "1rem");
-			$(".select2-container .select2-selection--single, .select2-container--default .select2-selection--single .select2-selection__rendered").css("height", "37px");
-			$(".select2-container--default .select2-selection--single .select2-selection__rendered, select2-selection__clear, select2-selection__arrow").css("height", "34px");
-		}
-		if($.fn.DataTable.isDataTable("table")) {
-			$("table").DataTable().columns.adjust().draw();
-		}
-	}
 
 	// Set nav brand
 	function setNavBrand() {
