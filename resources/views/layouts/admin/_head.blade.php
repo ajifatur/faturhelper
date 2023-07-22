@@ -21,11 +21,3 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedheader/3.2.4/css/fixedHeader.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/fixedcolumns/4.2.1/css/fixedColumns.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
-    <style>
-      body {overflow-y: auto;}
-      .nav-brand {text-align: center!important; background: #222e3c;}
-      @media(min-width: 991.99px) {
-        .nav-brand {display: none;}
-      }
-    </style>
-    

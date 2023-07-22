@@ -36,21 +36,22 @@ class ScheduleController extends \App\Http\Controllers\Controller
         }
 
         // Get holidays
-        $holidays = fetch("https://raw.githubusercontent.com/guangrei/Json-Indonesia-holidays/master/calendar.json");
+        $holidays = fetch("https://raw.githubusercontent.com/guangrei/APIHariLibur_V2/main/calendar.min.json");
         foreach($holidays as $key=>$holiday) {
-            if(is_array($holiday)) {
-                $date = substr($key,0,4).'-'.substr($key,4,2).'-'.substr($key,6,2);
-                array_push($schedules, [
-                    'id' => $key,
-                    'title' => $holiday['deskripsi'],
-                    'description' => $holiday['deskripsi'],
-                    'color' => '#dc3545',
-                    'start' => $date,
-                    'end' => $date,
-                    'sdatetext' => DateTimeExt::full($date),
-                    'edatetext' => DateTimeExt::full($date),
-                    'holiday' => true
-                ]);
+            if(is_array($holiday) && $key != "info") {
+                foreach($holiday['summary'] as $key2=>$summary) {
+                    array_push($schedules, [
+                        'id' => $key."-".$key2,
+                        'title' => $summary,
+                        'description' => $summary,
+                        'color' => '#dc3545',
+                        'start' => $key,
+                        'end' => $key,
+                        'sdatetext' => DateTimeExt::full($key),
+                        'edatetext' => DateTimeExt::full($key),
+                        'holiday' => true
+                    ]);
+                }
             }
         }
 
