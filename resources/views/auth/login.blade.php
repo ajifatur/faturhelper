@@ -16,54 +16,54 @@
 
     <title>Log in | {{ config('app.name') }}</title>
     <style>
-        body, body main {
-            min-height: 100vh;
-        }
-        .login-box {
-            text-align: center;
-            width: 75%;
-            margin: auto;
-        }
+        body, body main {min-height: 100vh; background-color: #eeedf5;}
+        .card {border-radius: 1rem;}
+        .login-box {min-height: calc(100vh - 200px); text-align: center; width: 75%; margin: auto;}
+        .login-image-box {min-height: calc(100vh - 200px); align-items: center; margin-top: .75rem; margin-bottom: .75rem; background-color: #efeef6; border-color: #efeef6;}
+        .btn[type=submit] {background-color: #9e60c0; color: #fff;}
     </style>
 </head>
 <body>
     <main class="d-flex align-items-center">
-        <div class="container">
+        <div class="container card shadow">
             <div class="row align-items-center">
                 <div class="col-12 col-lg-6">
-                    <form class="login-box" method="post" action="{{ route('auth.login') }}">
-                        @csrf
-                        <!-- <a href="/"><img class="mb-4" src="https://campusnet.id/assets/images/logo/campusnet.webp" alt="" height="60"></a> -->
-                        <h1 class="h3 mb-3 fw-normal">Selamat Datang</h1>
-                        @if($errors->has('message'))
-                        <div class="alert alert-danger" role="alert">{{ $errors->first('message') }}</div>
-                        @endif
-                        <div class="mb-3">
-                            <input type="text" name="username" class="form-control {{ $errors->has('username') ? 'border-danger' : '' }}" value="{{ old('username') }}" placeholder="{{ config('faturhelper.auth.allow_login_by_email') === true ? 'Email atau Username' : 'Username' }}" autofocus>
-                            @if($errors->has('username'))
-                            <div class="small text-danger text-start">{{ $errors->first('username') }}</div>
+                    <form class="login-box row align-items-center" method="post" action="{{ route('auth.login') }}">
+                        <div>
+                            @csrf
+                            <h1 class="h3 mb-3 fw-normal">Selamat Datang</h1>
+                            @if($errors->has('message'))
+                            <div class="alert alert-danger" role="alert">{{ $errors->first('message') }}</div>
                             @endif
-                        </div>
-                        <div class="mb-3">
-                            <div class="input-group">
-                                <input type="password" name="password" class="form-control {{ $errors->has('password') ? 'border-danger' : '' }}" placeholder="Password">
-                                <button type="button" class="btn {{ $errors->has('password') ? 'btn-outline-danger' : 'btn-outline-secondary' }} btn-toggle-password"><i class="bi-eye"></i></button>
+                            <div class="mb-3">
+                                <input type="text" name="username" class="form-control {{ $errors->has('username') ? 'border-danger' : '' }}" value="{{ old('username') }}"  placeholder="{{ config('faturhelper.auth.allow_login_by_email') === true ? 'Email atau Username' : 'Username' }}" autofocus>
+                                @if($errors->has('username'))
+                                <div class="small text-danger text-start">{{ $errors->first('username') }}</div>
+                                @endif
                             </div>
-                            @if($errors->has('password'))
-                            <div class="small text-danger text-start">{{ $errors->first('password') }}</div>
+                            <div class="mb-3">
+                                <div class="input-group">
+                                    <input type="password" name="password" class="form-control {{ $errors->has('password') ? 'border-danger' : '' }}" placeholder="Password">
+                                    <button type="button" class="btn {{ $errors->has('password') ? 'btn-outline-danger' : 'btn-outline-secondary' }} btn-toggle-password"><i class="bi-eye"></i></button>
+                                </div>
+                                @if($errors->has('password'))
+                                <div class="small text-danger text-start">{{ $errors->first('password') }}</div>
+                                @endif
+                            </div>
+                            <button class="w-100 btn" type="submit">Log in</button>
+                            @if(config('faturhelper.auth.socialite') == true)
+                            <div class="btn-group mt-3">
+                                <a href="{{ route('auth.login.provider', ['provider' => 'google']) }}" class="btn btn-outline-primary">Google</a>
+                                <a href="{{ route('auth.login.provider', ['provider' => 'facebook']) }}" class="btn btn-outline-primary">Facebook</a>
+                            </div>
                             @endif
                         </div>
-                        <button class="w-100 btn btn-primary" type="submit">Log in</button>
-                        @if(config('faturhelper.auth.socialite') == true)
-                        <div class="btn-group mt-3">
-                            <a href="{{ route('auth.login.provider', ['provider' => 'google']) }}" class="btn btn-outline-primary">Google</a>
-                            <a href="{{ route('auth.login.provider', ['provider' => 'facebook']) }}" class="btn btn-outline-primary">Facebook</a>
-                        </div>
-                        @endif
                     </form>
                 </div>
                 <div class="col-12 col-lg-6 d-none d-lg-block">
-                    <img src="https://campusdigital.id/assets/images/illustration/undraw_Login_re_4vu2.svg" alt="img" class="img-fluid">
+                    <div class="card login-image-box" style="">
+                        <img src="{{ asset('assets/images/login/img-login.png') }}" alt="img" class="img-fluid" style="max-width: 90%">
+                    </div>
                 </div>
             </div>
         </div>
