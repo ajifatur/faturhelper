@@ -24,7 +24,14 @@ class UserController extends \App\Http\Controllers\Controller
         // Loop roles
         foreach($roles as $key=>$role) {
             // Count users
-            $users = User::where('role_id','=',$role->id)->count();
+            if(setting('multiple_roles') == 1) {
+                $users = User::whereHas('roles', function (Builder $query) use ($role) {
+                    return $query->where('role_id','=',$role->id);
+                })->count();
+            }
+            else {
+                $users = User::where('role_id','=',$role->id)->count();
+            }
 
             // Push to data
             $data[] = [
