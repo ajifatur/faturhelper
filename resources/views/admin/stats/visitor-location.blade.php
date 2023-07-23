@@ -82,7 +82,7 @@
             for(i=0; i<response.data.length; i++) {
                 html += '<tr>';
                 html += (response.data[i].name == 'Tidak Diketahui') ? '<td class="text-danger">' + response.data[i].name + '</td>' : '<td>' + response.data[i].name + '</td>';
-                html += (response.data[i].name == 'Tidak Diketahui') ? '<td class="text-danger">' + Spandiv.NumberFormat(response.data[i].y.toString()) + '</td>' : '<td>' + Spandiv.NumberFormat(response.data[i].y.toString()) + '</td>';
+                html += (response.data[i].name == 'Tidak Diketahui') ? '<td class="text-danger">' + response.data[i].y + '</td>' : '<td>' + response.data[i].y + '</td>';
                 html += '</tr>';
             }
             $("#table-city tbody").html(html);
@@ -98,7 +98,7 @@
             for(i=0; i<response.data.length; i++) {
                 html += '<tr>';
                 html += (response.data[i].name == 'Tidak Diketahui') ? '<td class="text-danger">' + response.data[i].name + '</td>' : '<td>' + response.data[i].name + '</td>';
-                html += (response.data[i].name == 'Tidak Diketahui') ? '<td class="text-danger">' + Spandiv.NumberFormat(response.data[i].y.toString()) + '</td>' : '<td>' + Spandiv.NumberFormat(response.data[i].y.toString()) + '</td>';
+                html += (response.data[i].name == 'Tidak Diketahui') ? '<td class="text-danger">' + response.data[i].y + '</td>' : '<td>' + response.data[i].y + '</td>';
                 html += '</tr>';
             }
             $("#table-region tbody").html(html);
@@ -114,7 +114,7 @@
             for(i=0; i<response.data.length; i++) {
                 html += '<tr>';
                 html += (response.data[i].name == 'Tidak Diketahui') ? '<td class="text-danger">' + response.data[i].name + '</td>' : '<td>' + response.data[i].name + '</td>';
-                html += (response.data[i].name == 'Tidak Diketahui') ? '<td class="text-danger">' + Spandiv.NumberFormat(response.data[i].y.toString()) + '</td>' : '<td>' + Spandiv.NumberFormat(response.data[i].y.toString()) + '</td>';
+                html += (response.data[i].name == 'Tidak Diketahui') ? '<td class="text-danger">' + response.data[i].y + '</td>' : '<td>' + response.data[i].y + '</td>';
                 html += '</tr>';
             }
             $("#table-country tbody").html(html);

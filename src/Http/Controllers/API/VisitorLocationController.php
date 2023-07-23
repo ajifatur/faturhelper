@@ -46,7 +46,7 @@ class VisitorLocationController extends \App\Http\Controllers\Controller
             // Push to data
             $data[] = [
                 'name' => $key,
-                'y' => $value
+                'y' => number_format($value)
             ];
         }
 
