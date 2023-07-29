@@ -157,7 +157,6 @@ class LoginController extends \App\Http\Controllers\Controller
      */
     public function handleProviderCallback($provider)
     {
-        // $user = Socialite::driver($provider)->user();
         $user = Socialite::driver($provider)->user();
         $authUser = $this->findOrCreateUser($user, $provider);
         Auth::login($authUser, true);
@@ -177,38 +176,40 @@ class LoginController extends \App\Http\Controllers\Controller
         $authUser = UserAccount::where('provider_id','=',$user->getId())->where('provider_name','=',$provider)->first();
 
         if($authUser) {
-            return $authUser;
+            // Get the user
+            $data = User::find($authUser->user_id);
+            if($data)
+            	return $data;
         }
-        else {
-            // Get the user by the email
-            $data = User::where('email','=',$user->getEmail())->first();
 
-            if(!$data) {
-				// Save the user
-                $data = new User;
-                $data->role_id = role($this->role);
-                $data->name = $user->getName();
-                $data->username = $user->getNickname() != null ? $user->getNickname() : $user->getEmail();
-                $data->email = $user->getEmail();
-                $data->password = '';
-                $data->access_token = access_token();
-                $data->remember_token = null;
-				$data->avatar = $user->getAvatar();
-				$data->status = 1;
-				$data->last_visit = null;
-				$data->email_verified_at = null;
-                $data->save();
-            }
+	    // Get the user by the email
+	    $data = User::where('email','=',$user->getEmail())->first();
+	
+	    if(!$data) {
+		// Save the user
+		$data = new User;
+		$data->role_id = role($this->role);
+		$data->name = $user->getName();
+		$data->username = $user->getNickname() != null ? $user->getNickname() : $user->getEmail();
+		$data->email = $user->getEmail();
+		$data->password = '';
+		$data->access_token = access_token();
+		$data->remember_token = null;
+		$data->avatar = $user->getAvatar();
+		$data->status = 1;
+		$data->last_visit = null;
+		$data->email_verified_at = null;
+		$data->save();
+	    }
 				
-            // Save the user account
-            $user_account = new UserAccount;
-            $user_account->user_id = $data->id;
-            $user_account->provider_id = $user->getId();
-            $user_account->provider_name = $provider;
-            $user_account->save();
-
-            return $data;
-        }
+	    // Save the user account
+	    $user_account = new UserAccount;
+	    $user_account->user_id = $data->id;
+	    $user_account->provider_id = $user->getId();
+	    $user_account->provider_name = $provider;
+	    $user_account->save();
+	
+	    return $data;
     }
     
     /**
