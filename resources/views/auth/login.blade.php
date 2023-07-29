@@ -50,11 +50,16 @@
                                 <div class="small text-danger text-start">{{ $errors->first('password') }}</div>
                                 @endif
                             </div>
-                            <button class="w-100 btn" type="submit">Log in</button>
+                            <button class="w-100 btn" type="submit">Masuk</button>
                             @if(config('faturhelper.auth.socialite') == true)
-                            <div class="btn-group mt-3">
-                                <a href="{{ route('auth.login.provider', ['provider' => 'google']) }}" class="btn btn-outline-primary">Google</a>
-                                <a href="{{ route('auth.login.provider', ['provider' => 'facebook']) }}" class="btn btn-outline-primary">Facebook</a>
+                            <p class="mt-3 mb-1">Atau masuk melalui:</p>
+                            <div class="btn-group w-100">
+                                @if((config('services.google')) != null)
+                                <a href="{{ route('auth.login.provider', ['provider' => 'google']) }}" class="btn btn-outline-primary"><i class="bi-google me-2"></i> Google</a>
+                                @endif
+                                @if((config('services.facebook')) != null)
+                                <a href="{{ route('auth.login.provider', ['provider' => 'facebook']) }}" class="btn btn-outline-primary"><i class="bi-facebook me-2"></i> Facebook</a>
+                                @endif
                             </div>
                             @endif
                         </div>

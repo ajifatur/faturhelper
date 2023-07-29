@@ -157,6 +157,7 @@ class LoginController extends \App\Http\Controllers\Controller
      */
     public function handleProviderCallback($provider)
     {
+        // $user = Socialite::driver($provider)->user();
         $user = Socialite::driver($provider)->user();
         $authUser = $this->findOrCreateUser($user, $provider);
         Auth::login($authUser, true);
@@ -187,9 +188,9 @@ class LoginController extends \App\Http\Controllers\Controller
                 $data = new User;
                 $data->role_id = role($this->role);
                 $data->name = $user->getName();
-                $data->username = $user->getNickname();
+                $data->username = $user->getNickname() != null ? $user->getNickname() : $user->getEmail();
                 $data->email = $user->getEmail();
-                $data->password = null;
+                $data->password = '';
                 $data->access_token = access_token();
                 $data->remember_token = null;
 				$data->avatar = $user->getAvatar();
