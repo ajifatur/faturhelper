@@ -21,6 +21,10 @@
         .login-box {min-height: calc(100vh - 200px); text-align: center; width: 75%; margin: auto;}
         .login-image-box {min-height: calc(100vh - 200px); align-items: center; margin-top: .75rem; margin-bottom: .75rem; background-color: #efeef6; border-color: #efeef6;}
         .btn[type=submit] {background-color: #9e60c0; color: #fff;}
+        @media(max-width: 575px) {
+            .login-box {min-height: calc(100vh - 2px);}
+            .container.card {border-radius: 0px;}
+        }
     </style>
 </head>
 <body>

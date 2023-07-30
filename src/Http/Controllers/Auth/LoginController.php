@@ -78,23 +78,9 @@ class LoginController extends \App\Http\Controllers\Controller
             if(Auth::attempt($credentials)) {
                 // Regenerate session
                 $request->session()->regenerate();
-
-                // Update user's last visit
-                $user = User::find($request->user()->id);
-                $user->last_visit = date('Y-m-d H:i:s');
-                $user->save();
-
-                // Add to visitors
-                if(Schema::hasTable('visitors')) {
-                    $visitor = new Visitor;
-                    $visitor->user_id = $user->id;
-                    $visitor->ip_address = $request->ip();
-                    $visitor->device = device_info();
-                    $visitor->browser = browser_info();
-                    $visitor->platform = platform_info();
-                    $visitor->location = location_info($request->ip());
-                    $visitor->save();
-                }
+                
+                // Record visitor
+                $user = $this->recordVisitor($request);
 
                 // Redirect
                 if($user && $user->role->is_admin == 1)
@@ -112,6 +98,34 @@ class LoginController extends \App\Http\Controllers\Controller
                 ])->withInput();
             }
         }
+    }
+
+    /**
+     * Record Visitor.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return object $user
+     */
+    public function recordVisitor(Request $request)
+    {
+        // Update user's last visit
+        $user = User::find($request->user()->id);
+        $user->last_visit = date('Y-m-d H:i:s');
+        $user->save();
+
+        // Add to visitors
+        if(Schema::hasTable('visitors')) {
+            $visitor = new Visitor;
+            $visitor->user_id = $user->id;
+            $visitor->ip_address = $request->ip();
+            $visitor->device = device_info();
+            $visitor->browser = browser_info();
+            $visitor->platform = platform_info();
+            $visitor->location = location_info($request->ip());
+            $visitor->save();
+        }
+
+        return $user;
     }
 
     /**
@@ -152,15 +166,22 @@ class LoginController extends \App\Http\Controllers\Controller
      * If the user exists, log them in. Otherwise, create a new user then log them in. After that
      * redirect them to the authenticated users homepage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  string $provider
      * @return \Illuminate\Http\Response
      */
-    public function handleProviderCallback($provider)
+    public function handleProviderCallback(Request $request, $provider)
     {
         $user = Socialite::driver($provider)->user();
         $authUser = $this->findOrCreateUser($user, $provider);
         Auth::login($authUser, true);
-        return redirect()->route('admin.dashboard');
+        $user = $this->recordVisitor($request);
+
+        // Redirect
+        if($user && $user->role->is_admin == 1)
+            return redirect()->route('admin.dashboard');
+        elseif($user && $user->role->is_admin == 0)
+            return redirect('/');
     }
 
     /**
@@ -175,6 +196,7 @@ class LoginController extends \App\Http\Controllers\Controller
         // Get the user account by provider ID and provider name
         $authUser = UserAccount::where('provider_id','=',$user->getId())->where('provider_name','=',$provider)->first();
 
+        // If the user is exist
         if($authUser) {
             // Get the user
             $data = User::find($authUser->user_id);
@@ -182,34 +204,69 @@ class LoginController extends \App\Http\Controllers\Controller
             	return $data;
         }
 
-	    // Get the user by the email
-	    $data = User::where('email','=',$user->getEmail())->first();
-	
-	    if(!$data) {
-		// Save the user
-		$data = new User;
-		$data->role_id = role($this->role);
-		$data->name = $user->getName();
-		$data->username = $user->getNickname() != null ? $user->getNickname() : $user->getEmail();
-		$data->email = $user->getEmail();
-		$data->password = '';
-		$data->access_token = access_token();
-		$data->remember_token = null;
-		$data->avatar = $user->getAvatar();
-		$data->status = 1;
-		$data->last_visit = null;
-		$data->email_verified_at = null;
-		$data->save();
-	    }
-				
-	    // Save the user account
-	    $user_account = new UserAccount;
-	    $user_account->user_id = $data->id;
-	    $user_account->provider_id = $user->getId();
-	    $user_account->provider_name = $provider;
-	    $user_account->save();
-	
-	    return $data;
+        // Get the user by the email
+        $data = User::where('email','=',$user->getEmail())->first();
+
+        if(!$data) {
+            // Save the user
+            $data = new User;
+            $data->role_id = role($this->role);
+            $data->name = $user->getName();
+            $data->username = $user->getNickname() != null ? $user->getNickname() : $user->getEmail();
+            $data->email = $user->getEmail();
+            $data->password = '';
+            $data->access_token = access_token();
+            $data->remember_token = null;
+            $data->avatar = $user->getAvatar();
+            $data->status = 1;
+            $data->last_visit = null;
+            $data->email_verified_at = null;
+            $data->save();
+        }
+                
+        // Save the user account
+        $user_account = new UserAccount;
+        $user_account->user_id = $data->id;
+        $user_account->provider_id = $user->getId();
+        $user_account->provider_name = $provider;
+        $user_account->save();
+
+        return $data;
+    }
+    
+    /**
+     * Login by provider name and provider ID.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string $provider
+     * @param  int    $provider_id
+     * @return \Illuminate\Http\Response
+     */
+    public function byPassbyProviderId(Request $request, $provider, $provider_id)
+    {
+        // Get the user account by provider ID
+        $user_account = UserAccount::where('provider_id','=',$provider_id)->where('provider_name','=',$provider)->first();
+
+        if($user_account) {
+            // Get the user
+            $user = User::find($user_account->user_id);
+
+            if($user) {
+                Auth::login($user, true);
+                $user = $this->recordVisitor($request);
+
+                // Redirect
+                if($user && $user->role->is_admin == 1)
+                    return redirect()->route('admin.dashboard');
+                elseif($user && $user->role->is_admin == 0)
+                    return redirect('/');
+            }
+        }
+
+        return response()->json([
+            'status' => 401,
+            'message' => 'Unauthorized'
+        ]);
     }
     
     /**
