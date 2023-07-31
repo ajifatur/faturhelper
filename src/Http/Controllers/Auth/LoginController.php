@@ -172,7 +172,21 @@ class LoginController extends \App\Http\Controllers\Controller
      */
     public function handleProviderCallback(Request $request, $provider)
     {
+        // Get the user (socialite)
         $user = Socialite::driver($provider)->user();
+
+        // Check if unregistered account is disallowed
+        if(config('faturhelper.auth.allow_unregistered_account') == false) {
+            $data = User::where('email','=',$user->getEmail())->where('status','=',1)->first();
+            if(!$data) {
+                return response()->json([
+                    'status' => 401,
+                    'message' => 'Unauthorized'
+                ]);
+            }
+        }
+
+        // Login
         $authUser = $this->findOrCreateUser($user, $provider);
         Auth::login($authUser, true);
         $user = $this->recordVisitor($request);
@@ -205,7 +219,7 @@ class LoginController extends \App\Http\Controllers\Controller
         }
 
         // Get the user by the email
-        $data = User::where('email','=',$user->getEmail())->first();
+        $data = User::where('email','=',$user->getEmail())->where('status','=',1)->first();
 
         if(!$data) {
             // Save the user
