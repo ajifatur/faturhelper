@@ -179,10 +179,13 @@ class LoginController extends \App\Http\Controllers\Controller
         if(config('faturhelper.auth.allow_unregistered_account') == false) {
             $data = User::where('email','=',$user->getEmail())->where('status','=',1)->first();
             if(!$data) {
-                return response()->json([
-                    'status' => 401,
-                    'message' => 'Unauthorized'
-                ]);
+                // Add to log
+                $this->authenticationLog($request, 'Attempt failed.');
+
+                // Return
+                return redirect()->route('auth.login')->withErrors([
+                    'message' => 'Akun '.ucwords($provider).' yang Anda masukkan tidak terdaftar!'
+                ])->withInput();
             }
         }
 
@@ -277,10 +280,7 @@ class LoginController extends \App\Http\Controllers\Controller
             }
         }
 
-        return response()->json([
-            'status' => 401,
-            'message' => 'Unauthorized'
-        ]);
+        return response()->json("Anda tidak terdaftar atau tidak mempunyai akses!");
     }
     
     /**
