@@ -282,6 +282,11 @@ class UserController extends \App\Http\Controllers\Controller
             $user_avatars = UserAvatar::where('user_id','=',$user->id)->delete();
         }
 
+        // Delete the user account
+        if($user->account) {
+            $user->account->delete();
+        }
+
         // Delete the user roles
         if(count($user->roles) > 0) {
             $user->roles()->detach();
@@ -322,6 +327,11 @@ class UserController extends \App\Http\Controllers\Controller
                     // Delete the user avatars
                     if(count($user->avatars) > 0) {
                         $user_avatars = UserAvatar::where('user_id','=',$user->id)->delete();
+                    }
+
+                    // Delete the user account
+                    if($user->account) {
+                        $user->account->delete();
                     }
 
                     // Delete the user roles
