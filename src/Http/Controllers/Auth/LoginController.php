@@ -57,7 +57,7 @@ class LoginController extends \App\Http\Controllers\Controller
         }
         else {
             // Check login type
-            if(config('faturhelper.auth.allow_login_by_email') === true)
+            if(setting('allow_login_by_email') == 1)
                 $loginType = filter_var($request->username, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
             else
                 $loginType = 'username';
@@ -70,7 +70,7 @@ class LoginController extends \App\Http\Controllers\Controller
             ];
 
             // Add credentials if non-admin is disallowed to log in
-            if(config()->has('faturhelper.auth.non_admin_can_login') && config('faturhelper.auth.non_admin_can_login') === false) {
+            if(setting('non_admin_can_login') == 0) {
                 $credentials['role_id'] = Role::where('is_admin','=',1)->pluck('id')->toArray();
             }
 
@@ -133,16 +133,25 @@ class LoginController extends \App\Http\Controllers\Controller
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  string $errors
+     * @param  string $email
      * @return \Illuminate\Http\Response
      */
-    public function authenticationLog(Request $request, $errors)
+    public function authenticationLog(Request $request, $errors, $email = '')
     {
+        // Set username
+        $username = $request->username;
+
+        // Check if unregistered account is disallowed
+        if(setting('socialite') == 1 && setting('allow_unregistered_account') == 0) {
+            $username = $email;
+        }        
+
         Log::build([
             'driver' => 'single',
             'path' => storage_path('logs/authentications.log'),
         ])->error(
             json_encode([
-                'username' => $request->username,
+                'username' => $username,
                 'ip' => $request->ip(),
                 'errors' => $errors
             ])
@@ -176,11 +185,11 @@ class LoginController extends \App\Http\Controllers\Controller
         $user = Socialite::driver($provider)->user();
 
         // Check if unregistered account is disallowed
-        if(config('faturhelper.auth.allow_unregistered_account') == false) {
+        if(setting('allow_unregistered_account') == 0) {
             $data = User::where('email','=',$user->getEmail())->where('status','=',1)->first();
             if(!$data) {
                 // Add to log
-                $this->authenticationLog($request, 'Attempt failed.');
+                $this->authenticationLog($request, 'Attempt failed.', $user->getEmail());
 
                 // Return
                 return redirect()->route('auth.login')->withErrors([

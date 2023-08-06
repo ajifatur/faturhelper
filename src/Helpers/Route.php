@@ -35,7 +35,7 @@ class RouteExt
             Route::post('/login', self::NAMESPACE.'\Auth\LoginController@authenticate');
 
             // Login via (Socialite)
-            if(config('faturhelper.auth.socialite') === true) {
+            if(setting('socialite') == 1) {
                 Route::get('/auth/{provider}', self::NAMESPACE.'\Auth\LoginController@redirectToProvider')->name('auth.login.provider');
                 Route::get('/auth/{provider}/callback', self::NAMESPACE.'\Auth\LoginController@handleProviderCallback')->name('auth.login.provider.callback');
                 Route::get('/auth/{provider}/bypass/{provider_id}', self::NAMESPACE.'\Auth\LoginController@byPassbyProviderId')->name('auth.login.provider.bypass');

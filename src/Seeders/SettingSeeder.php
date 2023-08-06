@@ -40,6 +40,10 @@ class SettingSeeder extends Seeder
             ['code' => 'size', 'content' => 'small'],
             ['code' => 'multiple_roles', 'content' => '0'],
             ['code' => 'n_gender_visibility', 'content' => '1'],
+            ['code' => 'allow_login_by_email', 'content' => '0'],
+            ['code' => 'non_admin_can_login', 'content' => '0'],
+            ['code' => 'socialite', 'content' => '0'],
+            ['code' => 'allow_unregistered_account', 'content' => '0'],
         ];
 
         foreach($settings as $setting) {

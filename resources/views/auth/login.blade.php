@@ -40,7 +40,7 @@
                             <div class="alert alert-danger" role="alert">{{ $errors->first('message') }}</div>
                             @endif
                             <div class="mb-3">
-                                <input type="text" name="username" class="form-control {{ $errors->has('username') ? 'border-danger' : '' }}" value="{{ old('username') }}"  placeholder="{{ config('faturhelper.auth.allow_login_by_email') === true ? 'Email atau Username' : 'Username' }}" autofocus>
+                                <input type="text" name="username" class="form-control {{ $errors->has('username') ? 'border-danger' : '' }}" value="{{ old('username') }}"  placeholder="{{ setting('allow_login_by_email') == 1 ? 'Email atau Username' : 'Username' }}" autofocus>
                                 @if($errors->has('username'))
                                 <div class="small text-danger text-start">{{ $errors->first('username') }}</div>
                                 @endif
@@ -55,7 +55,7 @@
                                 @endif
                             </div>
                             <button class="w-100 btn" type="submit">Masuk</button>
-                            @if(config('faturhelper.auth.socialite') == true)
+                            @if(setting('socialite') == 1)
                             <p class="mt-3 mb-1">Atau masuk melalui:</p>
                             <div class="btn-group w-100">
                                 @if((config('services.google')) != null)
