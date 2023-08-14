@@ -23,6 +23,7 @@
  * @method string          platform_info()
  * @method string          location_info(string $ip)
  * @method string          counted(int $number)
+ * @method int             mround(int $number, int $to)
  */
 
 use Illuminate\Support\Str;
@@ -587,5 +588,18 @@ if(!function_exists('counted')) {
 			$result = $temp;
 		}
 		return trim($result);
+    }
+}
+
+/**
+ * Mround like Excel function.
+ *
+ * @param  int $number
+ * @param  int $to
+ * @return int
+ */
+if(!function_exists('mround')) {
+    function mround($number, $to) {
+        return round($number / $to, 0) * $to;
     }
 }
