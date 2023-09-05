@@ -44,6 +44,7 @@ class SettingSeeder extends Seeder
             ['code' => 'non_admin_can_login', 'content' => '0'],
             ['code' => 'socialite', 'content' => '0'],
             ['code' => 'allow_unregistered_account', 'content' => '0'],
+            ['code' => 'font_family', 'content' => 'default'],
         ];
 
         foreach($settings as $setting) {
