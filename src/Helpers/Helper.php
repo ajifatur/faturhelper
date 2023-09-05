@@ -603,3 +603,17 @@ if(!function_exists('mround')) {
         return round($number / $to, 0) * $to;
     }
 }
+
+/**
+ * Name with title.
+ *
+ * @param  string $name
+ * @param  string $front_title
+ * @param  string $behind_title
+ * @return string
+ */
+if(!function_exists('title_name')) {
+    function title_name($name, $front_title = '', $behind_title = '') {
+        return ($front_title != '' ? $front_title . ' ' : $front_title) . $name . ($behind_title != '' ? ', ' . $behind_title : $behind_title);
+    }
+}
