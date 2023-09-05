@@ -50,6 +50,22 @@
 		});
 	});
 
+	// Change font family
+	$(document).on("change", ".offcanvas input[name=font]", function(e) {
+		e.preventDefault();
+        if(typeof Pace !== "undefined") Pace.restart();
+		var font = $(this).val();
+		$.ajax({
+			type: "post",
+			url: "{{ route('admin.setting.update') }}",
+			data: {_token: "{{ csrf_token() }}", isAjax: true, code: "font_family", content: font},
+			success: function(response) {
+				if(response === "Success!")
+					$("body").attr("data-font",font);
+			}
+		});
+	});
+
 	// Sidebar toggle
 	$(document).on("click", ".sidebar-toggle", function(e) {
 		e.preventDefault();

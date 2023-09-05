@@ -36,16 +36,34 @@
 		</div>
 		<hr>
 		<div class="mb-3">
-			<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Ukuran</small>
-			@php $sizes = ['small' => 'Kecil', 'medium' => 'Sedang', 'large' => 'Besar']; @endphp
 			<div class="row">
-				<div class="col-12">
-					@foreach($sizes as $key=>$size)
-					<div class="form-check">
-						<input class="form-check-input" type="radio" name="size" id="size-{{ $key }}" value="{{ $key }}" {{ setting('size') == $key ? 'checked' : '' }}>
-						<label class="form-check-label" for="size-{{ $key }}">{{ $size }}</label>
+				<div class="col-6">
+					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Ukuran</small>
+					@php $sizes = ['small' => 'Kecil', 'medium' => 'Sedang', 'large' => 'Besar']; @endphp
+					<div class="row">
+						<div class="col-12">
+							@foreach($sizes as $key=>$size)
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="size" id="size-{{ $key }}" value="{{ $key }}" {{ setting('size') == $key ? 'checked' : '' }}>
+								<label class="form-check-label" for="size-{{ $key }}">{{ $size }}</label>
+							</div>
+							@endforeach
+						</div>
 					</div>
-					@endforeach
+				</div>
+				<div class="col-6">
+					<small class="d-block text-uppercase font-weight-bold text-muted mb-2">Font Family</small>
+					@php $fonts = ['default' => 'Default', 'sans-serif' => 'Sans-Serif', 'system-ui' => 'System-UI']; @endphp
+					<div class="row">
+						<div class="col-12">
+							@foreach($fonts as $key=>$font)
+							<div class="form-check">
+								<input class="form-check-input" type="radio" name="font" id="font-{{ $key }}" value="{{ $key }}" {{ setting('font_family') == $key ? 'checked' : '' }}>
+								<label class="form-check-label" for="font-{{ $key }}">{{ $font }}</label>
+							</div>
+							@endforeach
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
