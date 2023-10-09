@@ -75,6 +75,16 @@
 		setNavBrand();
 	});
 
+	// Sidebar items
+	$(window).on("load", function() {
+		var activeItem = $(".sidebar-nav .sidebar-item.active");
+		if(activeItem.length > 0 && activeItem.offset().top > $(window).height()) {
+			$(".simplebar-content-wrapper").animate({
+				scrollTop: activeItem.offset().top
+			}, 1000);
+		}
+	});
+
 	// Change role
 	$(document).on("click", ".btn-role", function(e) {
 		e.preventDefault();
