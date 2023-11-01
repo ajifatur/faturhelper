@@ -120,7 +120,7 @@
 						<div class="col-12"><a href="{{ route('admin.log.activity') }}">Aktivitas</a></div>
 						<div class="col-12"><a href="{{ route('admin.log.activity.url') }}">Aktivitas (URL)</a></div>
 						<div class="col-12"><a href="{{ route('admin.log.authentication') }}">Autentikasi</a></div>
-						<div class="col-12"><a href="{{ route('admin.visitor.index') }}">Visitor</a></div>
+						<div class="col-12"><a href="{{ route('admin.log.visitor') }}">Visitor</a></div>
 						<div class="col-12"><a href="{{ route('admin.log.index') }}" target="_blank">Semua Log</a></div>
 					</div>
 				</div>

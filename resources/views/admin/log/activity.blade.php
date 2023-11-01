@@ -16,7 +16,7 @@
                         <option>Memuat...</option>
                     </select>
                 </div>
-                <div class="ms-sm-2 ms-0">
+                <div class="ms-sm-2 ms-0 mb-sm-0 mb-2">
                     <select name="month" class="form-select form-select-sm">
                         @for($m=1; $m<=12; $m++)
                         <option value="{{ $m }}" {{ $month == $m ? 'selected' : '' }}>{{ \Ajifatur\Helpers\DateTimeExt::month($m) }}</option>

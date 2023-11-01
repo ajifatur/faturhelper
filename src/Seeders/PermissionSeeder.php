@@ -79,7 +79,7 @@ class PermissionSeeder extends Seeder
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::activity', 'name' => 'Menampilkan Log Aktivitas'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::activityByURL', 'name' => 'Menampilkan Log Aktivitas Berdasarkan URL'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::authentication', 'name' => 'Menampilkan Log Autentikasi'],
-            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\VisitorController::index', 'name' => 'Menampilkan Data Visitor'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::visitor', 'name' => 'Menampilkan Log Visitor'],
         ];
 
         $role = Role::where('code', '=', 'super-admin')->first();
@@ -95,6 +95,16 @@ class PermissionSeeder extends Seeder
                     $permission->roles()->attach($role->id);
                 }
             }
+        }
+
+        // Delete permissions
+        $deleted_array = [
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\VisitorController::index', 'name' => 'Menampilkan Data Visitor'],
+        ];
+
+        foreach($deleted_array as $key=>$data) {
+            $permission = Permission::where('code','=',$data['code'])->first();
+            if($permission) $permission->delete();
         }
     }
 }

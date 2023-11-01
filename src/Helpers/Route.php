@@ -180,12 +180,11 @@ class RouteExt
             Route::get('/admin/log/activity/user', self::NAMESPACE.'\LogController@activityByUserID')->name('admin.log.activity.user');
             Route::get('/admin/log/activity/url', self::NAMESPACE.'\LogController@activityByURL')->name('admin.log.activity.url');
             Route::get('/admin/log/authentication', self::NAMESPACE.'\LogController@authentication')->name('admin.log.authentication');
+            Route::get('/admin/log/visitor', self::NAMESPACE.'\LogController@visitor')->name('admin.log.visitor');
+            Route::get('/admin/log/visitor/sync', self::NAMESPACE.'\LogController@visitorSync')->name('admin.log.visitor.sync');
 
             // Route
             Route::get('/admin/route', self::NAMESPACE.'\RouteController@index')->name('admin.route.index');
-
-            // Visitor
-            Route::get('/admin/visitor', self::NAMESPACE.'\VisitorController@index')->name('admin.visitor.index');
         });
     }
 

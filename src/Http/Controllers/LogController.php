@@ -5,7 +5,9 @@ namespace Ajifatur\FaturHelper\Http\Controllers;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Ajifatur\FaturHelper\Models\User;
+use Ajifatur\FaturHelper\Models\Visitor;
 
 class LogController extends \App\Http\Controllers\Controller
 {
@@ -260,5 +262,112 @@ class LogController extends \App\Http\Controllers\Controller
 
         // View
         return view('faturhelper::admin/log/authentication');
+    }
+
+    /**
+     * Display the visitor log.
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function visitor(Request $request)
+    {
+        // Check the access
+        has_access(__METHOD__, Auth::user()->role_id);
+
+        if($request->ajax()) {
+            // DataTables
+            return datatables()->of($this->toArray('info', storage_path('logs/visitors.log')))
+                ->addColumn('user', '
+                    @php $user = \Ajifatur\FaturHelper\Models\User::find($user_id); @endphp
+                    @if($user)
+                        <a href="{{ \Route::has(\'admin.user.detail\') ? route(\'admin.user.detail\', [\'id\' => $user->id]) : \'#\' }}" target="_blank">{{ $user->name }}</a>
+                        <br>
+                        <small>{{ $user->role ? $user->role->name : "" }}</small>
+                    @endif
+                ')
+                ->editColumn('datetime', '
+                    <span class="d-none">{{ $visited_at }}</span>
+                    {{ date("d/m/Y", strtotime($visited_at)) }}
+                    <br>
+                    <small>{{ date("H:i:s", strtotime($visited_at)) }}</small>
+                ')
+                ->editColumn('device', '
+                    @if(is_array($device))
+                        <strong>Type:</strong> {{ $device[\'type\'] }}
+                        <hr class="my-1">
+                        <strong>Family:</strong> {{ $device[\'family\'] }}
+                        <hr class="my-1">
+                        <strong>Model:</strong> {{ $device[\'model\'] }}
+                        <hr class="my-1">
+                        <strong>Grade:</strong> {{ $device[\'grade\'] }}
+                    @endif
+                ')
+                ->editColumn('browser', '
+                    @if(is_array($browser))
+                        <strong>Name:</strong> {{ $browser[\'name\'] }}
+                        <hr class="my-1">
+                        <strong>Family:</strong> {{ $browser[\'family\'] }}
+                        <hr class="my-1">
+                        <strong>Version:</strong> {{ $browser[\'version\'] }}
+                        <hr class="my-1">
+                        <strong>Engine:</strong> {{ $browser[\'engine\'] }}
+                    @endif
+                ')
+                ->editColumn('platform', '
+                    @if(is_array($platform))
+                        <strong>Name:</strong> {{ $platform[\'name\'] }}
+                        <hr class="my-1">
+                        <strong>Family:</strong> {{ $platform[\'family\'] }}
+                        <hr class="my-1">
+                        <strong>Version:</strong> {{ $platform[\'version\'] }}
+                    @endif
+                ')
+                ->editColumn('location', '
+                    @if(is_array($location))
+                        <strong>IP:</strong> {{ $location[\'ip\'] }}
+                        <hr class="my-1">
+                        <strong>Kota:</strong> {{ $location[\'cityName\'] }}
+                        <hr class="my-1">
+                        <strong>Regional:</strong> {{ $location[\'regionName\'] }}
+                        <hr class="my-1">
+                        <strong>Negara:</strong> {{ $location[\'countryName\'] }}
+                    @endif
+                ')
+                ->rawColumns(['user', 'datetime', 'device', 'browser', 'platform', 'location'])
+                ->make(true);
+        }
+
+        // View
+        return view('faturhelper::admin/log/visitor');
+    }
+
+    /**
+     * Sync visitors from database.
+     * 
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function visitorSync(Request $request)
+    {
+        // Get visitors
+        $visitors = Visitor::all();
+        
+        foreach($visitors as $visitor) {
+            Log::build([
+                'driver' => 'single',
+                'path' => storage_path('logs/visitors.log'),
+            ])->info(
+                json_encode([
+                    'user_id' => $visitor->user_id,
+                    'ip' => $visitor->ip_address,
+                    'device' => $visitor->device,
+                    'browser' => $visitor->browser,
+                    'platform' => $visitor->platform,
+                    'location' => $visitor->location,
+                    'visited_at' => date('Y-m-d H:i:s', strtotime($visitor->created_at))
+                ])
+            );
+        }
     }
 }

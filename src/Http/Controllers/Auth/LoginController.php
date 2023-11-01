@@ -113,17 +113,20 @@ class LoginController extends \App\Http\Controllers\Controller
         $user->last_visit = date('Y-m-d H:i:s');
         $user->save();
 
-        // Add to visitors
-        if(Schema::hasTable('visitors')) {
-            $visitor = new Visitor;
-            $visitor->user_id = $user->id;
-            $visitor->ip_address = $request->ip();
-            $visitor->device = device_info();
-            $visitor->browser = browser_info();
-            $visitor->platform = platform_info();
-            $visitor->location = location_info($request->ip());
-            $visitor->save();
-        }
+        Log::build([
+            'driver' => 'single',
+            'path' => storage_path('logs/visitors.log'),
+        ])->info(
+            json_encode([
+                'user_id' => $user->id,
+                'ip' => $request->ip(),
+                'device' => device_info(),
+                'browser' => browser_info(),
+                'platform' => platform_info(),
+                'location' => location_info($request->ip()),
+                'visited_at' => date('Y-m-d H:i:s')
+            ])
+        );
 
         return $user;
     }
