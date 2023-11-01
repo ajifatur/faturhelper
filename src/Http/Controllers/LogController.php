@@ -293,6 +293,7 @@ class LogController extends \App\Http\Controllers\Controller
                     <small>{{ date("H:i:s", strtotime($visited_at)) }}</small>
                 ')
                 ->editColumn('device', '
+                    @php $device = json_decode($device, true); @endphp
                     @if(is_array($device))
                         <strong>Type:</strong> {{ $device[\'type\'] }}
                         <hr class="my-1">
@@ -304,6 +305,7 @@ class LogController extends \App\Http\Controllers\Controller
                     @endif
                 ')
                 ->editColumn('browser', '
+                    @php $browser = json_decode($browser, true); @endphp
                     @if(is_array($browser))
                         <strong>Name:</strong> {{ $browser[\'name\'] }}
                         <hr class="my-1">
@@ -315,6 +317,7 @@ class LogController extends \App\Http\Controllers\Controller
                     @endif
                 ')
                 ->editColumn('platform', '
+                    @php $platform = json_decode($platform, true); @endphp
                     @if(is_array($platform))
                         <strong>Name:</strong> {{ $platform[\'name\'] }}
                         <hr class="my-1">
@@ -324,6 +327,7 @@ class LogController extends \App\Http\Controllers\Controller
                     @endif
                 ')
                 ->editColumn('location', '
+                    @php $location = json_decode($location, true); @endphp
                     @if(is_array($location))
                         <strong>IP:</strong> {{ $location[\'ip\'] }}
                         <hr class="my-1">
