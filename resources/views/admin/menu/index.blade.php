@@ -65,15 +65,36 @@
                                             <div class="card-body p-2">
                                                 <div class="list-group sortable" data-url="{{ route('admin.menu.item.sort') }}">
                                                     @foreach($submenu_items as $submenu_item)
-                                                        <div class="list-group-item d-flex justify-content-between align-items-center p-2" data-id="{{ $submenu_item->id }}">
-                                                            <div>
-                                                                <i class="{{ $submenu_item->icon }} me-1" data-bs-toggle="tooltip" title="{{ $submenu_item->name }}"></i>
-                                                                <a href="{{ $submenu_item->route != '' ? is_array(json_decode($submenu_item->routeparams, true)) ? route($submenu_item->route, json_decode($submenu_item->routeparams, true)) : route($submenu_item->route) : '#' }}">{{ $submenu_item->name }}</a>
+                                                        @php
+                                                            $submenu_items_level_2 = $menu_header->items()->where('parent','=',$submenu_item->id)->orderBy('num_order','asc')->get();
+                                                        @endphp
+                                                        <div class="list-group-item p-2" data-id="{{ $submenu_item->id }}">
+                                                            <div class="d-flex w-100 justify-content-between align-items-center mb-2">
+                                                                <div>
+                                                                    <i class="{{ $submenu_item->icon }} me-1" data-bs-toggle="tooltip" title="{{ $submenu_item->name }}"></i>
+                                                                    <a href="{{ $submenu_item->route != '' ? is_array(json_decode($submenu_item->routeparams, true)) ? route($submenu_item->route, json_decode($submenu_item->routeparams, true)) : route($submenu_item->route) : '#' }}">{{ $submenu_item->name }}</a>
+                                                                </div>
+                                                                <div class="btn-group">
+                                                                    <a href="{{ route('admin.menu.item.edit', ['header_id' => $menu_header->id, 'item_id' => $submenu_item->id]) }}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Edit Item"><i class="bi-pencil"></i></a>
+                                                                    <a href="#" class="btn btn-sm btn-outline-secondary btn-delete-menu-item" data-id="{{ $submenu_item->id }}" data-bs-toggle="tooltip" title="Hapus Item"><i class="bi-trash"></i></a>
+                                                                </div>
                                                             </div>
-                                                            <div class="btn-group">
-                                                                <a href="{{ route('admin.menu.item.edit', ['header_id' => $menu_header->id, 'item_id' => $submenu_item->id]) }}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Edit Item"><i class="bi-pencil"></i></a>
-                                                                <a href="#" class="btn btn-sm btn-outline-secondary btn-delete-menu-item" data-id="{{ $submenu_item->id }}" data-bs-toggle="tooltip" title="Hapus Item"><i class="bi-trash"></i></a>
-                                                            </div>
+                                                            @if(count($submenu_items_level_2) > 0)
+                                                                <div class="list-group sortable" data-url="{{ route('admin.menu.item.sort') }}">
+                                                                    @foreach($submenu_items_level_2 as $submenu_item_level_2)
+                                                                        <div class="list-group-item d-flex justify-content-between align-items-center p-2" data-id="{{ $submenu_item_level_2->id }}">
+                                                                            <div>
+                                                                                <i class="{{ $submenu_item_level_2->icon }} me-1" data-bs-toggle="tooltip" title="{{ $submenu_item_level_2->name }}"></i>
+                                                                                <a href="{{ $submenu_item_level_2->route != '' ? is_array(json_decode($submenu_item_level_2->routeparams, true)) ? route($submenu_item_level_2->route, json_decode($submenu_item_level_2->routeparams, true)) : route($submenu_item_level_2->route) : '#' }}">{{ $submenu_item_level_2->name }}</a>
+                                                                            </div>
+                                                                            <div class="btn-group">
+                                                                                <a href="{{ route('admin.menu.item.edit', ['header_id' => $menu_header->id, 'item_id' => $submenu_item_level_2->id]) }}" class="btn btn-sm btn-outline-secondary" data-bs-toggle="tooltip" title="Edit Item"><i class="bi-pencil"></i></a>
+                                                                                <a href="#" class="btn btn-sm btn-outline-secondary btn-delete-menu-item" data-id="{{ $submenu_item_level_2->id }}" data-bs-toggle="tooltip" title="Hapus Item"><i class="bi-trash"></i></a>
+                                                                            </div>
+                                                                        </div>
+                                                                    @endforeach
+                                                                </div>
+                                                            @endif
                                                         </div>
                                                     @endforeach
                                                 </div>

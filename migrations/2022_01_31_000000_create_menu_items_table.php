@@ -20,7 +20,7 @@ class CreateMenuItemsTable extends Migration
                 $table->string('name');
                 $table->string('route');
                 $table->text('routeparams')->nullable();
-                $table->string('icon');
+                $table->string('icon')->nullable();
                 $table->text('visible_conditions')->nullable();
                 $table->text('active_conditions')->nullable();
                 $table->integer('parent');

@@ -30,7 +30,7 @@ class MenuItemController extends \App\Http\Controllers\Controller
         $menu_header = MenuHeader::find($header_id);
 
         // Get parent menu items
-        $menu_parents = MenuItem::where('parent','=',0)->orderBy('num_order','asc')->get();
+        $menu_parents = MenuItem::orderBy('num_order','asc')->get();
 
         // Get roles
         $roles = Role::orderBy('num_order','asc')->get();
@@ -59,7 +59,7 @@ class MenuItemController extends \App\Http\Controllers\Controller
         // Validation
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:200',
-            'icon' => $request->parent == 0 ? 'required|max:200' : '',
+            'icon' => 'required|max:200',
             'active_conditions' => 'required',
             'parent' => 'required',
         ]);
@@ -126,7 +126,7 @@ class MenuItemController extends \App\Http\Controllers\Controller
         $menu_header = MenuHeader::find($header_id);
 
         // Get parent menu items
-        $menu_parents = MenuItem::where('parent','=',0)->orderBy('num_order','asc')->get();
+        $menu_parents = MenuItem::orderBy('num_order','asc')->get();
 
         // Get roles
         $roles = Role::orderBy('num_order','asc')->get();
@@ -156,7 +156,7 @@ class MenuItemController extends \App\Http\Controllers\Controller
         // Validation
         $validator = Validator::make($request->all(), [
             'name' => 'required|max:200',
-            'icon' => $request->parent == 0 ? 'required|max:200' : '',
+            'icon' => 'required|max:200',
             'active_conditions' => 'required',
             'parent' => 'required',
         ]);

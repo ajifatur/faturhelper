@@ -164,7 +164,10 @@
                             <select name="parent" class="form-select form-select-sm {{ $errors->has('parent') ? 'border-danger' : '' }}">
                                 <option value="0">Tidak Ada</option>
                                 @foreach($menu_parents as $menu_parent)
-                                <option value="{{ $menu_parent->id }}" {{ old('parent') == $menu_parent->id ? 'selected' : '' }}>{{ $menu_parent->name }}</option>
+                                <option value="{{ $menu_parent->id }}" {{ old('parent') == $menu_parent->id ? 'selected' : '' }}>
+                                    {{ ($menu_parent->menu_parent ? $menu_parent->menu_parent->name.' - ' : '') }}
+                                    {{ $menu_parent->name }}
+                                </option>
                                 @endforeach
                             </select>
                             @if($errors->has('parent'))

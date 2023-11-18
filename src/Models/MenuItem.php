@@ -24,4 +24,12 @@ class MenuItem extends Model
     protected $fillable = [
         'name', 'route', 'routeparams', 'icon', 'visible_conditions', 'active_conditions', 'parent', 'num_order'
     ];
+
+    /**
+     * Get the menu parent.
+     */
+    public function menu_parent()
+    {
+        return $this->hasOne(MenuItem::class, 'id', 'parent');
+    }
 }

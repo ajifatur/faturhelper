@@ -192,12 +192,30 @@ if(!function_exists('menu')) {
                             $subitems = [];
                             if(count($menusubitems) > 0) {
                                 foreach($menusubitems as $menusubitem) {
+                                    // Get menu subitems level 2
+                                    $menusubitems_level_2 = $menuheader->items()->where('parent','=',$menusubitem->id)->orderBy('num_order','asc')->get();
+                                    $subitems_level_2 = [];
+                                    if(count($menusubitems_level_2) > 0) {
+                                        foreach($menusubitems_level_2 as $menusubitem_level_2) {
+                                            // Push to array
+                                            array_push($subitems_level_2, [
+                                                'name' => $menusubitem_level_2->name,
+                                                'route' => $menusubitem_level_2->route != '' ? $menusubitem_level_2->routeparams != '' ? route($menusubitem_level_2->route, json_decode($menusubitem_level_2->routeparams, true)) : route($menusubitem_level_2->route) : '',
+                                                'icon' => $menusubitem_level_2->icon,
+                                                'visible_conditions' => $menusubitem_level_2->visible_conditions,
+                                                'active_conditions' => $menusubitem_level_2->active_conditions
+                                            ]);
+                                        }
+                                    }
+
                                     // Push to array
                                     array_push($subitems, [
                                         'name' => $menusubitem->name,
                                         'route' => $menusubitem->route != '' ? $menusubitem->routeparams != '' ? route($menusubitem->route, json_decode($menusubitem->routeparams, true)) : route($menusubitem->route) : '',
+                                        'icon' => $menusubitem->icon,
                                         'visible_conditions' => $menusubitem->visible_conditions,
                                         'active_conditions' => $menusubitem->active_conditions,
+                                        'children' => $subitems_level_2
                                     ]);
                                 }
                             }

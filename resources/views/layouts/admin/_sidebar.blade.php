@@ -21,8 +21,29 @@
 									<i class="align-middle {{ $item['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $item['name'] }}</span>
 								</a>
 								<ul id="sidebar-subitem-{{ $key }}-{{ $key2 }}" class="sidebar-dropdown list-unstyled collapse {{ eval_sidebar($item['active_conditions'], 'show') }}" data-bs-parent="#sidebar">
-									@foreach($item['children'] as $subitem)
-									<li class="sidebar-item {{ eval_sidebar($subitem['active_conditions'], 'active') }}"><a class="sidebar-link" href="{{ $subitem['route'] }}">{{ $subitem['name'] }}</a></li>
+									@foreach($item['children'] as $key3=>$subitem)
+										@if(count($subitem['children']) > 0)
+											<li class="sidebar-item {{ eval_sidebar($subitem['active_conditions'], 'active') }}">
+												<a data-bs-target="#sidebar-subitem-2-{{ $key2 }}-{{ $key3 }}" data-bs-toggle="collapse" class="sidebar-link {{ eval_sidebar($subitem['active_conditions'], '', 'collapsed') }}">
+													<i class="align-middle {{ $subitem['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $subitem['name'] }}</span>
+												</a>
+												<ul id="sidebar-subitem-2-{{ $key2 }}-{{ $key3 }}" class="sidebar-dropdown list-unstyled collapse {{ eval_sidebar($subitem['active_conditions'], 'show') }}">
+													@foreach($subitem['children'] as $subitem_level_2)
+														<li class="sidebar-item {{ eval_sidebar($subitem_level_2['active_conditions'], 'active') }}">
+															<a class="sidebar-link" href="{{ $subitem_level_2['route'] }}">
+																<i class="align-middle {{ $subitem_level_2['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $subitem_level_2['name'] }}</span>
+															</a>
+														</li>
+													@endforeach
+												</ul>
+											</li>
+										@else
+											<li class="sidebar-item {{ eval_sidebar($subitem['active_conditions'], 'active') }}">
+												<a class="sidebar-link" href="{{ $subitem['route'] }}">
+													<i class="align-middle {{ $subitem['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $subitem['name'] }}</span>
+												</a>
+											</li>
+										@endif
 									@endforeach
 								</ul>
 							</li>
