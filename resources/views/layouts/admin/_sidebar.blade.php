@@ -28,12 +28,29 @@
 													<i class="align-middle {{ $subitem['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $subitem['name'] }}</span>
 												</a>
 												<ul id="sidebar-subitem-2-{{ $key2 }}-{{ $key3 }}" class="sidebar-dropdown list-unstyled collapse {{ eval_sidebar($subitem['active_conditions'], 'show') }}">
-													@foreach($subitem['children'] as $subitem_level_2)
-														<li class="sidebar-item {{ eval_sidebar($subitem_level_2['active_conditions'], 'active') }}">
-															<a class="sidebar-link" href="{{ $subitem_level_2['route'] }}">
-																<i class="align-middle {{ $subitem_level_2['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $subitem_level_2['name'] }}</span>
-															</a>
-														</li>
+													@foreach($subitem['children'] as $key4=>$subitem_level_2)
+														@if(count($subitem_level_2['children']) > 0)
+															<li class="sidebar-item {{ eval_sidebar($subitem_level_2['active_conditions'], 'active') }}">
+																<a data-bs-target="#sidebar-subitem-3-{{ $key3 }}-{{ $key4 }}" data-bs-toggle="collapse" class="sidebar-link {{ eval_sidebar($subitem_level_2['active_conditions'], '', 'collapsed') }}">
+																	<i class="align-middle {{ $subitem_level_2['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $subitem_level_2['name'] }}</span>
+																</a>
+																<ul id="sidebar-subitem-3-{{ $key3 }}-{{ $key4 }}" class="sidebar-dropdown list-unstyled collapse {{ eval_sidebar($subitem_level_2['active_conditions'], 'show') }}">
+																@foreach($subitem_level_2['children'] as $subitem_level_3)
+																	<li class="sidebar-item {{ eval_sidebar($subitem_level_3['active_conditions'], 'active') }}">
+																		<a class="sidebar-link" href="{{ $subitem_level_3['route'] }}">
+																			<i class="align-middle {{ $subitem_level_3['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $subitem_level_3['name'] }}</span>
+																		</a>
+																	</li>
+																@endforeach
+																</ul>
+															</li>
+														@else
+															<li class="sidebar-item {{ eval_sidebar($subitem_level_2['active_conditions'], 'active') }}">
+																<a class="sidebar-link" href="{{ $subitem_level_2['route'] }}">
+																	<i class="align-middle {{ $subitem_level_2['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $subitem_level_2['name'] }}</span>
+																</a>
+															</li>
+														@endif
 													@endforeach
 												</ul>
 											</li>

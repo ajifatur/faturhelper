@@ -204,6 +204,7 @@
         valueProp: "name",
         nameProp: "name"
     });
+    Spandiv.Select2("select[name=parent]");
 
     // Change Bootstrap Icons
     $(document).on("change", "select[name=icon]", function() {
