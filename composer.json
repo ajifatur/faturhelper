@@ -19,6 +19,6 @@
         "laravel/socialite": "^5.2",
         "rap2hpoutre/laravel-log-viewer": "^2.0",
         "stevebauman/location": "^6.3",
-        "yajra/laravel-datatables-oracle": "~9.0"
+        "yajra/laravel-datatables-oracle": "^10.0"
     }
 }
