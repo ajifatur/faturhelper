@@ -41,6 +41,7 @@
                                 <th width="80">Waktu</th>
                                 <th width="150">Pengguna</th>
                                 <th>URL</th>
+                                <th width="80">Route</th>
                                 <th width="70">Method</th>
                                 <th width="80">IP Address</th>
                             </tr>
@@ -70,6 +71,7 @@
             {data: 'datetime', name: 'datetime'},
             {data: 'user', name: 'user'},
             {data: 'url', name: 'url'},
+            {data: 'route', name: 'route'},
             {data: 'method', name: 'method'},
             {data: 'ip', name: 'ip'}
         ],

@@ -129,6 +129,11 @@ class LogController extends \App\Http\Controllers\Controller
                         </span>
                     @endif
                 ')
+                ->addColumn('route', '
+                    @if(isset($route))
+                        {{ $route }}
+                    @endif
+                ')
                 ->editColumn('method', '
                     @if(isset($ajax) && $ajax == true)
                         {{ $method }} (AJAX)
@@ -136,7 +141,7 @@ class LogController extends \App\Http\Controllers\Controller
                         {{ $method }}
                     @endif
                 ')
-                ->rawColumns(['user', 'datetime', 'url', 'method'])
+                ->rawColumns(['user', 'datetime', 'url', 'route', 'method'])
                 ->make(true);
         }
 

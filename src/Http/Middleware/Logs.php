@@ -5,6 +5,7 @@ namespace Ajifatur\FaturHelper\Http\Middleware;
 use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Route;
 use Ajifatur\FaturHelper\Models\User;
 
 class Logs
@@ -37,7 +38,9 @@ class Logs
                 'url' => $request->fullUrl(),
                 'method' => $request->method(),
                 'ajax' => $request->ajax(),
-                'ip' => $request->ip()
+                'ip' => $request->ip(),
+                'route' => Route::currentRouteName(),
+                'route_params' => $request->query()
             ])
         );
 

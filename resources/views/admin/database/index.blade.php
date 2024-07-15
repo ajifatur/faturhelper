@@ -13,6 +13,18 @@
 <div class="row">
     <div class="col-12">
 		<div class="card">
+            <div class="card-header d-sm-flex justify-content-end align-items-center">
+                <div></div>
+                <div class="ms-sm-2 ms-0">
+                    <select name="connection" class="form-select form-select-sm">
+                        <option value="" disabled>--Pilih Database--</option>
+                        @foreach($databases as $key=>$database)
+                        <option value="{{ $key }}" {{ $key == $connection ? 'selected' : '' }}>{{ $database }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
+            <hr class="my-0">
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-sm table-bordered">
@@ -92,6 +104,12 @@
             $(this).find("i").addClass("bi-eye-slash").removeClass("bi-eye");
             $(this).find("span").text("Sembunyikan Field");
         }
+    });
+    
+    // Change the connection
+    $(document).on("change", ".card-header select[name=connection]", function() {
+		var connection = $(this).val();
+		window.location.href = Spandiv.URL("{{ route('admin.database.index') }}", {connection: connection});
     });
 </script>
 

@@ -22,7 +22,9 @@
  * @method string          browser_info()
  * @method string          platform_info()
  * @method string          location_info(string $ip)
+ * @method string          title_name(string $name, string $front_title, string $behind_title)
  * @method string          counted(int $number)
+ * @method string          int_to_roman(int $number)
  * @method int             mround(int $number, int $to)
  */
 
@@ -585,6 +587,20 @@ if(!function_exists('location_info')) {
 }
 
 /**
+ * Name with title.
+ *
+ * @param  string $name
+ * @param  string $front_title
+ * @param  string $behind_title
+ * @return string
+ */
+if(!function_exists('title_name')) {
+    function title_name($name, $front_title = '', $behind_title = '') {
+        return ($front_title != '' ? $front_title . ' ' : $front_title) . $name . ($behind_title != '' ? ', ' . $behind_title : $behind_title);
+    }
+}
+
+/**
  * Get the counted from the number.
  *
  * @param  int $number
@@ -627,6 +643,43 @@ if(!function_exists('counted')) {
 }
 
 /**
+ * Integer to Roman Number
+ *
+ * @param  int $number
+ * @return string
+ */
+if(!function_exists('int_to_roman')) {
+    function int_to_roman($num) { 
+        $mapping = [ 
+            1000 => 'M', 
+            900 => 'CM', 
+            500 => 'D', 
+            400 => 'CD', 
+            100 => 'C', 
+            90 => 'XC', 
+            50 => 'L', 
+            40 => 'XL', 
+            10 => 'X', 
+            9 => 'IX', 
+            5 => 'V', 
+            4 => 'IV', 
+            1 => 'I'
+        ]; 
+    
+        $result = ''; 
+    
+        foreach ($mapping as $value => $roman) { 
+            while ($num >= $value) { 
+                $result .= $roman; 
+                $num -= $value; 
+            } 
+        } 
+    
+        return $result;
+    }
+}
+
+/**
  * Mround like Excel function.
  *
  * @param  int $number
@@ -636,19 +689,5 @@ if(!function_exists('counted')) {
 if(!function_exists('mround')) {
     function mround($number, $to) {
         return round($number / $to, 0) * $to;
-    }
-}
-
-/**
- * Name with title.
- *
- * @param  string $name
- * @param  string $front_title
- * @param  string $behind_title
- * @return string
- */
-if(!function_exists('title_name')) {
-    function title_name($name, $front_title = '', $behind_title = '') {
-        return ($front_title != '' ? $front_title . ' ' : $front_title) . $name . ($behind_title != '' ? ', ' . $behind_title : $behind_title);
     }
 }
