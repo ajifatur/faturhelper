@@ -32,6 +32,7 @@
                             <tr>
                                 <th width="30"><input type="checkbox" class="form-check-input checkbox-all"></th>
                                 <th>Akses</th>
+                                <th width="80">Status</th>
                                 @foreach($roles as $role)
                                 <th width="50" class="small">
                                     {{ $role->name }}
@@ -52,6 +53,7 @@
                                         <br>
                                         <span class="small text-muted">{{ $permission->code }}</span>
                                     </td>
+                                    <td><span class="badge {{ $permission->isAvailable ? 'bg-success' : 'bg-danger' }}">{{ $permission->isAvailable ? 'Tersedia' : 'Tidak Tersedia' }}</span></td>
                                     @foreach($roles as $role)
                                     <td align="center">
                                         <span class="d-none">{{ $permission->num_order }}</span>

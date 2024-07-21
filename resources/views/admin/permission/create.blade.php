@@ -25,7 +25,14 @@
                     <div class="row mb-3">
                         <label class="col-lg-2 col-md-3 col-form-label">Kode <span class="text-danger">*</span></label>
                         <div class="col-lg-10 col-md-9">
-                            <input type="text" name="code" class="form-control form-control-sm {{ $errors->has('code') ? 'border-danger' : '' }}" value="{{ old('code') }}">
+                            <select name="code" class="form-select form-select-sm {{ $errors->has('code') ? 'border-danger' : '' }}">
+                                <option value="" disabled selected>--Pilih--</option>
+                                @foreach($routes as $route)
+                                    @if($route != null)
+                                    <option value="{{ $route['actionName'] }}" {{ old('code') == $route['actionName'] ? 'selected' : '' }}>{{ $route['actionName'] }} - {{ $route['method'] }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
                             @if($errors->has('code'))
                             <div class="small text-danger">{{ $errors->first('code') }}</div>
                             @endif
@@ -44,5 +51,14 @@
         </div>
 	</div>
 </div>
+
+@endsection
+
+@section('js')
+
+<script>
+    // Select2
+    Spandiv.Select2("select[name=code]");
+</script>
 
 @endsection

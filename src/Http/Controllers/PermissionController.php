@@ -4,6 +4,7 @@ namespace Ajifatur\FaturHelper\Http\Controllers;
 
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Ajifatur\FaturHelper\Models\Permission;
@@ -28,6 +29,30 @@ class PermissionController extends \App\Http\Controllers\Controller
         else
             $permissions = Permission::where('default','=',0)->orderBy('num_order','asc')->get();
 
+        // Get routes
+        $routes = collect(Route::getRoutes())->map(function($route) use($request) {
+            if(is_int(strpos($route->getActionName(), ($request->query('default') == 1 ? 'Ajifatur\FaturHelper\Http\Controllers' : 'App\Http\Controllers')))) {
+                return [
+                    'actionName' => str_replace('@','::',$route->getActionName()),
+                ];
+            }
+        });
+
+        // Push to codes
+        $codes = [];
+        foreach($routes as $route) {
+            if($route != null) {
+                if($request->query('default') == 1)
+                    array_push($codes, substr($route['actionName'],1,strlen($route['actionName'])-1));
+                else
+                    array_push($codes, $route['actionName']);
+            }
+        }
+
+        foreach($permissions as $key=>$permission) {
+            $permissions[$key]->isAvailable = in_array($permission->code, $codes);
+        }
+
         // Get roles
         $roles = Role::orderBy('num_order','asc')->get();
 
@@ -48,8 +73,20 @@ class PermissionController extends \App\Http\Controllers\Controller
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 
+        // Get routes
+        $routes = collect(Route::getRoutes())->map(function($route) {
+            if(is_int(strpos($route->getActionName(), 'App\Http\Controllers'))) {
+                return [
+                    'method' => $route->methods()[0],
+                    'actionName' => str_replace('@','::',$route->getActionName()),
+                ];
+            }
+        });
+
         // View
-        return view('faturhelper::admin/permission/create');
+        return view('faturhelper::admin/permission/create', [
+            'routes' => $routes
+        ]);
     }
 
     /**
@@ -102,6 +139,16 @@ class PermissionController extends \App\Http\Controllers\Controller
         // Get the permission
         $permission = Permission::findOrFail($id);
 
+        // Get routes
+        $routes = collect(Route::getRoutes())->map(function($route) {
+            if(is_int(strpos($route->getActionName(), 'App\Http\Controllers'))) {
+                return [
+                    'method' => $route->methods()[0],
+                    'actionName' => str_replace('@','::',$route->getActionName()),
+                ];
+            }
+        });
+
         // Check permission whether is default
         if($permission->default === 1) {
             // Redirect
@@ -110,7 +157,8 @@ class PermissionController extends \App\Http\Controllers\Controller
 
         // View
         return view('faturhelper::admin/permission/edit', [
-            'permission' => $permission
+            'permission' => $permission,
+            'routes' => $routes
         ]);
     }
 
