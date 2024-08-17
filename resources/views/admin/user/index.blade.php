@@ -72,6 +72,9 @@
                                 <td><span class="badge {{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">{{ status($user->status) }}</span></td>
                                 <td align="center">
                                     <div class="btn-group">
+                                        @if(session()->exists('user') && (session('user') != $user->id && Auth::user()->id != $user->id))
+                                        <a href="#" class="btn btn-sm btn-info btn-camouflage" data-id="{{ $user->id }}" data-bs-toggle="tooltip" title="Kamuflase"><i class="bi-person-x"></i></a>
+                                        @endif
                                         <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" title="Edit"><i class="bi-pencil"></i></a>
                                         <a href="#" class="btn btn-sm btn-danger btn-delete" data-id="{{ $user->id }}" data-bs-toggle="tooltip" title="Hapus"><i class="bi-trash"></i></a>
                                     </div>
@@ -85,6 +88,11 @@
 		</div>
 	</div>
 </div>
+
+<form class="form-camouflage d-none" method="post" action="{{ route('admin.camouflage.login') }}">
+    @csrf
+    <input type="hidden" name="id">
+</form>
 
 <form class="form-delete d-none" method="post" action="{{ route('admin.user.delete') }}">
     @csrf
@@ -105,6 +113,13 @@
     Spandiv.DataTable("#datatable", {
         buttons: true,
         deleteBulk: true
+    });
+
+    // Button Camouflage
+    $(document).on("click", ".btn-camouflage", function(e) {
+        e.preventDefault();
+        $(".form-camouflage").find("input[name=id]").val($(this).data("id"));
+        $(".form-camouflage").submit();
     });
 
     // Button Delete

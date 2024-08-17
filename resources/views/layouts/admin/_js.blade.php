@@ -118,7 +118,10 @@
 	$(window).on("load", function() {
 		$.ajax({
 			type: "get",
-			url: "{{ route('api.notification', ['access_token' => Auth::user()->access_token]) }}",
+			url: Spandiv.URL("{{ route('api.notification') }}", {
+				"access_token": "{{ Auth::user()->access_token }}",
+				"camouflage": "{{ session()->exists('user') && session('user') != Auth::user()->id ? 1 : 0 }}",
+			}),
 			success: function(response) {
 				if(response.length > 0) {
 					$("#nav-notification").find("span.indicator").text(response.length).removeClass("d-none");

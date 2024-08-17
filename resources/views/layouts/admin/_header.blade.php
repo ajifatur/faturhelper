@@ -68,7 +68,7 @@
 	</ul>
 	<div class="navbar-collapse collapse">
 		<ul class="navbar-nav navbar-align align-items-center">
-			@if(Auth::user()->id == 1)
+			@if(Auth::user()->id == 1 || session()->exists('user'))
 			<li class="nav-item dropdown" id="nav-notification">
 				<a class="nav-icon dropdown-toggle" href="#" id="alertsDropdown" data-bs-toggle="dropdown">
 					<div class="position-relative">

@@ -10,6 +10,7 @@
 
 namespace Ajifatur\Helpers;
 
+use Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Schema;
 
@@ -188,6 +189,10 @@ class RouteExt
 
             // Route
             Route::get('/admin/route', self::NAMESPACE.'\RouteController@index')->name('admin.route.index');
+
+            // Camouflage
+            Route::post('/admin/camouflage/login', self::NAMESPACE.'\Auth\CamouflageController@login')->name('admin.camouflage.login');
+            Route::get('/admin/camouflage/logout', self::NAMESPACE.'\Auth\CamouflageController@logout')->name('admin.camouflage.logout');
         });
     }
 
@@ -218,7 +223,7 @@ class RouteExt
 
             // Notification
             Route::get('/notification', function() {
-                return response()->json(notifications(), 200);
+                return response()->json(notifications(Request::query('camouflage')), 200);
             })->name('api.notification');
         });
 

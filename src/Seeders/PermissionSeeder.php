@@ -80,6 +80,8 @@ class PermissionSeeder extends Seeder
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::activityByURL', 'name' => 'Menampilkan Log Aktivitas Berdasarkan URL'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::authentication', 'name' => 'Menampilkan Log Autentikasi'],
             ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\LogController::visitor', 'name' => 'Menampilkan Log Visitor'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\Auth\\CamouflageController::login', 'name' => 'Melakukan Kamuflase Akun'],
+            ['code' => 'Ajifatur\\FaturHelper\\Http\\Controllers\\Auth\\CamouflageController::logout', 'name' => 'Kembali ke Akun Semula dari Kamuflase'],
         ];
 
         $role = Role::where('code', '=', 'super-admin')->first();

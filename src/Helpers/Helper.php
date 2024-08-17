@@ -29,7 +29,9 @@
  */
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
 use Ajifatur\Helpers\FileExt;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
@@ -368,19 +370,32 @@ if(!function_exists('package')) {
  * @return array
  */
 if(!function_exists('notifications')) {
-    function notifications() {
+    function notifications($camouflage = null) {
         // Set notifications
         $notifications = [];
 
         // Check whether super admin account still using default password
-        $default_password = Hash::check('password', \Ajifatur\FaturHelper\Models\User::first()->password);
-        if($default_password === true) {
+        if($camouflage != 1) {
+            $default_password = Hash::check('password', \Ajifatur\FaturHelper\Models\User::first()->password);
+            if($default_password === true) {
+                array_push($notifications, [
+                    'title' => 'Password Akun',
+                    'description' => 'Anda masih menggunakan password default. Segera ganti demi keamanan akun Anda.',
+                    'route' => route('admin.settings.password'),
+                    'icon_name' => 'bi-exclamation-circle',
+                    'icon_color' => 'text-danger',
+                ]);
+            }
+        }
+
+        // Check whether camouflage
+        if($camouflage == 1) {
             array_push($notifications, [
-                'title' => 'Password Akun',
-                'description' => 'Anda masih menggunakan password default. Segera ganti demi keamanan akun Anda.',
-                'route' => route('admin.settings.password'),
-                'icon_name' => 'bi-exclamation-circle',
-                'icon_color' => 'text-danger',
+                'title' => 'Kamuflase',
+                'description' => 'Anda sedang berkamuflase menggunakan akun lain. Klik untuk kembali ke akun semula.',
+                'route' => route('admin.camouflage.logout'),
+                'icon_name' => 'bi-person-circle',
+                'icon_color' => 'text-warning',
             ]);
         }
 
