@@ -44,6 +44,7 @@
                                 <th width="80">Route</th>
                                 <th width="70">Method</th>
                                 <th width="80">IP Address</th>
+                                <th width="40">Is Bot?</th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -73,7 +74,8 @@
             {data: 'url', name: 'url'},
             {data: 'route', name: 'route'},
             {data: 'method', name: 'method'},
-            {data: 'ip', name: 'ip'}
+            {data: 'ip', name: 'ip'},
+            {data: 'is_bot', name: 'is_bot'},
         ],
         order: [1, 'desc']
     });

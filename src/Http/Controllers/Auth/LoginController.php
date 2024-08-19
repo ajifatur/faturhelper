@@ -20,7 +20,7 @@ class LoginController extends \App\Http\Controllers\Controller
      *
      * @var string
      */
-    protected $role = 'admin';
+    // protected $role = 'admin';
 
     /**
      * Show login form.
@@ -239,7 +239,7 @@ class LoginController extends \App\Http\Controllers\Controller
         if(!$data) {
             // Save the user
             $data = new User;
-            $data->role_id = role($this->role);
+            $data->role_id = role(setting('socialite_default_role'));
             $data->name = $user->getName();
             $data->username = $user->getNickname() != null ? $user->getNickname() : $user->getEmail();
             $data->email = $user->getEmail();

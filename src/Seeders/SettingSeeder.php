@@ -43,6 +43,7 @@ class SettingSeeder extends Seeder
             ['code' => 'allow_login_by_email', 'content' => '0'],
             ['code' => 'non_admin_can_login', 'content' => '0'],
             ['code' => 'socialite', 'content' => '0'],
+            ['code' => 'socialite_default_role', 'content' => 'member'],
             ['code' => 'allow_unregistered_account', 'content' => '0'],
             ['code' => 'font_family', 'content' => 'default'],
         ];

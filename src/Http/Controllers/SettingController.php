@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Validator;
 use Ajifatur\Helpers\FileExt;
+use Ajifatur\FaturHelper\Models\Role;
 use Ajifatur\FaturHelper\Models\Setting;
 
 class SettingController extends \App\Http\Controllers\Controller
@@ -19,15 +20,19 @@ class SettingController extends \App\Http\Controllers\Controller
      */
     public function index(Request $request)
     {
-        // // Check the access
+        // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
+
+        // Get roles
+        $roles = Role::orderBy('num_order','asc')->get();
 
         // Get timezones
         $timezones = timezone_identifiers_list(2047);
 
         // View
         return view('faturhelper::admin/setting/index', [
-            'timezones' => $timezones
+            'roles' => $roles,
+            'timezones' => $timezones,
         ]);
     }
 

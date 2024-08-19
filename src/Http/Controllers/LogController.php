@@ -141,7 +141,12 @@ class LogController extends \App\Http\Controllers\Controller
                         {{ $method }}
                     @endif
                 ')
-                ->rawColumns(['user', 'datetime', 'url', 'route', 'method'])
+                ->editColumn('is_bot', '
+                    @if(isset($is_bot) && $is_bot == true)
+                        Ya
+                    @endif
+                ')
+                ->rawColumns(['user', 'datetime', 'url', 'route', 'method', 'is_bot'])
                 ->make(true);
         }
 

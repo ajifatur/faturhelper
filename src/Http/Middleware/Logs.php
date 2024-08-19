@@ -6,6 +6,7 @@ use Closure;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
+use hisorange\BrowserDetect\Parser as Browser;
 use Ajifatur\FaturHelper\Models\User;
 
 class Logs
@@ -40,7 +41,8 @@ class Logs
                 'ajax' => $request->ajax(),
                 'ip' => $request->ip(),
                 'route' => Route::currentRouteName(),
-                'route_params' => $request->query()
+                'route_params' => $request->query(),
+                'is_bot' => Browser::isBot()
             ])
         );
 

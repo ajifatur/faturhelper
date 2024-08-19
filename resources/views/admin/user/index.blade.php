@@ -72,7 +72,7 @@
                                 <td><span class="badge {{ $user->status == 1 ? 'bg-success' : 'bg-danger' }}">{{ status($user->status) }}</span></td>
                                 <td align="center">
                                     <div class="btn-group">
-                                        @if(session()->exists('user') && (session('user') != $user->id && Auth::user()->id != $user->id))
+                                        @if(((session()->exists('user') && session('user') != $user->id) || session()->exists('user') == false) && Auth::user()->id != $user->id)
                                         <a href="#" class="btn btn-sm btn-info btn-camouflage" data-id="{{ $user->id }}" data-bs-toggle="tooltip" title="Kamuflase"><i class="bi-person-x"></i></a>
                                         @endif
                                         <a href="{{ route('admin.user.edit', ['id' => $user->id]) }}" class="btn btn-sm btn-warning" data-bs-toggle="tooltip" title="Edit"><i class="bi-pencil"></i></a>

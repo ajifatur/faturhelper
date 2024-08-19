@@ -297,6 +297,22 @@
                     </div>
                     <div class="row mb-3">
                         <label class="col-lg-3 col-md-4 col-form-label">
+                            Default Role Socialite<span class="text-danger">*</span><br><code>setting('socialite_default_role')</code>
+                        </label>
+                        <div class="col-lg-9 col-md-8">
+                            @foreach($roles as $role)
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="setting[socialite_default_role]" id="socialite_default_role-{{ $role->id }}" value="{{ $role->code }}" {{ setting('socialite_default_role') == $role->code ? 'checked' : '' }}>
+                                <label class="form-check-label" for="socialite_default_role-{{ $role->id }}">{{ $role->name }}</label>
+                            </div>
+                            @endforeach
+                            @if($errors->has('setting.socialite_default_role'))
+                            <div class="small text-danger">{{ $errors->first('setting.socialite_default_role') }}</div>
+                            @endif
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <label class="col-lg-3 col-md-4 col-form-label">
                             Akun Tidak Terdaftar Bisa Login<span class="text-danger">*</span><br><code>setting('allow_unregistered_account')</code>
                         </label>
                         <div class="col-lg-9 col-md-8">
