@@ -29,10 +29,7 @@
  */
 
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Session;
-use Ajifatur\Helpers\FileExt;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
@@ -181,7 +178,7 @@ if(!function_exists('menu')) {
         $menus = [];
 
         // Get menu headers
-        $menuheaders = \Ajifatur\FaturHelper\Models\MenuHeader::orderBy('num_order','asc')->get();
+        $menuheaders = \Ajifatur\FaturHelper\Models\MenuHeader::with('items')->orderBy('num_order','asc')->get();
 
         if(count($menuheaders) > 0) {
             foreach($menuheaders as $menuheader) {
@@ -209,7 +206,7 @@ if(!function_exists('menu')) {
                                                     // Push to array
                                                     array_push($subitems_level_3, [
                                                         'name' => $menusubitem_level_3->name,
-                                                        'route' => $menusubitem_level_3->route != '' ? $menusubitem_level_3->routeparams != '' ? route($menusubitem_level_3->route, json_decode($menusubitem_level_3->routeparams, true)) : route($menusubitem_level_3->route) : '',
+                                                        'route' => $menusubitem_level_3->route != '' ? ($menusubitem_level_3->routeparams != '' ? route($menusubitem_level_3->route, json_decode($menusubitem_level_3->routeparams, true)) : route($menusubitem_level_3->route)) : '',
                                                         'icon' => $menusubitem_level_3->icon,
                                                         'visible_conditions' => $menusubitem_level_3->visible_conditions,
                                                         'active_conditions' => $menusubitem_level_3->active_conditions
@@ -220,7 +217,7 @@ if(!function_exists('menu')) {
                                             // Push to array
                                             array_push($subitems_level_2, [
                                                 'name' => $menusubitem_level_2->name,
-                                                'route' => $menusubitem_level_2->route != '' ? $menusubitem_level_2->routeparams != '' ? route($menusubitem_level_2->route, json_decode($menusubitem_level_2->routeparams, true)) : route($menusubitem_level_2->route) : '',
+                                                'route' => $menusubitem_level_2->route != '' ? ($menusubitem_level_2->routeparams != '' ? route($menusubitem_level_2->route, json_decode($menusubitem_level_2->routeparams, true)) : route($menusubitem_level_2->route)) : '',
                                                 'icon' => $menusubitem_level_2->icon,
                                                 'visible_conditions' => $menusubitem_level_2->visible_conditions,
                                                 'active_conditions' => $menusubitem_level_2->active_conditions,
@@ -232,7 +229,7 @@ if(!function_exists('menu')) {
                                     // Push to array
                                     array_push($subitems, [
                                         'name' => $menusubitem->name,
-                                        'route' => $menusubitem->route != '' ? $menusubitem->routeparams != '' ? route($menusubitem->route, json_decode($menusubitem->routeparams, true)) : route($menusubitem->route) : '',
+                                        'route' => $menusubitem->route != '' ? ($menusubitem->routeparams != '' ? route($menusubitem->route, json_decode($menusubitem->routeparams, true)) : route($menusubitem->route)) : '',
                                         'icon' => $menusubitem->icon,
                                         'visible_conditions' => $menusubitem->visible_conditions,
                                         'active_conditions' => $menusubitem->active_conditions,
@@ -244,7 +241,7 @@ if(!function_exists('menu')) {
                             // Push to array
                             array_push($items, [
                                 'name' => $menuitem->name,
-                                'route' => $menuitem->route != '' ? $menuitem->routeparams != '' ? route($menuitem->route, json_decode($menuitem->routeparams, true)) : route($menuitem->route) : '',
+                                'route' => $menuitem->route != '' ? ($menuitem->routeparams != '' ? route($menuitem->route, json_decode($menuitem->routeparams, true)) : route($menuitem->route)) : '',
                                 'icon' => $menuitem->icon,
                                 'visible_conditions' => $menuitem->visible_conditions,
                                 'active_conditions' => $menuitem->active_conditions,

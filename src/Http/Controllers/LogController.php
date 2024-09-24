@@ -80,6 +80,9 @@ class LogController extends \App\Http\Controllers\Controller
      */
     public function activity(Request $request)
     {
+		ini_set("memory_limit", "-1");
+		ini_set("max_execution_time", "-1");
+
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 
@@ -95,11 +98,19 @@ class LogController extends \App\Http\Controllers\Controller
             // DataTables
             return datatables()->of($this->toArray('info', storage_path('logs/activities-'.$year.'-'.$monthString.'.log'), $user))
                 ->addColumn('user', '
-                    @php $user = \Ajifatur\FaturHelper\Models\User::find($user_id); @endphp
-                    @if($user)
-                        <a href="{{ \Route::has(\'admin.user.detail\') ? route(\'admin.user.detail\', [\'id\' => $user->id]) : \'#\' }}" target="_blank">{{ $user->name }}</a>
-                        <br>
-                        <small>{{ $user->role ? $user->role->name : "" }}</small>
+                    @if(!isset($user_name))
+                        @php $user = \Ajifatur\FaturHelper\Models\User::find($user_id); @endphp
+                        @if($user)
+                            <a href="{{ \Route::has(\'admin.user.detail\') ? route(\'admin.user.detail\', [\'id\' => $user->id]) : \'#\' }}" target="_blank">{{ $user->name }}</a>
+                            <br>
+                            <small>{{ $user->role ? $user->role->name : "" }}</small>
+                        @endif
+                    @else
+                        @if($user_id != null)
+                            <a href="{{ \Route::has(\'admin.user.detail\') ? route(\'admin.user.detail\', [\'id\' => $user_id]) : \'#\' }}" target="_blank">{{ $user_name }}</a>
+                            <br>
+                            <small>{{ $user_role }}</small>
+                        @endif
                     @endif
                 ')
                 ->editColumn('datetime', '
@@ -282,6 +293,9 @@ class LogController extends \App\Http\Controllers\Controller
      */
     public function visitor(Request $request)
     {
+		ini_set("memory_limit", "-1");
+		ini_set("max_execution_time", "-1");
+
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 

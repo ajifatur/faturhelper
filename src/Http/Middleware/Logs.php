@@ -23,26 +23,30 @@ class Logs
     {
         // Get the user ID
         if($request->is('api/*')) {
-            $user = User::where('access_token','=',$request->get('access_token'))->first();
+            $user    = User::where('access_token','=',$request->get('access_token'))->first();
             $user_id = $user && $request->get('access_token') != null ? $user->id : null;
         }
-        else
+        else {
+            $user    = User::find(Auth::guard($guard)->check() ? $request->user()->id : null);
             $user_id = Auth::guard($guard)->check() ? $request->user()->id : null;
+        }
 
         // Save log
         Log::build([
             'driver' => 'single',
-            'path' => storage_path('logs/activities-'.date('Y').'-'.date('m').'.log'),
+            'path'   => storage_path('logs/activities-'.date('Y').'-'.date('m').'.log'),
         ])->info(
             json_encode([
-                'user_id' => $user_id,
-                'url' => $request->fullUrl(),
-                'method' => $request->method(),
-                'ajax' => $request->ajax(),
-                'ip' => $request->ip(),
-                'route' => Route::currentRouteName(),
-                'route_params' => $request->query(),
-                'is_bot' => Browser::isBot()
+                'user_id'       => $user_id,
+                'user_name'     => $user ? $user->name : '',
+                'user_role'     => $user ? $user->role->name ?? '' : '',
+                'url'           => $request->fullUrl(),
+                'method'        => $request->method(),
+                'ajax'          => $request->ajax(),
+                'ip'            => $request->ip(),
+                'route'         => Route::currentRouteName(),
+                'route_params'  => $request->query(),
+                'is_bot'        => Browser::isBot()
             ])
         );
 
