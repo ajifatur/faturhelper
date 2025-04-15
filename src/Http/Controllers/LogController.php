@@ -80,9 +80,6 @@ class LogController extends \App\Http\Controllers\Controller
      */
     public function activity(Request $request)
     {
-		ini_set("memory_limit", "-1");
-		ini_set("max_execution_time", "-1");
-
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 
@@ -94,25 +91,19 @@ class LogController extends \App\Http\Controllers\Controller
         // Set month to date('m') format
         $monthString = strlen($month) == 2 ? $month : '0'.$month;
 
-        if($request->ajax()) {
+        if ($request->ajax()) {
+            // Ambil data user yang relevan
+            $users = User::with('role')->get()->keyBy('id');
+            
             // DataTables
             return datatables()->of($this->toArray('info', storage_path('logs/activities-'.$year.'-'.$monthString.'.log'), $user))
-                ->addColumn('user', '
-                    @if(!isset($user_name))
-                        @php $user = \Ajifatur\FaturHelper\Models\User::find($user_id); @endphp
-                        @if($user)
-                            <a href="{{ \Route::has(\'admin.user.detail\') ? route(\'admin.user.detail\', [\'id\' => $user->id]) : \'#\' }}" target="_blank">{{ $user->name }}</a>
-                            <br>
-                            <small>{{ $user->role ? $user->role->name : "" }}</small>
-                        @endif
-                    @else
-                        @if($user_id != null)
-                            <a href="{{ \Route::has(\'admin.user.detail\') ? route(\'admin.user.detail\', [\'id\' => $user_id]) : \'#\' }}" target="_blank">{{ $user_name }}</a>
-                            <br>
-                            <small>{{ $user_role }}</small>
-                        @endif
-                    @endif
-                ')
+                ->addColumn('user', function($log) use ($users) {
+                    $user = $users->get($log['user_id']);
+                    if ($user) {
+                        return '<span class="text-primary">' . $user->name . '</span><br><small>' . ($user->role?->name ?? "") . '</small>';
+                    }
+                    return '';
+                })
                 ->editColumn('datetime', '
                     <span class="d-none">{{ $datetime }}</span>
                     {{ date("d/m/Y", strtotime($datetime)) }}
@@ -293,9 +284,6 @@ class LogController extends \App\Http\Controllers\Controller
      */
     public function visitor(Request $request)
     {
-		ini_set("memory_limit", "-1");
-		ini_set("max_execution_time", "-1");
-
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 
