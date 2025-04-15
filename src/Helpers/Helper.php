@@ -29,7 +29,10 @@
  */
 
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Session;
+use Ajifatur\Helpers\FileExt;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Exception\ClientException;
@@ -45,27 +48,36 @@ use Stevebauman\Location\Facades\Location;
  * @return bool|void
  */
 if(!function_exists('has_access')) {
-    function has_access($permission_code, $role, $isAbort = true) {
-        // Get the permission
-        $permission = \Ajifatur\FaturHelper\Models\Permission::where('code','=',$permission_code)->first();
+    function has_access($permission_code, $role = null, $isAbort = true) {
+        static $permissions = null;
 
-        // If the permission is not exist
-        if(!$permission) {
-            if($isAbort) abort(403);
-            else return false;
+        if(is_null($role)) {
+            $role = session('role');
         }
 
-        // Check whether has role session
-        if(session()->has('role')) $role = session('role');
+        if(is_null($role)) {
+            if($isAbort) abort(403);
+            return false;
+        }
 
-        // Check role permission
-        if(in_array($role, $permission->roles()->pluck('role_id')->toArray())) {
+        if(is_null($permissions)) {
+            $permissions = \Ajifatur\FaturHelper\Models\Permission::with('roles')->get()->keyBy('code');
+        }
+
+        if(!$permissions->has($permission_code)) {
+            if($isAbort) abort(403);
+            return false;
+        }
+
+        $permission = $permissions->get($permission_code);
+        $allowedRoles = $permission->roles()->pluck('role_id')->map(fn($id) => (string)$id)->toArray();
+
+        if(in_array((string)$role, $allowedRoles)) {
             return true;
         }
-        else {
-            if($isAbort) abort(403);
-            else return false;
-        }
+
+        if($isAbort) abort(403);
+        return false;
     }
 }
 
@@ -112,14 +124,18 @@ if(!function_exists('fetch')) {
  */
 if(!function_exists('role')) {
     function role($key) {
-        // Get the role by ID
-        if(is_int($key)) {
-            $role = \Ajifatur\FaturHelper\Models\Role::find($key);
-            return $role ? $role->name : null;
+        static $roles = null;
+
+        // Load all roles once
+        if(is_null($roles)) {
+            $roles = \Ajifatur\FaturHelper\Models\Role::all()->keyBy('id');
         }
-        // Get the role by key
+
+        if(is_int($key)) {
+            return $roles->get($key)?->name ?? null;
+        }
         elseif(is_string($key)) {
-            $role = \Ajifatur\FaturHelper\Models\Role::where('code','=',$key)->first();
+            $role = $roles->firstWhere('code', $key);
             return $role ? $role->id : null;
         }
         else return null;
@@ -134,9 +150,15 @@ if(!function_exists('role')) {
  */
 if(!function_exists('setting')) {
     function setting($key) {
-        // Get the setting by key
-        $setting = \Ajifatur\FaturHelper\Models\Setting::where('code','=',$key)->first();
-        return $setting ? $setting->content : '';
+        static $settings = null;
+
+        // Load all settings once
+        if(is_null($settings)) {
+            $settings = \Ajifatur\FaturHelper\Models\Setting::pluck('content', 'code');
+        }
+
+        // Return value by key
+        return $settings->get($key, '');
     }
 }
 
@@ -148,9 +170,15 @@ if(!function_exists('setting')) {
  */
 if(!function_exists('meta')) {
     function meta($key) {
-        // Get the meta by key
-        $meta = \Ajifatur\FaturHelper\Models\Meta::where('code','=',$key)->first();
-        return $meta ? $meta->content : '';
+        static $metas = null;
+
+        // Load all metas once
+        if(is_null($metas)) {
+            $metas = \Ajifatur\FaturHelper\Models\Meta::pluck('content', 'code');
+        }
+
+        // Return value by key
+        return $metas->get($key, '');
     }
 }
 
@@ -178,87 +206,42 @@ if(!function_exists('menu')) {
         $menus = [];
 
         // Get menu headers
-        $menuheaders = \Ajifatur\FaturHelper\Models\MenuHeader::with('items')->orderBy('num_order','asc')->get();
+        $menuheaders = \Ajifatur\FaturHelper\Models\MenuHeader::with(['items' => function($query) {
+            $query->orderBy('num_order');
+        }])->orderBy('num_order')->get();
 
-        if(count($menuheaders) > 0) {
-            foreach($menuheaders as $menuheader) {
-                // Get menu items
-                $menuitems = $menuheader->items()->where('parent','=',0)->orderBy('num_order','asc')->get();
-                $items = [];
-                if(count($menuitems) > 0) {
-                    foreach($menuitems as $menuitem) {
-                        if($menuitem->visible_conditions == '' || ($menuitem->visible_conditions != '' && (bool)eval_sidebar($menuitem->visible_conditions, true, false))) {
-                            // Get menu subitems
-                            $menusubitems = $menuheader->items()->where('parent','=',$menuitem->id)->orderBy('num_order','asc')->get();
-                            $subitems = [];
-                            if(count($menusubitems) > 0) {
-                                foreach($menusubitems as $menusubitem) {
-                                    // Get menu subitems level 2
-                                    $menusubitems_level_2 = $menuheader->items()->where('parent','=',$menusubitem->id)->orderBy('num_order','asc')->get();
-                                    $subitems_level_2 = [];
-                                    if(count($menusubitems_level_2) > 0) {
-                                        foreach($menusubitems_level_2 as $menusubitem_level_2) {
-                                            // Get menu subitems level 3
-                                            $menusubitems_level_3 = $menuheader->items()->where('parent','=',$menusubitem_level_2->id)->orderBy('num_order','asc')->get();
-                                            $subitems_level_3 = [];
-                                            if(count($menusubitems_level_3) > 0) {
-                                                foreach($menusubitems_level_3 as $menusubitem_level_3) {
-                                                    // Push to array
-                                                    array_push($subitems_level_3, [
-                                                        'name' => $menusubitem_level_3->name,
-                                                        'route' => $menusubitem_level_3->route != '' ? ($menusubitem_level_3->routeparams != '' ? route($menusubitem_level_3->route, json_decode($menusubitem_level_3->routeparams, true)) : route($menusubitem_level_3->route)) : '',
-                                                        'icon' => $menusubitem_level_3->icon,
-                                                        'visible_conditions' => $menusubitem_level_3->visible_conditions,
-                                                        'active_conditions' => $menusubitem_level_3->active_conditions
-                                                    ]);
-                                                }
-                                            }
-
-                                            // Push to array
-                                            array_push($subitems_level_2, [
-                                                'name' => $menusubitem_level_2->name,
-                                                'route' => $menusubitem_level_2->route != '' ? ($menusubitem_level_2->routeparams != '' ? route($menusubitem_level_2->route, json_decode($menusubitem_level_2->routeparams, true)) : route($menusubitem_level_2->route)) : '',
-                                                'icon' => $menusubitem_level_2->icon,
-                                                'visible_conditions' => $menusubitem_level_2->visible_conditions,
-                                                'active_conditions' => $menusubitem_level_2->active_conditions,
-                                                'children' => $subitems_level_3
-                                            ]);
-                                        }
-                                    }
-
-                                    // Push to array
-                                    array_push($subitems, [
-                                        'name' => $menusubitem->name,
-                                        'route' => $menusubitem->route != '' ? ($menusubitem->routeparams != '' ? route($menusubitem->route, json_decode($menusubitem->routeparams, true)) : route($menusubitem->route)) : '',
-                                        'icon' => $menusubitem->icon,
-                                        'visible_conditions' => $menusubitem->visible_conditions,
-                                        'active_conditions' => $menusubitem->active_conditions,
-                                        'children' => $subitems_level_2
-                                    ]);
-                                }
-                            }
-
-                            // Push to array
-                            array_push($items, [
-                                'name' => $menuitem->name,
-                                'route' => $menuitem->route != '' ? ($menuitem->routeparams != '' ? route($menuitem->route, json_decode($menuitem->routeparams, true)) : route($menuitem->route)) : '',
-                                'icon' => $menuitem->icon,
-                                'visible_conditions' => $menuitem->visible_conditions,
-                                'active_conditions' => $menuitem->active_conditions,
-                                'children' => $subitems
-                            ]);
-                        }
-                    }
-                }
-
-                // Push to array
-                array_push($menus, [
-                    'header' => $menuheader->name,
-                    'items' => $items
-                ]);
-            }
+        foreach($menuheaders as $menuheader) {
+            $allItems = $menuheader->items;
+            
+            // Group by parent
+            $grouped = $allItems->groupBy('parent');
+            
+            // Fungsi rekursif untuk susun children
+            $buildTree = function($parentId = 0) use (&$buildTree, $grouped) {
+                $items = $grouped[$parentId] ?? collect();
+                return $items->filter(function($item) {
+                    return $item->visible_conditions == '' || (bool)eval_sidebar($item->visible_conditions, true, false);
+                })->map(function($item) use (&$buildTree) {
+                    return [
+                        'name' => $item->name,
+                        'route' => $item->route != '' ? ($item->routeparams != '' ? route($item->route, json_decode($item->routeparams, true)) : route($item->route)) : '',
+                        'icon' => $item->icon,
+                        'visible_conditions' => $item->visible_conditions,
+                        'active_conditions' => $item->active_conditions,
+                        'children' => $buildTree($item->id)
+                    ];
+                })->values()->toArray();
+            };
+        
+            // Build tree dari parent = 0
+            $items = $buildTree(0);
+        
+            $menus[] = [
+                'header' => $menuheader->name,
+                'items' => $items
+            ];
         }
-
+        
         // Return
         return $menus;
     }
