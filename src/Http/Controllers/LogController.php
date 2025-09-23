@@ -22,50 +22,77 @@ class LogController extends \App\Http\Controllers\Controller
      * @param  int     $user
      * @return array
      */
-    public function toArray($type, $file, $user = 0)
+    public function toArray($type, $file, $user = 0, $range = 'today')
     {
-        $logs = [];
+        $logs    = [];
 
-        if(File::exists($file)) {
-            // Get log
-            $contents = preg_split('/\r\n|\r|\n/', file_get_contents($file));
-            $contents = is_array($contents) ? array_filter($contents) : [];
+        // Tentukan tanggal awal & akhir
+        $today = date('Y-m-d');
+        switch ($range) {
+            case 'yesterday':
+                $dateFrom = $dateTo = date('Y-m-d', strtotime('-1 day'));
+                break;
 
-            // Get log info
-            if(count($contents) > 0) {
-                foreach($contents as $content) {
-                    $info = explode('.'.strtoupper($type).': ', trim($content));
-                    if(count($info) == 2) {
-                        $log = json_decode($info[1], true); // JSON to Array
-                        $log['datetime'] = substr($info[0],1,19); // Datetime
-                        $log['environment'] = substr($info[0],22); // Environment
+            case 'this_week':
+                $monday = date('Y-m-d', strtotime('monday this week'));
+                $sunday = date('Y-m-d', strtotime('sunday this week'));
+                $dateFrom = $monday;
+                $dateTo   = $sunday;
+                break;
 
-                        // Push to logs and URLs
-                        if($user == 0) {
-                            array_push($logs, $log);
-                            if(array_key_exists('ajax', $log) && $log['ajax'] === false)
-                                array_push($this->URLs, $log['url'].' - '.$log['method']);
+            case 'this_month':
+                $dateFrom = date('Y-m-01'); // hari pertama bulan ini
+                $dateTo   = date('Y-m-t');  // hari terakhir bulan ini
+                break;
+
+            case 'today':
+            default:
+                $dateFrom = $dateTo = $today;
+                break;
+        }
+
+        if (File::exists($file)) {
+            $handle = fopen($file, 'r');
+            if ($handle) {
+                while (($line = fgets($handle)) !== false) {
+                    $content = trim($line);
+                    $info = explode('.'.strtoupper($type).': ', $content);
+
+                    if (count($info) == 2) {
+                        $log = json_decode($info[1], true);
+                        if (!$log) continue;
+
+                        $datetime    = substr($info[0], 1, 19);
+                        $logDate     = substr($info[0], 1, 10); // YYYY-MM-DD
+                        $environment = substr($info[0], 22);
+
+                        // ✅ filter tanggal sesuai range
+                        if ($logDate < $dateFrom || $logDate > $dateTo) {
+                            continue;
                         }
-                        elseif($user == -1) {
-                            if($log['user_id'] == null) {
-                                array_push($logs, $log);
-                                if(array_key_exists('ajax', $log) && $log['ajax'] === false)
-                                    array_push($this->URLs, $log['url'].' - '.$log['method']);
+
+                        $log['datetime']    = $datetime;
+                        $log['environment'] = $environment;
+
+                        // filter user
+                        if ($user == 0 || 
+                        ($user == -1 && $log['user_id'] == null) || 
+                        ($log['user_id'] == $user)) {
+                            
+                            // exclude jika method GET + ajax true
+                            if (
+                                isset($log['method'], $log['ajax']) &&
+                                $log['method'] === 'GET' &&
+                                $log['ajax'] === true
+                            ) {
+                                continue;
                             }
-                        }
-                        else {
-                            if($log['user_id'] == $user) {
-                                array_push($logs, $log);
-                                if(array_key_exists('ajax', $log) && $log['ajax'] === false)
-                                    array_push($this->URLs, $log['url'].' - '.$log['method']);
-                            }
-                        }
 
-                        // Push to user IDs
-                        if(array_key_exists('user_id', $log) && !in_array($log['user_id'], $this->userIDs))
-                            array_push($this->userIDs, $log['user_id']);
+                            $logs[] = $log;
+                        }
                     }
                 }
+                fclose($handle);
             }
         }
 
@@ -83,20 +110,24 @@ class LogController extends \App\Http\Controllers\Controller
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 
-        // Get user, month, year
-        $user = $request->query('user') ?: 0;
+        // Get user, range, month, year
+        $user  = $request->query('user') ?: 0;
+        $range = $request->query('range') ?: 'today';
         $month = $request->query('month') ?: date('n');
-        $year = $request->query('year') ?: date('Y');
+        $year  = $request->query('year') ?: date('Y');
 
         // Set month to date('m') format
         $monthString = strlen($month) == 2 ? $month : '0'.$month;
+
+        // Get users
+        $users = User::with('role')->get();
 
         if ($request->ajax()) {
             // Ambil data user yang relevan
             $users = User::with('role')->get()->keyBy('id');
             
             // DataTables
-            return datatables()->of($this->toArray('info', storage_path('logs/activities-'.$year.'-'.$monthString.'.log'), $user))
+            return datatables()->of($this->toArray('info', storage_path('logs/activities-'.$year.'-'.$monthString.'.log'), $user, $range))
                 ->addColumn('user', function($log) use ($users) {
                     $user = $users->get($log['user_id']);
                     if ($user) {
@@ -154,9 +185,11 @@ class LogController extends \App\Http\Controllers\Controller
 
         // View
         return view('faturhelper::admin/log/activity', [
-            'user' => $user,
-            'month' => $month,
-            'year' => $year,
+            'user'   => $user,
+            'range'  => $range,
+            'month'  => $month,
+            'year'   => $year,
+            'users'  => $users,
         ]);
     }
 
@@ -201,32 +234,35 @@ class LogController extends \App\Http\Controllers\Controller
         // Check the access
         has_access(__METHOD__, Auth::user()->role_id);
 
-        // Get user, month, year
-        $user = $request->query('user') ?: 0;
+        // Get user, range, month, year
+        $user  = $request->query('user') ?: 0;
+        $range = $request->query('range') ?: 'today';
         $month = $request->query('month') ?: date('n');
-        $year = $request->query('year') ?: date('Y');
+        $year  = $request->query('year') ?: date('Y');
 
         // Set month to date('m') format
         $monthString = strlen($month) == 2 ? $month : '0'.$month;
 
+        // Get users
+        $users = User::with('role')->get();
+
         if($request->ajax()) {
             // Get logs
-            $logs = $this->toArray('info', storage_path('logs/activities-'.$year.'-'.$monthString.'.log'), $user);
+            $logs = collect($this->toArray('info', storage_path('logs/activities-'.$year.'-'.$monthString.'.log'), $user, $range));
 
             // Count URLs
-            $temp = array_count_values($this->URLs);
-            array_walk($temp, function(&$value, $key) {
-                $explode = explode(" - ", $key);
-                $value = [
-                    'url' => $explode[0],
-                    'method' => $explode[1],
-                    'count' => $value
-                ];
-            });
-            $this->URLs = array_values($temp);
+            $counts = $logs
+                ->groupBy(fn($log) => $log['url'].'|'.$log['method'])
+                ->map(fn($group) => [
+                    'url'    => $group->first()['url'],
+                    'method' => $group->first()['method'],
+                    'count'  => $group->count(),
+                ])
+                ->values() // reset index
+                ->toArray();
 
             // DataTables
-            return datatables()->of($this->URLs)
+            return datatables()->of($counts)
                 ->editColumn('url', '
                     @if($method == "GET")
                         <a href="{{ $url }}" target="_blank" style="word-break: break-all;">
@@ -242,9 +278,11 @@ class LogController extends \App\Http\Controllers\Controller
 
         // View
         return view('faturhelper::admin/log/activity-by-url', [
-            'user' => $user,
-            'month' => $month,
-            'year' => $year,
+            'user'   => $user,
+            'range'  => $range,
+            'month'  => $month,
+            'year'   => $year,
+            'users'  => $users,
         ]);
     }
 

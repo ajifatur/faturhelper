@@ -12,8 +12,20 @@
 		<div class="card">
             <div class="card-header d-sm-flex justify-content-end align-items-center">
                 <div class="mb-sm-0 mb-2">
-                    <select name="user" class="form-select form-select-sm" disabled>
-                        <option>Memuat...</option>
+                    <select name="user" class="form-select form-select-sm">
+                        <option value="0">Semua Pengguna</option>
+                        <option value="-1">Guest</option>
+                        @foreach($users as $u)
+                        <option value="{{ $u->id }}" {{ $u->id == $user ? 'selected' : '' }}>{{ $u->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="ms-sm-2 ms-0 mb-sm-0 mb-2">
+                    <select name="range" class="form-select form-select-sm">
+                        <option value="today" {{ $range == 'today' ? 'selected' : '' }}>Hari Ini</option>
+                        <option value="yesterday" {{ $range == 'yesterday' ? 'selected' : '' }}>Kemarin</option>
+                        <option value="this_week" {{ $range == 'this_week' ? 'selected' : '' }}>Minggu Ini</option>
+                        <option value="this_month" {{ $range == 'this_month' ? 'selected' : '' }}>Bulan Ini</option>
                     </select>
                 </div>
                 <div class="ms-sm-2 ms-0 mb-sm-0 mb-2">
@@ -41,7 +53,7 @@
                                 <th width="80">Waktu</th>
                                 <th width="150">Pengguna</th>
                                 <th>URL</th>
-                                <th width="80">Route</th>
+                                <th>Route</th>
                                 <th width="70">Method</th>
                                 <th width="80">IP Address</th>
                                 <th width="40">Is Bot?</th>
@@ -66,7 +78,7 @@
         orderAll: true,
 		pageLength: 50,
         fixedHeader: true,
-        url: Spandiv.URL("{{ route('admin.log.activity') }}", {user: "{{ $user }}", month: "{{ $month }}", year: "{{ $year }}"}),
+        url: Spandiv.URL("{{ route('admin.log.activity') }}", {user: "{{ $user }}", range: "{{ $range }}", month: "{{ $month }}", year: "{{ $year }}"}),
         columns: [
             {data: 'environment', name: 'environment'},
             {data: 'datetime', name: 'datetime'},
@@ -80,28 +92,13 @@
         order: [1, 'desc']
     });
 
-    // Get users
-    $.ajax({
-        type: "get",
-        url: Spandiv.URL("{{ route('admin.log.activity.user') }}", {month: "{{ $month }}", year: "{{ $year }}"}),
-        success: function(response) {
-            var html = '';
-            html += '<option value="0">Semua Pengguna</option>';
-            html += '<option value="-1">Guest</option>';
-            for(var i=0; i<response.length; i++) {
-                html += '<option value="' + response[i].id + '">' + response[i].name + '</option>';
-            }
-            $("select[name=user]").html(html).removeAttr("disabled");
-            $("select[name=user]").val("{{ $user }}");
-        }
-    });
-
     // Change User, Month, Year
-    $(document).on("change", "select[name=user], select[name=month], select[name=year]", function() {
-        var user = $("select[name=user]").val();
+    $(document).on("change", "select[name=user], select[name=range], select[name=month], select[name=year]", function() {
+        var user  = $("select[name=user]").val();
+        var range = $("select[name=range]").val();
         var month = $("select[name=month]").val();
-        var year = $("select[name=year]").val();
-        window.location.href = Spandiv.URL("{{ route('admin.log.activity') }}", {user: user, month: month, year: year});
+        var year  = $("select[name=year]").val();
+        window.location.href = Spandiv.URL("{{ route('admin.log.activity') }}", {user: user, range: range, month: month, year: year});
     });
 
     // Button Read More
