@@ -30,7 +30,38 @@ class MenuItemController extends \App\Http\Controllers\Controller
         $menu_header = MenuHeader::find($header_id);
 
         // Get parent menu items
-        $menu_parents = MenuItem::orderBy('num_order','asc')->get();
+        $menu_parents = MenuItem::with([
+                'menu_parent',
+                'menu_parent.menu_parent',
+                'menu_parent.menu_parent.menu_parent'
+            ])
+            ->get()
+            ->map(function ($item) {
+                if($item->menu_parent && $item->menu_parent->menu_parent && $item->menu_parent->menu_parent->menu_parent) {
+                    $item->name      = $item->menu_parent->menu_parent->menu_parent->name . ' - ' . $item->menu_parent->menu_parent->name . ' - ' . $item->menu_parent->name . ' - ' . $item->name;
+                    $item->num_order = str_pad($item->menu_parent->menu_parent->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->menu_parent->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->num_order, 2, '0', STR_PAD_LEFT);
+                }
+                elseif($item->menu_parent && $item->menu_parent->menu_parent) {
+                    $item->name      = $item->menu_parent->menu_parent->name . ' - ' . $item->menu_parent->name . ' - ' . $item->name;
+                    $item->num_order = '99 - ' . str_pad($item->menu_parent->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->num_order, 2, '0', STR_PAD_LEFT);
+                }
+                elseif($item->menu_parent && !$item->menu_parent->menu_parent) {
+                    $item->name      = $item->menu_parent->name . ' - ' . $item->name;
+                    $item->num_order = '99 - 99 - ' . str_pad($item->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->num_order, 2, '0', STR_PAD_LEFT);
+                }
+                else {
+                    $item->num_order = '99 - 99 - 99 - ' . $item->num_order;
+                }
+
+                return $item;
+            })
+            ->sortBy('num_order');
 
         // Get roles
         $roles = Role::orderBy('num_order','asc')->get();
@@ -126,7 +157,38 @@ class MenuItemController extends \App\Http\Controllers\Controller
         $menu_header = MenuHeader::find($header_id);
 
         // Get parent menu items
-        $menu_parents = MenuItem::orderBy('num_order','asc')->get();
+        $menu_parents = MenuItem::with([
+                'menu_parent',
+                'menu_parent.menu_parent',
+                'menu_parent.menu_parent.menu_parent'
+            ])
+            ->get()
+            ->map(function ($item) {
+                if($item->menu_parent && $item->menu_parent->menu_parent && $item->menu_parent->menu_parent->menu_parent) {
+                    $item->name      = $item->menu_parent->menu_parent->menu_parent->name . ' - ' . $item->menu_parent->menu_parent->name . ' - ' . $item->menu_parent->name . ' - ' . $item->name;
+                    $item->num_order = str_pad($item->menu_parent->menu_parent->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->menu_parent->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->num_order, 2, '0', STR_PAD_LEFT);
+                }
+                elseif($item->menu_parent && $item->menu_parent->menu_parent) {
+                    $item->name      = $item->menu_parent->menu_parent->name . ' - ' . $item->menu_parent->name . ' - ' . $item->name;
+                    $item->num_order = '99 - ' . str_pad($item->menu_parent->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->num_order, 2, '0', STR_PAD_LEFT);
+                }
+                elseif($item->menu_parent && !$item->menu_parent->menu_parent) {
+                    $item->name      = $item->menu_parent->name . ' - ' . $item->name;
+                    $item->num_order = '99 - 99 - ' . str_pad($item->menu_parent->num_order, 2, '0', STR_PAD_LEFT)
+                                        . ' - ' . str_pad($item->num_order, 2, '0', STR_PAD_LEFT);
+                }
+                else {
+                    $item->num_order = '99 - 99 - 99 - ' . $item->num_order;
+                }
+
+                return $item;
+            })
+            ->sortBy('num_order');
 
         // Get roles
         $roles = Role::orderBy('num_order','asc')->get();
