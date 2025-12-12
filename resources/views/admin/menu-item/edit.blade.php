@@ -179,7 +179,6 @@
                                 <option value="0">Tidak Ada</option>
                                 @foreach($menu_parents as $menu_parent)
                                 <option value="{{ $menu_parent->id }}" {{ $menu_item->parent == $menu_parent->id ? 'selected' : '' }}>
-                                    {{ ($menu_parent->menu_parent ? $menu_parent->menu_parent->name.' - ' : '') }}
                                     {{ $menu_parent->name }}
                                 </option>
                                 @endforeach
