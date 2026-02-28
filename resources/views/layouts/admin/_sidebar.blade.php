@@ -16,18 +16,18 @@
 				@if(count($menu['items']) > 0)
 					@foreach($menu['items'] as $key2=>$item)
 						@if(count($item['children']) > 0)
-							<li class="sidebar-item {{ eval_sidebar($item['active_conditions'], 'active') }}">
+							<li class="sidebar-item {{ $item['active'] ? 'active' : '' }}">
 								<a data-bs-target="#sidebar-subitem-{{ $key }}-{{ $key2 }}" data-bs-toggle="collapse" class="sidebar-link {{ eval_sidebar($item['active_conditions'], '', 'collapsed') }}">
 									<i class="align-middle {{ $item['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $item['name'] }}</span>
 								</a>
-								<ul id="sidebar-subitem-{{ $key }}-{{ $key2 }}" class="sidebar-dropdown list-unstyled collapse {{ eval_sidebar($item['active_conditions'], 'show') }}" data-bs-parent="#sidebar">
+								<ul id="sidebar-subitem-{{ $key }}-{{ $key2 }}" class="sidebar-dropdown list-unstyled collapse {{ $item['active'] ? 'show' : '' }}" data-bs-parent="#sidebar">
 									@foreach($item['children'] as $key3=>$subitem)
 										@if(count($subitem['children']) > 0)
-											<li class="sidebar-item {{ eval_sidebar($subitem['active_conditions'], 'active') }}">
+											<li class="sidebar-item {{ $subitem['active'] ? 'active' : '' }}">
 												<a data-bs-target="#sidebar-subitem-2-{{ $key2 }}-{{ $key3 }}" data-bs-toggle="collapse" class="sidebar-link {{ eval_sidebar($subitem['active_conditions'], '', 'collapsed') }}">
 													<i class="align-middle {{ $subitem['icon'] }}" style="font-size: 1rem;"></i> <span class="align-middle">{{ $subitem['name'] }}</span>
 												</a>
-												<ul id="sidebar-subitem-2-{{ $key2 }}-{{ $key3 }}" class="sidebar-dropdown list-unstyled collapse {{ eval_sidebar($subitem['active_conditions'], 'show') }}">
+												<ul id="sidebar-subitem-2-{{ $key2 }}-{{ $key3 }}" class="sidebar-dropdown list-unstyled collapse {{ $subitem['active'] ? 'show' : '' }}">
 													@foreach($subitem['children'] as $key4=>$subitem_level_2)
 														@if(count($subitem_level_2['children']) > 0)
 															<li class="sidebar-item {{ eval_sidebar($subitem_level_2['active_conditions'], 'active') }}">

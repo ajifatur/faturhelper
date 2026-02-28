@@ -30,6 +30,7 @@
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Session;
 use Ajifatur\Helpers\FileExt;
@@ -48,27 +49,36 @@ use Stevebauman\Location\Facades\Location;
  * @return bool|void
  */
 if(!function_exists('has_access')) {
-    function has_access($permission_code, $role, $isAbort = true) {
-        // Get the permission
-        $permission = \Ajifatur\FaturHelper\Models\Permission::with('roles')->where('code', $permission_code)->first();
+    function has_access($permission_code, $role = null, $isAbort = true) {
+        static $permissions = null;
 
-        // If the permission is not exist
-        if(!$permission) {
-            if($isAbort) abort(403);
-            else return false;
+        if(is_null($role)) {
+            $role = session('role');
         }
 
-        // Check whether has role session
-        if(session()->has('role')) $role = session('role');
+        if(is_null($role)) {
+            if($isAbort) abort(403);
+            return false;
+        }
 
-        // Check role permission
-        if($permission->roles->unique('id')->pluck('id')->contains($role)) {
+        if(is_null($permissions)) {
+            $permissions = \Ajifatur\FaturHelper\Models\Permission::with('roles')->get()->keyBy('code');
+        }
+
+        if(!$permissions->has($permission_code)) {
+            if($isAbort) abort(403);
+            return false;
+        }
+
+        $permission = $permissions->get($permission_code);
+        $allowedRoles = $permission->roles()->pluck('role_id')->map(fn($id) => (string)$id)->toArray();
+
+        if(in_array((string)$role, $allowedRoles)) {
             return true;
         }
-        else {
-            if($isAbort) abort(403);
-            else return false;
-        }
+
+        if($isAbort) abort(403);
+        return false;
     }
 }
 
@@ -115,21 +125,19 @@ if(!function_exists('fetch')) {
  */
 if(!function_exists('role')) {
     function role($key) {
-        // Get the role by ID
-        if(is_int($key)) {
-            static $rolesByID = null;
-            if($rolesByID === null) {
-                $rolesByID = \Ajifatur\FaturHelper\Models\Role::pluck('name', 'id')->toArray();
-            }
-            return $rolesByID[$key] ?? null;
+        static $roles = null;
+
+        // Load all roles once
+        if(is_null($roles)) {
+            $roles = \Ajifatur\FaturHelper\Models\Role::all()->keyBy('id');
         }
-        // Get the role by key
+
+        if(is_int($key)) {
+            return $roles->get($key)?->name ?? null;
+        }
         elseif(is_string($key)) {
-            static $rolesByCode = null;
-            if($rolesByCode === null) {
-                $rolesByCode = \Ajifatur\FaturHelper\Models\Role::pluck('id', 'code')->toArray();
-            }
-            return $rolesByCode[$key] ?? null;
+            $role = $roles->firstWhere('code', $key);
+            return $role ? $role->id : null;
         }
         else return null;
     }
@@ -143,12 +151,15 @@ if(!function_exists('role')) {
  */
 if(!function_exists('setting')) {
     function setting($key) {
-        // Get the setting by key
         static $settings = null;
-        if($settings === null) {
-            $settings = \Ajifatur\FaturHelper\Models\Setting::pluck('content', 'code')->toArray();
+
+        // Load all settings once
+        if(is_null($settings)) {
+            $settings = \Ajifatur\FaturHelper\Models\Setting::pluck('content', 'code');
         }
-        return $settings[$key] ?? null;
+
+        // Return value by key
+        return $settings->get($key, '');
     }
 }
 
@@ -160,12 +171,15 @@ if(!function_exists('setting')) {
  */
 if(!function_exists('meta')) {
     function meta($key) {
-        // Get the meta by key
         static $metas = null;
-        if($metas === null) {
-            $metas = \Ajifatur\FaturHelper\Models\Meta::pluck('content', 'code')->toArray();
+
+        // Load all metas once
+        if(is_null($metas)) {
+            $metas = \Ajifatur\FaturHelper\Models\Meta::pluck('content', 'code');
         }
-        return $metas[$key] ?? null;
+
+        // Return value by key
+        return $metas->get($key, '');
     }
 }
 
@@ -197,85 +211,65 @@ if(!function_exists('menu')) {
             $query->orderBy('num_order');
         }])->orderBy('num_order')->get();
 
-        if(count($menuheaders) > 0) {
-            foreach($menuheaders as $menuheader) {
-                // Get menu items
-                $menuitems = $menuheader->items->where('parent', 0);
-                $items = [];
-                if(count($menuitems) > 0) {
-                    foreach($menuitems as $menuitem) {
-                        if($menuitem->visible_conditions == '' || ($menuitem->visible_conditions != '' && (bool)eval_sidebar($menuitem->visible_conditions, true, false))) {
-                            // Get menu subitems
-                            $menusubitems = $menuheader->items->where('parent', $menuitem->id);
-                            $subitems = [];
-                            if(count($menusubitems) > 0) {
-                                foreach($menusubitems as $menusubitem) {
-                                    // Get menu subitems level 2
-                                    $menusubitems_level_2 = $menuheader->items->where('parent',$menusubitem->id);
-                                    $subitems_level_2 = [];
-                                    if(count($menusubitems_level_2) > 0) {
-                                        foreach($menusubitems_level_2 as $menusubitem_level_2) {
-                                            // Get menu subitems level 3
-                                            $menusubitems_level_3 = $menuheader->items->where('parent', $menusubitem_level_2->id);
-                                            $subitems_level_3 = [];
-                                            if(count($menusubitems_level_3) > 0) {
-                                                foreach($menusubitems_level_3 as $menusubitem_level_3) {
-                                                    // Push to array
-                                                    array_push($subitems_level_3, [
-                                                        'name' => $menusubitem_level_3->name,
-                                                        'route' => $menusubitem_level_3->route != '' ? $menusubitem_level_3->routeparams != '' ? route($menusubitem_level_3->route, json_decode($menusubitem_level_3->routeparams, true)) : route($menusubitem_level_3->route) : '',
-                                                        'icon' => $menusubitem_level_3->icon,
-                                                        'visible_conditions' => $menusubitem_level_3->visible_conditions,
-                                                        'active_conditions' => $menusubitem_level_3->active_conditions
-                                                    ]);
-                                                }
-                                            }
+        foreach($menuheaders as $menuheader) {
+            $allItems = $menuheader->items;
+            
+            // Group by parent
+            $grouped = $allItems->groupBy('parent');
 
-                                            // Push to array
-                                            array_push($subitems_level_2, [
-                                                'name' => $menusubitem_level_2->name,
-                                                'route' => $menusubitem_level_2->route != '' ? $menusubitem_level_2->routeparams != '' ? route($menusubitem_level_2->route, json_decode($menusubitem_level_2->routeparams, true)) : route($menusubitem_level_2->route) : '',
-                                                'icon' => $menusubitem_level_2->icon,
-                                                'visible_conditions' => $menusubitem_level_2->visible_conditions,
-                                                'active_conditions' => $menusubitem_level_2->active_conditions,
-                                                'children' => $subitems_level_3
-                                            ]);
-                                        }
-                                    }
+            $buildTree = function($parentId = 0) use (&$buildTree, $grouped) {
+                $items = $grouped[$parentId] ?? collect();
 
-                                    // Push to array
-                                    array_push($subitems, [
-                                        'name' => $menusubitem->name,
-                                        'route' => $menusubitem->route != '' ? $menusubitem->routeparams != '' ? route($menusubitem->route, json_decode($menusubitem->routeparams, true)) : route($menusubitem->route) : '',
-                                        'icon' => $menusubitem->icon,
-                                        'visible_conditions' => $menusubitem->visible_conditions,
-                                        'active_conditions' => $menusubitem->active_conditions,
-                                        'children' => $subitems_level_2
-                                    ]);
-                                }
+                return $items->filter(function($item) {
+                    return $item->visible_conditions == '' 
+                        || (bool)eval_sidebar($item->visible_conditions, true, false);
+                })->map(function($item) use (&$buildTree) {
+                    // Build children dulu
+                    $children = $buildTree($item->id);
+
+                    // Cek active parent
+                    $isActive = false;
+
+                    if ($item->active_conditions != '') {
+                        $isActive = (bool) eval_sidebar($item->active_conditions, true, false);
+                    }
+
+                    // Jika parent belum aktif, cek children
+                    if (!$isActive && count($children) > 0) {
+                        foreach ($children as $child) {
+                            if ($child['active']) {
+                                $isActive = true;
+                                break;
                             }
-
-                            // Push to array
-                            array_push($items, [
-                                'name' => $menuitem->name,
-                                'route' => $menuitem->route != '' ? $menuitem->routeparams != '' ? route($menuitem->route, json_decode($menuitem->routeparams, true)) : route($menuitem->route) : '',
-                                'icon' => $menuitem->icon,
-                                'visible_conditions' => $menuitem->visible_conditions,
-                                'active_conditions' => $menuitem->active_conditions,
-                                'children' => $subitems
-                            ]);
                         }
                     }
-                }
 
-                // Push to array
-                array_push($menus, [
-                    'header' => $menuheader->name,
-                    'items' => $items
-                ]);
-            }
+                    return [
+                        'name' => $item->name,
+                        'route' => $item->route != '' 
+                            ? ($item->routeparams != '' 
+                                ? route($item->route, json_decode($item->routeparams, true)) 
+                                : route($item->route)
+                            ) 
+                            : '',
+                        'icon' => $item->icon,
+                        'visible_conditions' => $item->visible_conditions,
+                        'active_conditions' => $item->active_conditions,
+                        'active' => $isActive, // Tambahkan flag active
+                        'children' => $children
+                    ];
+                })->values()->toArray();
+            };
+        
+            // Build tree dari parent = 0
+            $items = $buildTree(0);
+        
+            $menus[] = [
+                'header' => $menuheader->name,
+                'items' => $items
+            ];
         }
-
+        
         // Return
         return $menus;
     }
