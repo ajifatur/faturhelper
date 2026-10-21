@@ -17,8 +17,8 @@
     "require": {
         "hisorange/browser-detect": "^4.4",
         "laravel/socialite": "^5.2",
-        "rap2hpoutre/laravel-log-viewer": "^2.0",
-        "stevebauman/location": "^6.3",
-        "yajra/laravel-datatables-oracle": "^10.0"
+        "rap2hpoutre/laravel-log-viewer": "^2.0 || ^3.0",
+        "stevebauman/location": "^7.0",
+        "yajra/laravel-datatables-oracle": "^10.0 || ^11.0 || ^12.0 || ^13.0"
     }
 }
