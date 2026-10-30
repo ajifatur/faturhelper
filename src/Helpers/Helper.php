@@ -254,7 +254,7 @@ if(!function_exists('menu')) {
                             : '',
                         'icon' => $item->icon,
                         'visible_conditions' => $item->visible_conditions,
-                        'active_conditions' => $item->active_conditions,
+                        'active_conditions' => $isActive ? 'true' : $item->active_conditions,
                         'active' => $isActive, // Tambahkan flag active
                         'children' => $children
                     ];
