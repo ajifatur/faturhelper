@@ -77,11 +77,27 @@
 
 	// Sidebar items
 	$(window).on("load", function() {
-		var activeItem = $(".sidebar-nav .sidebar-item.active");
-		if(activeItem.length > 0 && activeItem.offset().top > $(window).height()) {
-			$(".simplebar-content-wrapper").animate({
-				scrollTop: activeItem.offset().top
-			}, 1000);
+		var activeItem = $(".sidebar-nav .sidebar-item.active").last();
+		var sidebarContent = $(".simplebar-content-wrapper");
+
+		if(activeItem.length > 0 && sidebarContent.length > 0) {
+			var itemTop = activeItem.offset().top - sidebarContent.offset().top + sidebarContent.scrollTop();
+			var itemBottom = itemTop + activeItem.outerHeight();
+			var visibleTop = sidebarContent.scrollTop();
+			var visibleBottom = visibleTop + sidebarContent.innerHeight();
+			var scrollTop = visibleTop;
+
+			if(itemTop < visibleTop) {
+				scrollTop = itemTop;
+			} else if(itemBottom > visibleBottom) {
+				scrollTop = itemBottom - sidebarContent.innerHeight();
+			}
+
+			if(scrollTop !== visibleTop) {
+				sidebarContent.animate({
+					scrollTop: scrollTop
+				}, 1000);
+			}
 		}
 	});
 

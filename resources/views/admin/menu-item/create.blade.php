@@ -310,7 +310,7 @@
 
     function generateRoutes1() {
         var route = $("select[name=getMethodRoutes]").val();
-        return route != null ? "Request::url() == route('" + route + "')" : "";
+        return route != null ? "Route::currentRouteName() == '" + route + "'" : "";
     }
 
     function generateRoutes2() {

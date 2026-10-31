@@ -227,15 +227,15 @@ if(!function_exists('menu')) {
                     // Build children dulu
                     $children = $buildTree($item->id);
 
-                    // Cek active parent
+                    // Item with children follows the active state of its children.
+                    $hasChildren = count($children) > 0;
                     $isActive = false;
 
-                    if ($item->active_conditions != '') {
+                    if (!$hasChildren && $item->active_conditions != '') {
                         $isActive = (bool) eval_sidebar($item->active_conditions, true, false);
                     }
 
-                    // Jika parent belum aktif, cek children
-                    if (!$isActive && count($children) > 0) {
+                    if ($hasChildren) {
                         foreach ($children as $child) {
                             if ($child['active']) {
                                 $isActive = true;
@@ -254,7 +254,9 @@ if(!function_exists('menu')) {
                             : '',
                         'icon' => $item->icon,
                         'visible_conditions' => $item->visible_conditions,
-                        'active_conditions' => $isActive ? 'true' : $item->active_conditions,
+                        'active_conditions' => $hasChildren
+                            ? ($isActive ? 'true' : 'false')
+                            : ($isActive ? 'true' : $item->active_conditions),
                         'active' => $isActive, // Tambahkan flag active
                         'children' => $children
                     ];
