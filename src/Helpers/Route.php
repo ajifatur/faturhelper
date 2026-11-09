@@ -169,10 +169,6 @@ class RouteExt
             // Database
             Route::get('/admin/database', self::NAMESPACE.'\DatabaseController@index')->name('admin.database.index');
 
-            // Artisan
-            Route::get('/admin/artisan', self::NAMESPACE.'\ArtisanController@index')->name('admin.artisan.index');
-            Route::post('/admin/artisan/run', self::NAMESPACE.'\ArtisanController@run')->name('admin.artisan.run');
-
             // Stats
             Route::get('/admin/stats/user', self::NAMESPACE.'\StatsController@user')->name('admin.stats.user');
             Route::get('/admin/stats/visitor', self::NAMESPACE.'\StatsController@visitor')->name('admin.stats.visitor');
