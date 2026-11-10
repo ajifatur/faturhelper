@@ -34,14 +34,13 @@ class RouteExt
         Route::group(['middleware' => ['faturhelper.guest']], function() {
             // Login
             Route::get('/login', self::NAMESPACE.'\Auth\LoginController@show')->name('auth.login');
-            Route::post('/login', self::NAMESPACE.'\Auth\LoginController@authenticate');
+            Route::post('/login', self::NAMESPACE.'\Auth\LoginController@authenticate')->middleware('throttle:5,1');
 
             // Login via (Socialite)
             if(Schema::hasTable('settings')) {
                 if(setting('socialite') == 1) {
                     Route::get('/auth/{provider}', self::NAMESPACE.'\Auth\LoginController@redirectToProvider')->name('auth.login.provider');
                     Route::get('/auth/{provider}/callback', self::NAMESPACE.'\Auth\LoginController@handleProviderCallback')->name('auth.login.provider.callback');
-                    Route::get('/auth/{provider}/bypass/{provider_id}', self::NAMESPACE.'\Auth\LoginController@byPassbyProviderId')->name('auth.login.provider.bypass');
                 }
             }
         });
