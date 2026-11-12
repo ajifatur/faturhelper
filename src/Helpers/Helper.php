@@ -159,7 +159,7 @@ if(!function_exists('setting')) {
         }
 
         // Return value by key
-        return $settings->get($key, '');
+        return $settings->get($key, null);
     }
 }
 
