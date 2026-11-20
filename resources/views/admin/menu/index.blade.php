@@ -5,6 +5,8 @@
 @section('content')
 
 @php
+    $roles = $roles ?? \Ajifatur\FaturHelper\Models\Role::orderBy('num_order', 'asc')->get();
+    
     $visibleRoleBadges = function ($conditions) use ($roles) {
         if (trim((string) $conditions) === '') {
             return $roles;
