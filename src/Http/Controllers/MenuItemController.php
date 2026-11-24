@@ -329,7 +329,7 @@ class MenuItemController extends \App\Http\Controllers\Controller
         foreach($routes as $route) {
             if($route != null && count($route['parameterName']) == 0) {
                 array_push($getMethodRoutes, $route['name']);
-                if(is_int(strpos($route['name'], '.index'))) array_push($indexRoutes, $route['name']);
+                if(is_int(strpos($route['name'], '.index'))) array_push($indexRoutes, str_replace('.index', '.*', $route['name']));
             }
         }
         $this->getMethodRoutes = $getMethodRoutes;

@@ -148,8 +148,8 @@
                                     $array = [];
                                     $explode = explode(" || ", $menu_item->active_conditions);
                                     foreach($explode as $e) {
-                                        $filter = str_replace("is_int(strpos(Request::url(), route('", "", $e);
-                                        $filter = str_replace("')))", "", $filter);
+                                        $filter = str_replace("Route::is('", "", $e);
+                                        $filter = str_replace("')", "", $filter);
                                         array_push($array, $filter);
                                     }
                                 ?>
@@ -331,7 +331,7 @@
         var array = [];
         var routes = $("select[name='indexRoutes[]']").val();
         for(var i=0; i<routes.length; i++) {
-            array.push("is_int(strpos(Request::url(), route('" + routes[i] + "')))")
+            array.push("Route::is('" + routes[i] + "')")
         }
         return array.join(" || ");
     }
